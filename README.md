@@ -15,7 +15,7 @@ I've written this package to allow simple and (almost) bulletproof application.
 You can install the development version of evalPurency from [GitHub](https://github.com/) with:
 (devtools only has to be installed once)
 ``` r
-# install.packages("devtools")
+# install.packages("devtools") # just necessary of not already installed (remove the '#' at the beginning of line)
 devtools::install_github("Maki-science/evalPurency")
 ```
 Once installed, you don't need to repeat this step!
