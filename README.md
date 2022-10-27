@@ -18,12 +18,18 @@ You can install the development version of evalPurency from [GitHub](https://git
 # install.packages("devtools") # just necessary of not already installed (remove the '#' at the beginning of line)
 devtools::install_github("Maki-science/evalPurency")
 ```
-Once installed, you don't need to repeat this step!
+Once installed, you don't need to repeat this step each time! 
+If you want to update, to the newest version, run the second line again.
 
 ## Workflow
 The (pre-)Purency workflow usually produces several filters (measurements) for each sample. I highly recommend to adopt a common file-naming procedure. The function uses everything of the .csv file names before the first '_' as sample name. The rest is considered as measurement name (e.g., SAMPLENAME_MEASUREMENTX.csv).
 
 Put all files you want to process into one folder. I recommend to put all files of a certain project/study or similar into one folder.
+
+To use the package function, just load the package as usual:
+``` r
+library(evalPurency)
+```
 
 Now simply run the follwing line, but change the path accordingly to the location where you stored your files to be processed. Make sure to use (or change) '/' and not '\', since only windows uses backslashes. 
 
