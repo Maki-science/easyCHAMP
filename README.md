@@ -8,7 +8,7 @@
 Evaluate a bulk of csv files in one directory, produced by purrency. 
 It will count occurences of of fibres, fragments, spheres and pixels, as well as size fractions (<10, 10-20, 20-50, 50-100, 100-150, 150-200,..., >500) for each polymer. Each file (i.e., each measurement) is evaluated separately, as well as summarized for all files (i.e., one sample).
 
-I've written this package to allow simple and (almost) bulletproof application.
+I've written this package for the TOEKI working group of the university of bayreuth, to allow simple and (almost) bulletproof application.
 
 ## Installation
 
@@ -35,7 +35,7 @@ Now simply run the follwing line, but change the path accordingly to the locatio
 
 This is an example from the TOEKI student server:
 ``` r
-evalPurency(path="//btb1r2.bio.uni-bayreuth.de/LSTOEK1_STUDENT/MYNAME/MYFILESTOBEPROCESSED/")
+evalPurency(path="//SERVERADDRESS/LSTOEK1_STUDENT/MYNAME/MYFILESTOBEPROCESSED/")
 ```
 The '/' in the end is required!
 Copy and paste this line into the console press 'enter'.
