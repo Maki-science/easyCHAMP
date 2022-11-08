@@ -6,7 +6,8 @@
 <!-- badges: end -->
 
 Evaluate a bulk of csv files in one directory, produced by purrency. 
-It will count occurences of of fibres, fragments, spheres and pixels, as well as size fractions (<10, 10-20, 20-50, 50-100, 100-150, 150-200,..., >500) for each polymer. Each file (i.e., each measurement) is evaluated separately, as well as summarized for all files (i.e., one sample).
+It will count occurences of of fibres, fragments, spheres and pixels, as well as size fractions (<10, 10-20, 20-50, 50-100, 100-150, 150-200,..., >500) for each polymer. Each file (i.e., each measurement) is evaluated separately, as well as summarized for all files (i.e., one sample). For each sample a new excel file will be generated
+    in the folder where the files are placed.
 
 I've written this package for the TOEKI working group of the university of bayreuth, to allow simple and (almost) bulletproof application.
 
@@ -42,11 +43,14 @@ Copy and paste this line into the console press 'enter'.
 
 It will usually need just very few seconds to process e.g. 100 files. An excel file for each sample is created in the selected folder. On the first sheet, a summary of the whole sample is provided with the counts of particle form and size fractions. On the second sheet, each measurement is evaluated in case you want trace back the single measurements.
 
+The Excel files are of an old version. Therefore, there might occur a message that you have to confirm.
+
 Of course you can also use your local hard drive like so:
 ``` r
 evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/") # or similar
 ```
 
+### Change evaluated polymers
 At the current state, the function evaluates up to 22 polymers (see example).
 If you would like to add polymers, or just evaluate some of them, you can overwrite the default setting by simply change the content of the 'c(...)' accordingly. 
 Just delete or add the (un)desired polymers.
@@ -57,6 +61,7 @@ evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/",
                          "PSU", "SI", "PLA", "PLAPBAT"))
 ```
 
+### Keep the data in R as data frame
 If you further want to proceed and analyse the data with R, you can set *dataReturn = TRUE*. The function will then return a data frame consisting of all measurements of all samples of the selected folder.
 ``` r
 mydata <- evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 

@@ -202,27 +202,27 @@ evalPurency <- function(path,
     # each measurement and the summary gets their own sheet 
     suppressWarnings(
       measurementSum <- data.frame(
-        sample = rep(NA, length(polymers)),
-        measurement = rep(NA, length(polymers)),
-        polymer = rep(NA, length(polymers)),
-        fibres = rep(0, length(polymers)),
-        fragments = rep(0, length(polymers)),
-        spheres = rep(0, length(polymers)),
-        pixels = rep(0, length(polymers)),
-        particlesTotal = rep(0, length(polymers)),
-        upto10 = rep(0, length(polymers)),
-        from10to20 = rep(0, length(polymers)),
-        from20to50 = rep(0, length(polymers)),
-        from50to100 = rep(0, length(polymers)),
-        from100to150 = rep(0, length(polymers)),
-        from150to200 = rep(0, length(polymers)),
-        from200to250 = rep(0, length(polymers)),
-        from250to300 = rep(0, length(polymers)),
-        from300to350 = rep(0, length(polymers)),
-        from350to400 = rep(0, length(polymers)),
-        from400to450 = rep(0, length(polymers)),
-        from450to500 = rep(0, length(polymers)),
-        above500 = rep(0, length(polymers))
+        sample = rep(NA, length(polymers)+1),
+        measurement = rep(NA, length(polymers)+1),
+        polymer = rep(NA, length(polymers)+1),
+        fibres = rep(0, length(polymers)+1),
+        fragments = rep(0, length(polymers)+1),
+        spheres = rep(0, length(polymers)+1),
+        pixels = rep(0, length(polymers)+1),
+        particlesTotal = rep(0, length(polymers)+1),
+        upto10 = rep(0, length(polymers)+1),
+        from10to20 = rep(0, length(polymers)+1),
+        from20to50 = rep(0, length(polymers)+1),
+        from50to100 = rep(0, length(polymers)+1),
+        from100to150 = rep(0, length(polymers)+1),
+        from150to200 = rep(0, length(polymers)+1),
+        from200to250 = rep(0, length(polymers)+1),
+        from250to300 = rep(0, length(polymers)+1),
+        from300to350 = rep(0, length(polymers)+1),
+        from350to400 = rep(0, length(polymers)+1),
+        from400to450 = rep(0, length(polymers)+1),
+        from450to500 = rep(0, length(polymers)+1),
+        above500 = rep(0, length(polymers)+1)
       )
     ) # end supressWarnings
     
@@ -232,7 +232,7 @@ evalPurency <- function(path,
       for(k in 1:length(tempobj)){
         
         measurementSum$sample[j] <- levels(factor(temp$sample))[i]
-        measurementSum$measurement[j] <- "sum"
+        measurementSum$measurement[j] <- "sample sum"
         measurementSum$polymer[j] <- polymers[j]
         measurementSum$fibres[j] <- measurementSum$fibres[j] + if(length(tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$fibres) != 0){tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$fibres}else{0}
         measurementSum$fragments[j] <- measurementSum$fragments[j] + if(length(tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$fragments) != 0){tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$fragments}else{0}
@@ -256,6 +256,30 @@ evalPurency <- function(path,
       }# end for k
     } # end for j
     
+    # add a bottom line with the sum of each column (requested feature)
+    measurementSum$sample[length(polymers)+1] <- "column sum"
+    measurementSum$measurement[length(polymers)+1] <- "column sum"
+    measurementSum$polymer[length(polymers)+1] <- "column sum"
+    measurementSum$fibres[length(polymers)+1] <- sum(measurementSum$fibres)
+    measurementSum$fragments[length(polymers)+1] <- sum(measurementSum$fragments)
+    measurementSum$spheres[length(polymers)+1] <- sum(measurementSum$spheres)
+    measurementSum$pixels[length(polymers)+1] <- sum(measurementSum$pixels)
+    measurementSum$particlesTotal[length(polymers)+1] <- sum(measurementSum$particlesTotal)
+    measurementSum$upto10[length(polymers)+1] <- sum(measurementSum$upto10)
+    measurementSum$from10to20[length(polymers)+1] <- sum(measurementSum$from10to20)
+    measurementSum$from20to50[length(polymers)+1] <- sum(measurementSum$from20to50)
+    measurementSum$from50to100[length(polymers)+1] <- sum(measurementSum$from50to100)
+    measurementSum$from100to150[length(polymers)+1] <- sum(measurementSum$from100to150)
+    measurementSum$from150to200[length(polymers)+1] <- sum(measurementSum$from150to200)
+    measurementSum$from200to250[length(polymers)+1] <- sum(measurementSum$from200to250)
+    measurementSum$from250to300[length(polymers)+1] <- sum(measurementSum$from250to300)
+    measurementSum$from300to350[length(polymers)+1] <- sum(measurementSum$from300to350)
+    measurementSum$from350to400[length(polymers)+1] <- sum(measurementSum$from350to400)
+    measurementSum$from400to450[length(polymers)+1] <- sum(measurementSum$from400to450)
+    measurementSum$from450to500[length(polymers)+1] <- sum(measurementSum$from450to500)
+    measurementSum$above500[length(polymers)+1] <- sum(measurementSum$above500)
+    
+    
     # write results into excel file
     allMeasurements <- data.frame()
     for(j in 1:length(tempobj)){
@@ -267,6 +291,8 @@ evalPurency <- function(path,
                         paste(PATH, levels(factor(temp$sample))[i], "_evaluated.xls", sep=""))
     
   }# end for(i)
+  
+  cat("Done.")
   
   # return the whole data set as data frame
   if(dataReturn == TRUE){
