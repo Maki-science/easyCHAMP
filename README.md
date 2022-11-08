@@ -101,7 +101,7 @@ Marvin Kiene (2022). evalPurency: Automated Evaluation of Purency Data. R packag
 https://github.com/Maki-science/evalPurency
 
 
-Ein BibTeX-Eintrag für LaTeX-Benutzer ist
+A BibTeX-entry for LaTeX-user is
 
   @Misc{,
     title = {evalPurency: Automated Evaluation of Purency Data},
