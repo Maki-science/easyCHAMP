@@ -1,8 +1,12 @@
-citHeader("To cite evalPurency in publications use:")
+citHeader("To cite evalPurency in publications use:
+
+    Marvin Kiene (2022). evalPurency: Automated Evaluation of Purency Data. R
+  package version 1.1.1.0002. https://github.com/Maki-science/evalPurency
+    ")
 
 citEntry(
   entry    = "Misc",
-  title    = "evalPurency",
+  title    = "evalPurency: Automated Evaluation of Purency Data",
   author   = c(person("Marvin", "Kiene", , "info@maki-science.org", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-9981-5661"))),
   note     = {"R package version 1.1.1.0002"},
