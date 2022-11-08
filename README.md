@@ -47,9 +47,12 @@ evalPurency(path="//SERVERADDRESS/LSTOEK1_STUDENT/MYNAME/MYFILESTOBEPROCESSED/")
 The '/' in the end is required!
 Copy and paste this line into the console press 'enter'.
 
+The function will warn you if there are missing values at some files. The respective files and columns are reported.
+Once it finished the processing it will message that it is done.
+
 It will usually need just very few seconds to process e.g. 100 files. An excel file for each sample is created in the selected folder. On the first sheet, a summary of the whole sample is provided with the counts of particle form and size fractions. On the second sheet, each measurement is evaluated in case you want trace back the single measurements.
 
-The Excel files are of an old version. Therefore, there might occur a message that you have to confirm.
+For compatibility the Excel files are of an old version. Therefore, there might occur a message that you have to confirm. However, the warning can be ignored.
 
 Of course you can also use your local hard drive like so:
 ``` r
