@@ -5,11 +5,17 @@
 [![CRAN status](https://www.r-pkg.org/badges/version/evalPurency)](https://CRAN.R-project.org/package=evalPurency)
 <!-- badges: end -->
 
+
+Microplastics can be found in any part of an environmental or nutritional sample. Today, FPA-based FTIR imaging allows a whole sample to be measured quickly. However, to analyse the measurement data, a powerful tool is needed to reliably identify the polymer particles contained in the sample. The analysis must provide objective, complete and robust results, which are presented in detail and transparently. The Microplastics Finder by Purency uses machine learning algorithms that identify more than 20 polymer types within minutes. In combination with FTIR imaging, it offers the fastest method to examine an entire sample for microplastics. Thanks to automation, which does not require time-consuming manual post-processing, the analysis results are optimally comparable and reproducible. Microplastics analysis becomes scalable and new types of questions about the presence and origin of microplastics can be answered. 
+*Source: https://www.purency.ai/product1/microplastics-finder)*
+
+
+## Purpose of this package
 Evaluate a bulk of .csv files in one directory, produced by Purency (https://www.purency.ai/). 
-It will count occurences of of fibres, fragments, spheres and pixels, as well as size fractions (<10, 10-20, 20-50, 50-100, 100-150, 150-200,..., >500) for each polymer. Each file (i.e., each measurement) is evaluated separately, as well as summarized for all files (i.e., one sample). For each sample a new excel file will be generated
+It will count occurences of fibres, fragments, spheres and pixels, as well as size fractions (<10, 10-20, 20-50, 50-100, 100-150, 150-200,..., >500) for each polymer. Each file (i.e., each measurement) is evaluated separately, as well as summarized for all files (i.e., one sample). For each sample a new excel file will be generated
     in the folder where the files are placed.
 
-I've written this package for the TOEKI working group of the university of bayreuth, to allow simple and (almost) bulletproof application.
+I've written this package for the TOEKI working group of the university of bayreuth, to allow simple and (almost) bulletproof application. If you are interested in adopting the framework for another lab with different specifications, let me know and I will see what I can do. Ideas for implementation for broader usability are appreciated.
 
 ## Installation
 
