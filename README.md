@@ -11,7 +11,8 @@ Microplastics can be found in any part of an environmental or nutritional sample
 
 
 ## Purpose of this package
-Evaluate a bulk of .csv files in one directory, produced by Purency (https://www.purency.ai/). 
+Commonly in microplastic research, a sample is splitted and filtered on several filters. These filters have to be measured separately via FTIR and can be then evaluated using the Purency software (https://www.purency.ai/). This produces .csv files for each measurement.
+This package and its functions can be used to automate the single file handling and gathering the relevant data for each sample into one file.
 It will count occurences of fibres, fragments, spheres and pixels, as well as size fractions (<10, 10-20, 20-50, 50-100, 100-150, 150-200,..., >500) for each polymer. Each file (i.e., each measurement) is evaluated separately, as well as summarized for all files (i.e., one sample). For each sample a new excel file will be generated
     in the folder where the files are placed.
 
