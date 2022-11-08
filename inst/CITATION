@@ -5,6 +5,7 @@ citEntry(
   title    = "evalPurency",
   author   = c(person("Marvin", "Kiene", , "info@maki-science.org", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-9981-5661"))),
+  note     = {"R package version 1.1.1.0002"},
   year     = 2022,
   url      = "https://github.com/Maki-science/evalPurency",
   textVersion = paste(
