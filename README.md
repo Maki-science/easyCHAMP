@@ -12,7 +12,9 @@ Microplastics can be found in any part of an environmental or nutritional sample
 
 ## Purpose of this package
 Commonly in microplastic research, a sample is splitted and filtered on several filters. These filters have to be measured separately via FTIR and can be then evaluated using the Purency software (https://www.purency.ai/). This produces .csv files for each measurement.
+
 This package and its functions can be used to automate the single file handling and gathering the relevant data for each sample into one file.
+
 It will count occurences of fibres, fragments, spheres and pixels, as well as size fractions (<10, 10-20, 20-50, 50-100, 100-150, 150-200,..., >500) for each polymer. Each file (i.e., each measurement) is evaluated separately, as well as summarized for all files (i.e., one sample). For each sample a new excel file will be generated
     in the folder where the files are placed.
 
@@ -90,3 +92,21 @@ I've commented it quite sophisticated, and changes should be quite easy when you
 programming.
 
 If there are any issues or wishes for changes, you can send me a mail to info@maki-science.org or open an issue here on github (https://github.com/Maki-science/evalPurency/issues).
+
+
+## Citation
+To cite evalPurency in publications use:
+
+Marvin Kiene (2022). evalPurency: Automated Evaluation of Purency Data. R package version 1.1.1.0002.
+https://github.com/Maki-science/evalPurency
+
+
+Ein BibTeX-Eintrag für LaTeX-Benutzer ist
+
+  @Misc{,
+    title = {evalPurency: Automated Evaluation of Purency Data},
+    author = {Marvin Kiene},
+    note = {R package version 1.1.1.0002},
+    year = {2022},
+    url = {https://github.com/Maki-science/evalPurency},
+  }
