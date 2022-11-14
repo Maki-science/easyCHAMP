@@ -11,6 +11,23 @@
 #' polymers.
 #' @param dataReturn If set TRUE, a data frame will be returned containing the data of all measurement with 
 #' the necessary information.
+#' @param colPol Column number where the polymer type is stated. In the TOEKI lab this is column 6 (Class Name). 
+#' Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
+#' @param colL Column number for the particle length. In the TOEKI lab this is column 17 (Length [5µ]). 
+#' Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
+#' @param colReqPol Column number for the particle check, whether the particle is a polymer or not. 
+#' In the TOEKI lab this is column 24 (Plastik? or Plastik ja/nein). Could also be provided as column name, but only 
+#' in ASCII encoding (e.g., special character as . and ä = d).
+#' @param colShape Column number for the particle shape. In the TOEKI lab this is column 25 (Form).
+#' Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
+#' @param colCol Column number for the particle color In the TOEKI lab this is column 26 (Farbe).
+#' Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
+#' @param colLFib Column number for the particle length in case of a fibre with corrected length (because of curvy shape)
+#' In the TOEKI lab this is column 27 (Länge). Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
+#' @param fibre How fibres are called in colShape (Form). In the TOEKI lab it is 'Faser'.
+#' @param sphere How spheres are called in colShape (Form). In the TOEKI lab it is 'Kugel'.
+#' @param fragment How fragments are called in colShape (Form). In the TOEKI lab it is 'Fragment'.
+#' @param pixel How pixels are called in colShape (Form). In the TOEKI lab it is 'Pixel'.
 #'
 #' @export
 #' @import writexl
@@ -19,11 +36,20 @@ evalPurency <- function(path,
                         polymers = c("PU", "EVAc", "PA", "PAN", "PBT", "PET", "PE", "PMMA", "PP", 
                                      "POM", "PS", "PVC", "PC", "ABS", "PPSU", "CA", "PEEK", "EVOH", 
                                      "PSU", "SI", "PLA", "PLAPBAT"),
-                        dataReturn = FALSE
+                        dataReturn = FALSE,
+                        colPol = 6, 
+                        colL = 17,
+                        colReqPol = 24, 
+                        colShape = 25, 
+                        colCol = 26,
+                        colLFib = 27,
+                        fibre = "Faser",
+                        sphere = "Kugel",
+                        fragment = "Fragment",
+                        pixel = "Pixel"
 ){
-  # this requires the package writexl
   # set the path, where the files are stored, and where the result should be saved
-  PATH<- path #"//btb1r2.bio.uni-bayreuth.de/home/PhD/Auswertungen R/Eva/files to process/" 
+  PATH <- path 
   
   # a set of polymers that may occur
   polymers <- polymers
@@ -48,25 +74,28 @@ evalPurency <- function(path,
   # each particle will be stored in one line with the measurement number and sample name (unique combination).
   suppressWarnings(
     for (i in 1:length(Dateien)){
-      assign("Hilfsobjekt",read.csv(paste0(PATH,Dateien[i]),sep=";", dec=",",skip=40,fileEncoding = "ASCII")) # read data and skip the first 40 lines
+      # need to read data as ASCII. Otherwise it sometimes makes problems with the column names with special character
+      assign("Hilfsobjekt",read.csv(paste0(PATH,Dateien[i]),sep=";", dec=",", skip=40, fileEncoding = "ASCII")) # read data and skip the first 40 lines
       
       # I need to check whether the column was called Plastik? (Eva) or Plastik ja/nein (Martin)
       # otherwise it does not work properly in all cases
-      if(length(Hilfsobjekt$Plastik.ja.nein) > 0){
-        Hilfsobjekt <- droplevels(subset(Hilfsobjekt, Hilfsobjekt$Plastik.ja.nein == "ja"))
-        
-      }
-      else{
-        Hilfsobjekt <- droplevels(subset(Hilfsobjekt, Hilfsobjekt$Plastik. == "ja"))
-      }
+      # if(length(Hilfsobjekt$Plastik.ja.nein) > 0){
+      #   Hilfsobjekt <- droplevels(subset(Hilfsobjekt, Hilfsobjekt$Plastik.ja.nein == "ja"))
+      #   
+      # }
+      # else{
+      #   Hilfsobjekt <- droplevels(subset(Hilfsobjekt, Hilfsobjekt$Plastik. == "ja"))
+      # }
+      # now with column numbers in the default form, but can also be provided als column name
+      Hilfsobjekt <- droplevels(subset(Hilfsobjekt, Hilfsobjekt[colReqPol] == "ja"))
       
       temp2 <- data.frame(sample = name_measurement[i],
                           measurement = Dateien[i],
-                          className = Hilfsobjekt$Class.Name,
-                          length = Hilfsobjekt[, "Length..5m."],
-                          form = Hilfsobjekt$Form,
-                          color = Hilfsobjekt$Farbe,
-                          lengthFibre = Hilfsobjekt[, "Ldnge"])
+                          className = Hilfsobjekt[, colPol], # polymer type
+                          length = Hilfsobjekt[, colL], # length of the particle
+                          form = Hilfsobjekt[, colShape], # fragment, pixel, fibre, sphere
+                          color = Hilfsobjekt[, colCol],
+                          lengthFibre = Hilfsobjekt[, colLFib]) # in case the fibre is curved, the length can be found here
       temp <- rbind(temp, temp2)
     }
   ) # end supressWarnings
@@ -76,7 +105,7 @@ evalPurency <- function(path,
   temp$actualLength <- NA
   for(i in 1:nrow(temp)){
     # If lengthFibre is NA, but form is still Faser, the length is the value to be taken.
-    if(temp$form[i] == "Faser" && !is.na(temp$lengthFibre[i]) == TRUE){
+    if(temp$form[i] == fibre && !is.na(temp$lengthFibre[i]) == TRUE){
       temp$actualLength[i] <- temp$lengthFibre[i]
     }
     else{
@@ -86,12 +115,12 @@ evalPurency <- function(path,
       # To add a quality control, I check whether the field of form or length is na. If yes, a warning will be
       # thrown, including the sample and measurement.
       if(is.na(temp$form[i]) == TRUE || temp$form[i] == ""){
-        cat(warning(paste("Warning: There is a value missing in column 'Form' in ", temp$measurement[i], "\n")))
+        cat(warning(paste("Warning: There is a value missing in column ", colnames(Hilfsobjekt[colShape]), " in ", temp$measurement[i], "\n")))
       }
     ) # end supressWarnings
     suppressWarnings(
       if(is.na(temp$length[i]) == TRUE || temp$length[i] == ""){
-        cat(warning(paste("Warning: There is a value missing in column 'L\U00E4nge [\U00B5m]' in ", temp$measurement[i], "\n")))
+        cat(warning(paste("Warning: There is a value missing in column ", colnames(Hilfsobjekt[colL]), " in ", temp$measurement[i], "\n")))
       }
     ) # end supressWarnings
   } # end for(i)
@@ -170,10 +199,10 @@ evalPurency <- function(path,
         measurementX$sample[k] <- levels(factor(temp$sample))[i]
         measurementX$measurement[k] <- levels(factor(tempSample$measurement))[j]
         measurementX$polymer[k] <- levels(factor(tempMeasurement$className))[k]
-        measurementX$fibres[k] <- nrow(tempMeasurement[which(tempMeasurement$form == "Faser" & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
-        measurementX$fragments[k] <- nrow(tempMeasurement[which(tempMeasurement$form == "Fragment" & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
-        measurementX$spheres[k] <- nrow(tempMeasurement[which(tempMeasurement$form == "Kugel" & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
-        measurementX$pixels[k] <- nrow(tempMeasurement[which(tempMeasurement$form == "Pixel" & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
+        measurementX$fibres[k] <- nrow(tempMeasurement[which(tempMeasurement$form == fibre & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
+        measurementX$fragments[k] <- nrow(tempMeasurement[which(tempMeasurement$form == fragment & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
+        measurementX$spheres[k] <- nrow(tempMeasurement[which(tempMeasurement$form == sphere & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
+        measurementX$pixels[k] <- nrow(tempMeasurement[which(tempMeasurement$form == pixel & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
         measurementX$particlesTotal[k] <- measurementX$fibres[k] + measurementX$fragments[k] + measurementX$pixels[k] + measurementX$spheres[k]
         measurementX$upto10[k] <- nrow(tempMeasurement[which(tempMeasurement$actualLength <= 10 & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
         measurementX$from10to20[k] <- nrow(tempMeasurement[which(tempMeasurement$actualLength > 10 & tempMeasurement$actualLength <= 20 & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])

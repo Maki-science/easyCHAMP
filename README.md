@@ -53,9 +53,9 @@ Copy and paste this line into the console press 'enter'.
 The function will warn you if there are missing values at some files. The respective files and columns are reported.
 Once it finished the processing it will message that it is done.
 
-It will usually need just very few seconds to process e.g. 100 files. An excel file for each sample is created in the selected folder. On the first sheet, a summary of the whole sample is provided with the counts of particle form and size fractions. On the second sheet, each measurement is evaluated in case you want trace back the single measurements.
+It will usually need just very few seconds to process e.g. 100 files. An excel file for each sample is created in the selected folder. On the first sheet, a summary of the whole sample is provided with the counts of particle form and size fractions as well as the sum of each column as the last line. On the second sheet, each measurement is evaluated in case you want trace back the single measurements.
 
-For compatibility the Excel files are of an old version. Therefore, there might occur a message that you have to confirm. However, the warning can be ignored.
+For compatibility the Excel files are of an old version. Therefore, there might occur a message about potential broken file that you have to confirm. However, the warning can be ignored.
 
 Of course you can also use your local hard drive like so:
 ``` r
@@ -82,14 +82,38 @@ mydata <- evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/",
 You can now proceed with *mydata* and do your analyses or plotting as usual.
 
 
+
+## Use this package in another lab
+The output of Purency can be customized to a certain extend and different labs may have different requirements and conventions on how to name things (also in the language this is done). Therefore, the default settings of this function apply for the animal ecology group of the University of Bayreuth. Unfortunately, there is no smart way to workaround. Thus, this function requires several parameters to preset the working environment of the lab.
+
+To make it as generic and convenient to other labs working with this package, you can overwrite the default settings to your liking. In case you would prefer a complete preset for your lab, that you don't have to provide each parameter separately, I can implement a preset set to your desire if you open an issue or send me a request.
+
+
+Parameters to be adjusted (just add the necessary parameters as additional parameter in the function call):
+
+  - colPol = 6, Column number where the polymer type is stated. In the TOEKI lab this is column 6 (Class Name). Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
+  - colL = 17, Column number for the particle length. In the TOEKI lab this is column 17 (Length [5µ]). Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
+  - colReqPol = 24, Column number for the particle check, whether the particle is a polymer or not. In the TOEKI lab this is column 24 (Plastik? or Plastik ja/nein). Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
+  - colShape = 25, Column number for the particle shape. In the TOEKI lab this is column 25 (Form). Could also be provided as column name, but only in ASCII encoding (e.g., special character = . and ä = d).
+  - colCol = 26, Column number for the particle color In the TOEKI lab this is column 26 (Farbe). Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
+  - colLFib = 27, Column number for the particle length in case of a fibre with corrected length (because of curvy shape). In the TOEKI lab this is column 27 (Länge). Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
+  - fibre = "Faser", How fibres are called in colShape (Form). In the TOEKI lab it is 'Faser'.
+  - sphere = "Kugel", How spheres are called in colShape (Form). In the TOEKI lab it is 'Kugel'.
+  - fragment = "Fragment", How fragments are called in colShape (Form). In the TOEKI lab it is 'Fragment'.
+  - pixel = "Pixel", How pixels are called in colShape (Form). In the TOEKI lab it is 'Pixel'.
+
+I used column numbers here to workaround issues with special characters in some languages which R might has problems with. Numbers provide an unambiguous delimiter.
+
+With an adopted preset, you can now run the function as mentioned before (just add the preset always to the function)
+
+
 ## Troubleshooting:
 
-The function was written in Oktober 2022. I've used the current column names to address the required information. If these will be changed by any chance, this should be adopted to the function as well.
+The function was written in Oktober 2022. I've used the current column numbers to address the required information. If these will be changed by any chance, this should be adopted to the function as well (see 'Use this package in another lab' above to read how).
 If not, the results are not reliable any more! 
 
 The source code can be accessed via github.
-I've commented it quite sophisticated, and changes should be quite easy when you're a bit into
-programming.
+I've commented it quite sophisticated, and changes should be quite easy when you're a bit into programming. Otherwise open an issue or send me a request, and I can do my best to implement your desired features.
 
 If there are any issues or wishes for changes, you can send me a mail to info@maki-science.org or open an issue here on github (https://github.com/Maki-science/evalPurency/issues).
 
