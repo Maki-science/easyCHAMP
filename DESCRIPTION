@@ -1,6 +1,6 @@
 Package: evalPurency
 Title: Automated Evaluation of Purency Data
-Version: 1.1.1.9002
+Version: 1.1.1.9003
 Authors@R: 
     person("Marvin", "Kiene", , "info@maki-science.org", role = c("aut", "cre"),
          comment = c(ORCID = "0000-0001-9981-5661"))

@@ -25,7 +25,7 @@ I've written this package for the TOEKI working group of the university of bayre
 You can install the development version of evalPurency from [GitHub](https://github.com/) with:
 (devtools only has to be installed once)
 ``` r
-# install.packages("devtools") # just necessary of not already installed (remove the '#' at the beginning of line)
+install.packages("devtools") # just necessary of not already installed
 devtools::install_github("Maki-science/evalPurency")
 ```
 Once installed, you don't need to repeat this step each time! 
@@ -64,7 +64,7 @@ evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/") # or similar
 
 ### Change evaluated polymers
 At the current state, the function evaluates up to 22 polymers (see example).
-If you would like to add polymers, or just evaluate some of them, you can overwrite the default setting by simply change the content of the 'c(...)' accordingly. 
+If you would like to add polymers, or just evaluate some of them, you can overwrite the default setting by simply change the content of the 'c(...)' accordingly (make sure, that the content is not ending with a , like (... ,). 
 Just delete or add the (un)desired polymers.
 ``` r
 evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
