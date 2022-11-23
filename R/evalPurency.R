@@ -1,7 +1,7 @@
-######## evalPurrency() ###########
+######## evalPurency() ###########
 #' created by Marvin Kiene, use this function at own risk!
 #' @description
-#' Evaluate csv files, produced by purrency. It will count occurences of of fibres, fragments, spheres and pixels,
+#' Evaluate csv files, produced by Purency. It will count occurences of of fibres, fragments, spheres and pixels,
 #' as well as size fractions (<10, 10-20, 20-50, 50-100, 100-150, 150-200,..., >500) for each polymer. Each file (i.e., each measurement)
 #' is evaluated separately, as well as summarized for all files (i.e., one sample). 
 #' 
@@ -9,8 +9,15 @@
 #' resulting files in this directory.
 #' @param polymers A vector containing the abbreviations of polymers to be considered. Default vector contains 22 
 #' polymers.
+#' @param sizeclasses A vector containing desired sizeclasses to be evaluated. Default is c(10, 20, 50, 100, 150, 
+#' 200, 250, 300, 350, 400, 450, 500) The function starts at 0 and then uses the set steps. 
+#' It always uses values up to the provided higher number but excluding the former number (e.g., for
+#' the default values, the function uses 0 to <= 10, >10 to <= 20, >20 to <= 50, ..., all >500).
 #' @param dataReturn If set TRUE, a data frame will be returned containing the data of all measurement with 
 #' the necessary information.
+#' @param eocsum If TRUE (default) it adds a column sum at the end of each column of the summary panel.
+#' @param labpreset A preset for most of the parameters (except: path, polymers, dataReturn, eocsum). 
+#' Can be requested by other labs, to be implemented, that they don't have to be set manually all the time. 
 #' @param colPol Column number where the polymer type is stated. In the TOEKI lab this is column 6 (Class Name). 
 #' Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
 #' @param colL Column number for the particle length. In the TOEKI lab this is column 17 (Length [5µ]). 
@@ -36,7 +43,10 @@ evalPurency <- function(path,
                         polymers = c("PU", "EVAc", "PA", "PAN", "PBT", "PET", "PE", "PMMA", "PP", 
                                      "POM", "PS", "PVC", "PC", "ABS", "PPSU", "CA", "PEEK", "EVOH", 
                                      "PSU", "SI", "PLA", "PLAPBAT"),
+                        sizeclasses = c(10, 20, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500),
                         dataReturn = FALSE,
+                        eocsum = TRUE,
+                        labpreset = FALSE,
                         colPol = 6, 
                         colL = 17,
                         colReqPol = 24, 
@@ -51,8 +61,40 @@ evalPurency <- function(path,
   # set the path, where the files are stored, and where the result should be saved
   PATH <- path 
   
-  # a set of polymers that may occur
-  polymers <- polymers
+  # if a preset is set, load the respective preset (if available)
+  # this is how a preset is created:
+  # presets <- data.frame(
+  #   labname = "Laforsch",
+  #   colPol = 6,
+  #   colL = 17,
+  #   colReqPol = 24,
+  #   colShape = 25,
+  #   colCol = 26,
+  #   colLFib = 27,
+  #   fibre = "Faser",
+  #   sphere = "Kugel",
+  #   fragment = "Fragment",
+  #   pixel = "Pixel"
+  # )
+  # usethis::use_data(presets, internal = TRUE, overwrite = TRUE)
+  if(labpreset != FALSE){
+    if( length(presets$labname[which(presets$labname == labpreset)]) == 0){
+      stop("You selected a labpreset, that does not exist. Please check this parameter for typo or request a new labpreset for your lab. \n")
+    }
+    
+    colPol <- presets$colPol[which(presets$labname == labpreset)]
+    colL <- presets$colL[which(presets$labname == labpreset)]
+    colReqPol <- presets$colReqPol[which(presets$labname == labpreset)]
+    colShape <- presets$colShape[which(presets$labname == labpreset)]
+    colCol <- presets$colCol[which(presets$labname == labpreset)]
+    colLFib <- presets$colLFib[which(presets$labname == labpreset)]
+    fibre <- presets$fibre[which(presets$labname == labpreset)]
+    sphere <- presets$sphere[which(presets$labname == labpreset)]
+    fragment <- presets$fragment[which(presets$labname == labpreset)]
+    pixel <- presets$pixel[which(presets$labname == labpreset)]
+  }
+  
+  
   
   # get all files in the set folder
   Dateien <- list.files(path=PATH,pattern=".csv") # search for files with .csv ending
@@ -100,7 +142,7 @@ evalPurency <- function(path,
     }
   ) # end supressWarnings
   
-  # The length is not correct for fibres.
+  # The length is not always correct for fibres.
   # Thus create a new column with the correct length for all particles (that I don't need to select the correct column further below)
   temp$actualLength <- NA
   for(i in 1:nrow(temp)){
@@ -126,31 +168,32 @@ evalPurency <- function(path,
   } # end for(i)
   
   # create a data frame to hold all data, to return it if dataReturn set TRUE
-  suppressWarnings(
-    returnObj <- data.frame(
-      sample = NA,
-      measurement = NA,
-      polymer = NA,
-      fibres = NA,
-      fragments = NA,
-      spheres = NA,
-      pixels = NA,
-      particlesTotal = NA,
-      upto10 = NA,
-      from10to20 = NA,
-      from20to50 = NA,
-      from50to100 = NA,
-      from100to150 = NA,
-      from150to200 = NA,
-      from200to250 = NA,
-      from250to300 = NA,
-      from300to350 = NA,
-      from350to400 = NA,
-      from400to450 = NA,
-      from450to500 = NA,
-      above500 = NA
-    )
+  returnObj <- data.frame(
+    sample = NA,
+    measurement = NA,
+    polymer = NA,
+    fibres = NA,
+    fragments = NA,
+    spheres = NA,
+    pixels = NA,
+    particlesTotal = NA
   )
+  # add columns for sizeclasses
+  for(i in 1:(length(sizeclasses)+1)){
+    if(i == 1){ # for the first number it's 0 to <=x
+      returnObj <- cbind(returnObj, data.frame(x = NA))
+      colnames(returnObj) <- c(colnames(returnObj)[-length(colnames(returnObj))], paste("from", "0", "to", sizeclasses[i], sep=""))
+    }
+    else if(i == (length(sizeclasses)+1)){ # for the last number it's >x to infinite
+      returnObj <- cbind(returnObj, data.frame(x = NA))
+      colnames(returnObj) <- c(colnames(returnObj)[-length(colnames(returnObj))], paste("above", sizeclasses[i-1], sep=""))
+    }
+    else{
+      returnObj <- cbind(returnObj, data.frame(x = NA))
+      colnames(returnObj) <- c(colnames(returnObj)[-length(colnames(returnObj))], paste("from", sizeclasses[i-1], "to", sizeclasses[i], sep=""))
+    }
+  }
+  # delete NA line
   returnObj <- returnObj[-1,]
   
   # iterate over all samples and process each sample separately
@@ -166,31 +209,32 @@ evalPurency <- function(path,
       tempMeasurement <- droplevels(subset(tempSample, tempSample$measurement == levels(factor(tempSample$measurement))[j]))
       
       # create data frame to store all values for each polymer
-      suppressWarnings(
-        measurementX <- data.frame(
-          sample = rep(NA, length(levels(factor(tempMeasurement$className)))),
-          measurement = rep(NA, length(levels(factor(tempMeasurement$className)))),
-          polymer = rep(NA, length(levels(factor(tempMeasurement$className)))),
-          fibres = rep(NA, length(levels(factor(tempMeasurement$className)))),
-          fragments = rep(NA, length(levels(factor(tempMeasurement$className)))),
-          spheres = rep(NA, length(levels(factor(tempMeasurement$className)))),
-          pixels = rep(NA, length(levels(factor(tempMeasurement$className)))),
-          particlesTotal = rep(NA, length(levels(factor(tempMeasurement$className)))),
-          upto10 = rep(NA, length(levels(factor(tempMeasurement$className)))),
-          from10to20 = rep(NA, length(levels(factor(tempMeasurement$className)))),
-          from20to50 = rep(NA, length(levels(factor(tempMeasurement$className)))),
-          from50to100 = rep(NA, length(levels(factor(tempMeasurement$className)))),
-          from100to150 = rep(NA, length(levels(factor(tempMeasurement$className)))),
-          from150to200 = rep(NA, length(levels(factor(tempMeasurement$className)))),
-          from200to250 = rep(NA, length(levels(factor(tempMeasurement$className)))),
-          from250to300 = rep(NA, length(levels(factor(tempMeasurement$className)))),
-          from300to350 = rep(NA, length(levels(factor(tempMeasurement$className)))),
-          from350to400 = rep(NA, length(levels(factor(tempMeasurement$className)))),
-          from400to450 = rep(NA, length(levels(factor(tempMeasurement$className)))),
-          from450to500 = rep(NA, length(levels(factor(tempMeasurement$className)))),
-          above500 = rep(NA, length(levels(factor(tempMeasurement$className))))
-        )
-      ) # end supressWarnings
+      measurementX <- data.frame(
+        sample = rep(NA, length(levels(factor(tempMeasurement$className)))),
+        measurement = rep(NA, length(levels(factor(tempMeasurement$className)))),
+        polymer = rep(NA, length(levels(factor(tempMeasurement$className)))),
+        fibres = rep(NA, length(levels(factor(tempMeasurement$className)))),
+        fragments = rep(NA, length(levels(factor(tempMeasurement$className)))),
+        spheres = rep(NA, length(levels(factor(tempMeasurement$className)))),
+        pixels = rep(NA, length(levels(factor(tempMeasurement$className)))),
+        particlesTotal = rep(NA, length(levels(factor(tempMeasurement$className))))
+      )
+      # add columns for sizeclasses
+      for(l in 1:(length(sizeclasses)+1)){
+        if(l == 1){ # for the first number it's 0 to <=x
+          measurementX <- cbind(measurementX, data.frame(x = rep(NA, length(levels(factor(tempMeasurement$className))))))
+          colnames(measurementX) <- c(colnames(measurementX)[-length(colnames(measurementX))], paste("from", "0", "to", sizeclasses[l], sep=""))
+        }
+        else if(l == (length(sizeclasses)+1)){ # for the last number it's >x to infinite
+          measurementX <- cbind(measurementX, data.frame(x = rep(NA, length(levels(factor(tempMeasurement$className))))))
+          colnames(measurementX) <- c(colnames(measurementX)[-length(colnames(measurementX))], paste("above", sizeclasses[l-1], sep=""))
+        }
+        else{
+          measurementX <- cbind(measurementX, data.frame(x = rep(NA, length(levels(factor(tempMeasurement$className))))))
+          colnames(measurementX) <- c(colnames(measurementX)[-length(colnames(measurementX))], paste("from", sizeclasses[l-1], "to", sizeclasses[l], sep=""))
+        }
+      }
+      
       
       # iterate over all polymers and add a line for each 
       for(k in 1:length(levels(factor(tempMeasurement$className)))){
@@ -204,19 +248,19 @@ evalPurency <- function(path,
         measurementX$spheres[k] <- nrow(tempMeasurement[which(tempMeasurement$form == sphere & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
         measurementX$pixels[k] <- nrow(tempMeasurement[which(tempMeasurement$form == pixel & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
         measurementX$particlesTotal[k] <- measurementX$fibres[k] + measurementX$fragments[k] + measurementX$pixels[k] + measurementX$spheres[k]
-        measurementX$upto10[k] <- nrow(tempMeasurement[which(tempMeasurement$actualLength <= 10 & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
-        measurementX$from10to20[k] <- nrow(tempMeasurement[which(tempMeasurement$actualLength > 10 & tempMeasurement$actualLength <= 20 & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
-        measurementX$from20to50[k] <- nrow(tempMeasurement[which(tempMeasurement$actualLength > 20 & tempMeasurement$actualLength <= 50 & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
-        measurementX$from50to100[k] <- nrow(tempMeasurement[which(tempMeasurement$actualLength > 50 & tempMeasurement$actualLength <= 100 & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
-        measurementX$from100to150[k] <- nrow(tempMeasurement[which(tempMeasurement$actualLength > 100 & tempMeasurement$actualLength <= 150 & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
-        measurementX$from150to200[k] <- nrow(tempMeasurement[which(tempMeasurement$actualLength > 150 & tempMeasurement$actualLength <= 200 & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
-        measurementX$from200to250[k] <- nrow(tempMeasurement[which(tempMeasurement$actualLength > 200 & tempMeasurement$actualLength <= 250 & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
-        measurementX$from250to300[k] <- nrow(tempMeasurement[which(tempMeasurement$actualLength > 250 & tempMeasurement$actualLength <= 300 & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
-        measurementX$from300to350[k] <- nrow(tempMeasurement[which(tempMeasurement$actualLength > 300 & tempMeasurement$actualLength <= 350 & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
-        measurementX$from350to400[k] <- nrow(tempMeasurement[which(tempMeasurement$actualLength > 350 & tempMeasurement$actualLength <= 400 & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
-        measurementX$from400to450[k] <- nrow(tempMeasurement[which(tempMeasurement$actualLength > 400 & tempMeasurement$actualLength <= 450 & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
-        measurementX$from450to500[k] <- nrow(tempMeasurement[which(tempMeasurement$actualLength > 450 & tempMeasurement$actualLength <= 500 & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
-        measurementX$above500[k] <- nrow(tempMeasurement[which(tempMeasurement$actualLength > 500 & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
+        # fill fields of sizeclasses
+        for(l in 1:(length(sizeclasses)+1)){
+          if(l == 1){ # for the first number it's 0 to <=x
+            measurementX[,paste("from", "0", "to", sizeclasses[l], sep="")][k] <- nrow(tempMeasurement[which(tempMeasurement$actualLength <= sizeclasses[l] & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
+          }
+          else if(l == (length(sizeclasses)+1)){ # for the last number it's >x to infinite
+            measurementX[,paste("above", sizeclasses[l-1], sep="")][k] <- nrow(tempMeasurement[which(tempMeasurement$actualLength > sizeclasses[l-1] & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
+          }
+          else{
+            measurementX[,paste("from", sizeclasses[l-1], "to", sizeclasses[l], sep="")][k] <- nrow(tempMeasurement[which(tempMeasurement$actualLength > sizeclasses[l-1] & tempMeasurement$actualLength <= sizeclasses[l] & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
+          }
+        }  
+        
       }# end for(k)
       
       # store measurementX into tempobj
@@ -229,31 +273,31 @@ evalPurency <- function(path,
     # now I have all measurements in tempobj
     # now I can sum all measurements together and write all data into an excelfile
     # each measurement and the summary gets their own sheet 
-    suppressWarnings(
-      measurementSum <- data.frame(
-        sample = rep(NA, length(polymers)+1),
-        measurement = rep(NA, length(polymers)+1),
-        polymer = rep(NA, length(polymers)+1),
-        fibres = rep(0, length(polymers)+1),
-        fragments = rep(0, length(polymers)+1),
-        spheres = rep(0, length(polymers)+1),
-        pixels = rep(0, length(polymers)+1),
-        particlesTotal = rep(0, length(polymers)+1),
-        upto10 = rep(0, length(polymers)+1),
-        from10to20 = rep(0, length(polymers)+1),
-        from20to50 = rep(0, length(polymers)+1),
-        from50to100 = rep(0, length(polymers)+1),
-        from100to150 = rep(0, length(polymers)+1),
-        from150to200 = rep(0, length(polymers)+1),
-        from200to250 = rep(0, length(polymers)+1),
-        from250to300 = rep(0, length(polymers)+1),
-        from300to350 = rep(0, length(polymers)+1),
-        from350to400 = rep(0, length(polymers)+1),
-        from400to450 = rep(0, length(polymers)+1),
-        from450to500 = rep(0, length(polymers)+1),
-        above500 = rep(0, length(polymers)+1)
-      )
-    ) # end supressWarnings
+    measurementSum <- data.frame(
+      sample = rep(NA, length(polymers)),
+      measurement = rep(NA, length(polymers)),
+      polymer = rep(NA, length(polymers)),
+      fibres = rep(0, length(polymers)),
+      fragments = rep(0, length(polymers)),
+      spheres = rep(0, length(polymers)),
+      pixels = rep(0, length(polymers)),
+      particlesTotal = rep(0, length(polymers))
+    )
+    # add columns for sizeclasses
+    for(l in 1:(length(sizeclasses)+1)){
+      if(l == 1){ # for the first number it's 0 to <=x
+        measurementSum <- cbind(measurementSum, data.frame(x = rep(0, length(polymers))))
+        colnames(measurementSum) <- c(colnames(measurementSum)[-length(colnames(measurementSum))], paste("from", "0", "to", sizeclasses[l], sep=""))
+      }
+      else if(l == (length(sizeclasses)+1)){ # for the last number it's >x to infinite
+        measurementSum <- cbind(measurementSum, data.frame(x = rep(0, length(polymers))))
+        colnames(measurementSum) <- c(colnames(measurementSum)[-length(colnames(measurementSum))], paste("above", sizeclasses[l-1], sep=""))
+      }
+      else{
+        measurementSum <- cbind(measurementSum, data.frame(x = rep(0, length(polymers))))
+        colnames(measurementSum) <- c(colnames(measurementSum)[-length(colnames(measurementSum))], paste("from", sizeclasses[l-1], "to", sizeclasses[l], sep=""))
+      }
+    }
     
     # iterate over the possible polymers (that way it is in desired order and the table is similar across samples)
     for(j in 1:length(polymers)){
@@ -268,46 +312,53 @@ evalPurency <- function(path,
         measurementSum$spheres[j] <- measurementSum$spheres[j] + if(length(tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$spheres) != 0){tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$spheres}else{0}
         measurementSum$pixels[j] <- measurementSum$pixels[j] + if(length(tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$pixels) != 0){tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$pixels}else{0}
         measurementSum$particlesTotal[j] <- measurementSum$fibres[j] + measurementSum$fragments[j] + measurementSum$pixels[j]
-        measurementSum$upto10[j] <- measurementSum$upto10[j] + if(length(tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$upto10) != 0){tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$upto10}else{0}
-        measurementSum$from10to20[j] <- measurementSum$from10to20[j] + if(length(tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$from10to20) != 0){tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$from10to20}else{0}
-        measurementSum$from20to50[j] <- measurementSum$from20to50[j] + if(length(tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$from20to50) != 0){tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$from20to50}else{0}
-        measurementSum$from50to100[j] <- measurementSum$from50to100[j] + if(length(tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$from50to100) != 0){tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$from50to100}else{0}
-        measurementSum$from100to150[j] <- measurementSum$from100to150[j] + if(length(tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$from100to150) != 0){tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$from100to150}else{0}
-        measurementSum$from150to200[j] <- measurementSum$from150to200[j] + if(length(tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$from150to200) != 0){tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$from150to200}else{0}
-        measurementSum$from200to250[j] <- measurementSum$from200to250[j] + if(length(tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$from200to250) != 0){tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$from200to250}else{0}
-        measurementSum$from250to300[j] <- measurementSum$from250to300[j] + if(length(tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$from250to300) != 0){tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$from250to300}else{0}
-        measurementSum$from300to350[j] <- measurementSum$from300to350[j] + if(length(tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$from300to350) != 0){tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$from300to350}else{0}
-        measurementSum$from350to400[j] <- measurementSum$from350to400[j] + if(length(tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$from350to400) != 0){tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$from350to400}else{0}
-        measurementSum$from400to450[j] <- measurementSum$from400to450[j] + if(length(tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$from400to450) != 0){tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$from400to450}else{0}
-        measurementSum$from450to500[j] <- measurementSum$from450to500[j] + if(length(tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$from450to500) != 0){tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$from450to500}else{0}
-        measurementSum$above500[j] <- measurementSum$above500[j] + if(length(tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$above500) != 0){tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),]$above500}else{0}
+        # fill fields of sizeclasses
+        for(l in 1:(length(sizeclasses)+1)){
+          if(l == 1){ # for the first number it's 0 to <=x
+            measurementSum[,paste("from", "0", "to", sizeclasses[l], sep="")][j] <- measurementSum[,paste("from", "0", "to", sizeclasses[l], sep="")][j] + if(length(tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),][,paste("from", "0", "to", sizeclasses[l], sep="")]) != 0){tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),][,paste("from", "0", "to", sizeclasses[l], sep="")]}else{0}
+          }
+          else if(l == (length(sizeclasses)+1)){ # for the last number it's >x to infinite
+            measurementSum[,paste("above", sizeclasses[l-1], sep="")][j] <- measurementSum[,paste("above", sizeclasses[l-1], sep="")][j] + if(length(tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),][,paste("above", sizeclasses[l-1], sep="")]) != 0){tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),][,paste("above", sizeclasses[l-1], sep="")]}else{0}
+          }
+          else{
+            measurementSum[,paste("from", sizeclasses[l-1], "to", sizeclasses[l], sep="")][j] <- measurementSum[,paste("from", sizeclasses[l-1], "to", sizeclasses[l], sep="")][j] + if(length(tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),][,paste("from", sizeclasses[l-1], "to", sizeclasses[l], sep="")]) != 0){tempobj[[k]][which(tempobj[[k]]$polymer == polymers[j]),][,paste("from", sizeclasses[l-1], "to", sizeclasses[l], sep="")]}else{0}
+          }
+        }  
         
       }# end for k
     } # end for j
     
     # add a bottom line with the sum of each column (requested feature)
-    measurementSum$sample[length(polymers)+1] <- "column sum"
-    measurementSum$measurement[length(polymers)+1] <- "column sum"
-    measurementSum$polymer[length(polymers)+1] <- "column sum"
-    measurementSum$fibres[length(polymers)+1] <- sum(measurementSum$fibres)
-    measurementSum$fragments[length(polymers)+1] <- sum(measurementSum$fragments)
-    measurementSum$spheres[length(polymers)+1] <- sum(measurementSum$spheres)
-    measurementSum$pixels[length(polymers)+1] <- sum(measurementSum$pixels)
-    measurementSum$particlesTotal[length(polymers)+1] <- sum(measurementSum$particlesTotal)
-    measurementSum$upto10[length(polymers)+1] <- sum(measurementSum$upto10)
-    measurementSum$from10to20[length(polymers)+1] <- sum(measurementSum$from10to20)
-    measurementSum$from20to50[length(polymers)+1] <- sum(measurementSum$from20to50)
-    measurementSum$from50to100[length(polymers)+1] <- sum(measurementSum$from50to100)
-    measurementSum$from100to150[length(polymers)+1] <- sum(measurementSum$from100to150)
-    measurementSum$from150to200[length(polymers)+1] <- sum(measurementSum$from150to200)
-    measurementSum$from200to250[length(polymers)+1] <- sum(measurementSum$from200to250)
-    measurementSum$from250to300[length(polymers)+1] <- sum(measurementSum$from250to300)
-    measurementSum$from300to350[length(polymers)+1] <- sum(measurementSum$from300to350)
-    measurementSum$from350to400[length(polymers)+1] <- sum(measurementSum$from350to400)
-    measurementSum$from400to450[length(polymers)+1] <- sum(measurementSum$from400to450)
-    measurementSum$from450to500[length(polymers)+1] <- sum(measurementSum$from450to500)
-    measurementSum$above500[length(polymers)+1] <- sum(measurementSum$above500)
-    
+    if(eocsum == TRUE){
+      
+      tempsumrow <- data.frame(
+                                sample = "column sum",
+                                measurement = "column sum",
+                                polymer = "column sum",
+                                fibres = sum(measurementSum$fibres),
+                                fragments = sum(measurementSum$fragments),
+                                spheres = sum(measurementSum$spheres),
+                                pixels = sum(measurementSum$pixels),
+                                particlesTotal = sum(measurementSum$particlesTotal)
+                              )
+      # add columns for sizeclasses
+      for(l in 1:(length(sizeclasses)+1)){
+        if(l == 1){ # for the first number it's 0 to <=x
+          tempsumrow <- cbind(tempsumrow, data.frame(x = sum(measurementSum[,paste("from", "0", "to", sizeclasses[l], sep="")])))
+          colnames(tempsumrow) <- c(colnames(tempsumrow)[-length(colnames(tempsumrow))], paste("from", "0", "to", sizeclasses[l], sep=""))
+        }
+        else if(l == (length(sizeclasses)+1)){ # for the last number it's >x to infinite
+          tempsumrow <- cbind(tempsumrow, data.frame(x = sum(measurementSum[,paste("above", sizeclasses[l-1], sep="")])))
+          colnames(tempsumrow) <- c(colnames(tempsumrow)[-length(colnames(tempsumrow))], paste("above", sizeclasses[l-1], sep=""))
+        }
+        else{
+          tempsumrow <- cbind(tempsumrow, data.frame(x = sum(measurementSum[,paste("from", sizeclasses[l-1], "to", sizeclasses[l], sep="")])))
+          colnames(tempsumrow) <- c(colnames(tempsumrow)[-length(colnames(tempsumrow))], paste("from", sizeclasses[l-1], "to", sizeclasses[l], sep=""))
+        }
+      }
+      
+      measurementSum <- rbind(measurementSum, tempsumrow)
+    }
     
     # write results into excel file
     allMeasurements <- data.frame()

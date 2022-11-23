@@ -1,3 +1,10 @@
+# evalPurency 1.1.3.9004
+  
+  - changed the way how the column summary is calculated to support the following feature
+  - added a new parameter. Now *eocsum* can be set TRUE (detault) or FALSE to get this line or skip this calculation.
+  - added a new parameter. Now labpreset can be set accordingly for different labs, that not all parameters have to be changed/set manually for other labs. Labpresets can now be requested and implemented fast.
+  - a new parameter was added. Now the user can set the desired size classes that should be evaluated. Now, virtually every parameters is programmed dynamically and can be customised.
+
 # evalPurency 1.1.1.9003
 
   - added customizable parameters to adopt the function in other labs with other naming conventions and different preset

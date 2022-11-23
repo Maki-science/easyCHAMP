@@ -13,12 +13,12 @@ Microplastics can be found in any part of an environmental or nutritional sample
 ## Purpose of this package
 Commonly in microplastic research, a sample is splitted and filtered on several filters. These filters have to be measured separately via FTIR and can be then evaluated using the Purency software (https://www.purency.ai/). This produces .csv files for each measurement.
 
-This package and its functions can be used to automate the single file handling and gathering the relevant data for each sample into one file.
+This package and its functions can be used to automate the single file handling and gathering the relevant data for each sample into one file. Commonly the processing requires only a few seconds instead of hours (of copying and pasting).
 
-It will count occurences of fibres, fragments, spheres and pixels, as well as size fractions (<10, 10-20, 20-50, 50-100, 100-150, 150-200,..., >500) for each polymer. Each file (i.e., each measurement) is evaluated separately, as well as summarized for all files (i.e., one sample). For each sample a new excel file will be generated
-    in the folder where the files are placed.
+It will count occurences of fibres, fragments, spheres and pixels, as well as different (customisable) size fractions (<10, 10-20, 20-50, 50-100, 100-150, 150-200,..., >500) for each polymer. Each file (i.e., each measurement) is evaluated separately, as well as summarized for all files (i.e., one sample). For each sample a new excel file will be generated in the folder where the files are placed. If desired, the function returns a data frame to the R environment, which can be used for further processing in R, if desired.
 
-I've written this package for the TOEKI working group of the university of bayreuth, to allow simple and (almost) bulletproof application. If you are interested in adopting the framework for another lab with different specifications, let me know and I will see what I can do. Ideas for implementation for broader usability are appreciated.
+The default parameter settings are based on the requirements of the TOEKI group (AG Laforsch) of the University of Bayreuth. However, the function is highly customisable, and you can change all parameters to your desire. Read further below for detailed instruction what and how you can/should change things.
+
 
 ## Installation
 
@@ -73,6 +73,14 @@ evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/",
                          "PSU", "SI", "PLA", "PLAPBAT"))
 ```
 
+### Change evaluated size classes
+The size classes that should be evaluated by the function can be set manually. The function will dynamically switch to the desired size classes. It will sum the numbers from 0 to the first number (e.g., <=10. Then it will always exclude the lower number and include the upper number (e.g., >10 to <= 20, >20 to <= 50, ...). Finally, the highest number to infinite (e.g., >500).
+``` r
+evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
+            sizeclasses = c(10, 20, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500))
+```
+
+
 ### Keep the data in R as data frame
 If you further want to proceed and analyse the data with R, you can set *dataReturn = TRUE*. The function will then return a data frame consisting of all measurements of all samples of the selected folder.
 ``` r
@@ -82,13 +90,21 @@ mydata <- evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/",
 You can now proceed with *mydata* and do your analyses or plotting as usual.
 
 
+### Summary of each column at the bottom
+The function adds a bottom line to the summary data. There, each column is summed for custom purpose (e.g., quality control of the function and preliminary steps). However, if you don't like this line to be in your data set, e.g., because you want to process the data further, you can skipt the calculation by adding *eocsum = FALSE* to the function call.
+``` r
+mydata <- evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
+                      eocsum = FALSE)
+```
 
 ## Use this package in another lab
 The output of Purency can be customized to a certain extend and different labs may have different requirements and conventions on how to name things (also in the language this is done). Therefore, the default settings of this function apply for the animal ecology group of the University of Bayreuth. Unfortunately, there is no smart way to workaround. Thus, this function requires several parameters to preset the working environment of the lab.
 
-To make it as generic and convenient to other labs working with this package, you can overwrite the default settings to your liking. In case you would prefer a complete preset for your lab, that you don't have to provide each parameter separately, I can implement a preset set to your desire if you open an issue or send me a request.
+To make it as generic and convenient to other labs working with this package, you can overwrite the default settings to your liking. In case you would prefer a complete preset for your lab, that you don't have to provide each parameter separately, I can implement a preset set to your desire if you open an issue or send me a request. This can be done quite fast.
 
+A preset can be set in the function call by adding the parameter *labpreset = "MYOWNLABNAME"*.
 
+If no preset is available for your lab, so far, consider the following:
 Parameters to be adjusted (just add the necessary parameters as additional parameter in the function call):
 
   - colPol = 6, Column number where the polymer type is stated. In the TOEKI lab this is column 6 (Class Name). Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
