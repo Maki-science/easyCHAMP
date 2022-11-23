@@ -8,7 +8,20 @@ evalPurency(
   path,
   polymers = c("PU", "EVAc", "PA", "PAN", "PBT", "PET", "PE", "PMMA", "PP", "POM", "PS",
     "PVC", "PC", "ABS", "PPSU", "CA", "PEEK", "EVOH", "PSU", "SI", "PLA", "PLAPBAT"),
-  dataReturn = FALSE
+  sizeclasses = c(10, 20, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500),
+  dataReturn = FALSE,
+  eocsum = TRUE,
+  labpreset = FALSE,
+  colPol = 6,
+  colL = 17,
+  colReqPol = 24,
+  colShape = 25,
+  colCol = 26,
+  colLFib = 27,
+  fibre = "Faser",
+  sphere = "Kugel",
+  fragment = "Fragment",
+  pixel = "Pixel"
 )
 }
 \arguments{
@@ -18,11 +31,48 @@ resulting files in this directory.}
 \item{polymers}{A vector containing the abbreviations of polymers to be considered. Default vector contains 22
 polymers.}
 
+\item{sizeclasses}{A vector containing desired sizeclasses to be evaluated. Default is c(10, 20, 50, 100, 150,
+200, 250, 300, 350, 400, 450, 500) The function starts at 0 and then uses the set steps.
+It always uses values up to the provided higher number but excluding the former number (e.g., for
+the default values, the function uses 0 to <= 10, >10 to <= 20, >20 to <= 50, ..., all >500).}
+
 \item{dataReturn}{If set TRUE, a data frame will be returned containing the data of all measurement with
 the necessary information.}
+
+\item{eocsum}{If TRUE (default) it adds a column sum at the end of each column of the summary panel.}
+
+\item{labpreset}{A preset for most of the parameters (except: path, polymers, dataReturn, eocsum).
+Can be requested by other labs, to be implemented, that they don't have to be set manually all the time.}
+
+\item{colPol}{Column number where the polymer type is stated. In the TOEKI lab this is column 6 (Class Name).
+Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).}
+
+\item{colL}{Column number for the particle length. In the TOEKI lab this is column 17 (Length 5µ).
+Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).}
+
+\item{colReqPol}{Column number for the particle check, whether the particle is a polymer or not.
+In the TOEKI lab this is column 24 (Plastik? or Plastik ja/nein). Could also be provided as column name, but only
+in ASCII encoding (e.g., special character as . and ä = d).}
+
+\item{colShape}{Column number for the particle shape. In the TOEKI lab this is column 25 (Form).
+Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).}
+
+\item{colCol}{Column number for the particle color In the TOEKI lab this is column 26 (Farbe).
+Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).}
+
+\item{colLFib}{Column number for the particle length in case of a fibre with corrected length (because of curvy shape)
+In the TOEKI lab this is column 27 (Länge). Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).}
+
+\item{fibre}{How fibres are called in colShape (Form). In the TOEKI lab it is 'Faser'.}
+
+\item{sphere}{How spheres are called in colShape (Form). In the TOEKI lab it is 'Kugel'.}
+
+\item{fragment}{How fragments are called in colShape (Form). In the TOEKI lab it is 'Fragment'.}
+
+\item{pixel}{How pixels are called in colShape (Form). In the TOEKI lab it is 'Pixel'.}
 }
 \description{
-Evaluate csv files, produced by purrency. It will count occurences of of fibres, fragments, spheres and pixels,
+Evaluate csv files, produced by Purency. It will count occurences of of fibres, fragments, spheres and pixels,
 as well as size fractions (<10, 10-20, 20-50, 50-100, 100-150, 150-200,..., >500) for each polymer. Each file (i.e., each measurement)
 is evaluated separately, as well as summarized for all files (i.e., one sample).
 }

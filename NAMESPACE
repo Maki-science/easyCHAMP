@@ -2,3 +2,4 @@
 
 export(evalPurency)
 import(writexl)
+importFrom(utils,read.csv)

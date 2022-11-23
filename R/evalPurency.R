@@ -20,7 +20,7 @@
 #' Can be requested by other labs, to be implemented, that they don't have to be set manually all the time. 
 #' @param colPol Column number where the polymer type is stated. In the TOEKI lab this is column 6 (Class Name). 
 #' Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
-#' @param colL Column number for the particle length. In the TOEKI lab this is column 17 (Length [5µ]). 
+#' @param colL Column number for the particle length. In the TOEKI lab this is column 17 (Length 5µ). 
 #' Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
 #' @param colReqPol Column number for the particle check, whether the particle is a polymer or not. 
 #' In the TOEKI lab this is column 24 (Plastik? or Plastik ja/nein). Could also be provided as column name, but only 
@@ -38,6 +38,7 @@
 #'
 #' @export
 #' @import writexl
+#' @importFrom utils read.csv
 #'
 evalPurency <- function(path, 
                         polymers = c("PU", "EVAc", "PA", "PAN", "PBT", "PET", "PE", "PMMA", "PP", 
