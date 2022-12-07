@@ -1,16 +1,32 @@
 citHeader("To cite evalPurency in publications use:
 
     Marvin Kiene (2022). evalPurency: Automated Evaluation of Purency Data. R
-  package version 1.1.1.0002. https://github.com/Maki-science/evalPurency
+  package version 1.2.4.9004. https://github.com/Maki-science/evalPurency
     ")
 
 citEntry(
   entry    = "Misc",
   title    = "evalPurency: Automated Evaluation of Purency Data",
   author   = c(person("Marvin", "Kiene", , "info@maki-science.org", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0001-9981-5661"))),
-  note     = {"R package version 1.1.1.0002"},
-  year     = 2022,
+           comment = c(ORCID = "0000-0001-9981-5661")),
+       person(
+          "Eva", "Vizsolyi Cseperke",
+          role = c("aut"),
+          comment = c(ORCID = "0000-0002-9786-1071")
+          ),
+      person(
+          "Martin", "Löder",
+          role = c("aut"),
+          comment = c(ORCID = "0000-0002-3034-9305")
+          ),
+      person(
+          "Christian", "Laforsch",
+          role = c("aut"),
+          comment = c(ORCID = "0000-0001-9981-5661")
+          )
+      ),
+  note     = {"R package version 1.2.4.9004"},
+  year     = 2023,
   url      = "https://github.com/Maki-science/evalPurency",
   textVersion = paste(
 

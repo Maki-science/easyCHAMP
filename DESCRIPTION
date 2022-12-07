@@ -1,15 +1,32 @@
 Package: evalPurency
 Title: Automated Evaluation of Purency Data
-Version: 1.1.3.9004
+Version: 1.2.4.9004
 Authors@R: 
-    person("Marvin", "Kiene", , "info@maki-science.org", role = c("aut", "cre"),
-         comment = c(ORCID = "0000-0001-9981-5661"))
+    c(person("Marvin", "Kiene", , "info@maki-science.org", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-9981-5661")),
+       person(
+          "Eva", "Vizsolyi Cseperke",
+          role = c("aut"),
+          comment = c(ORCID = "0000-0002-9786-1071")
+          ),
+      person(
+          "Martin", "Löder",
+          role = c("aut"),
+          comment = c(ORCID = "0000-0002-3034-9305")
+          ),
+      person(
+          "Christian", "Laforsch",
+          role = c("aut"),
+          comment = c(ORCID = "0000-0001-9981-5661")
+          )
+      )
 Maintainer: Marvin Kiene <info@maki-science.org>
 Description: Evaluate a bulk of csv files in one directory, produced by Purency. 
     It will count occurrences of of fibres, fragments, spheres and pixels, as well as size fractions 
     (<10, 10-20, 20-50, 50-100, 100-150, 150-200,..., >500) for each polymer. Each 
     file (i.e., each measurement) is evaluated separately, as well as summarized 
-    for all files (i.e., one sample). For each sample a new excel file will be generated
+    for all files (i.e., one sample). Also the blank correction is done during the processing.
+    For each sample a new excel file will be generated
     in the folder where the files are placed. The function is highly customisable and each 
     parameter can be changed to your desire.
 License: CC BY 4.0
@@ -22,3 +39,7 @@ Imports:
     writexl
 Depends: 
     R (>= 2.10)
+Suggests: 
+    covr,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

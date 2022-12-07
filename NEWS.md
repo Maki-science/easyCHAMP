@@ -1,3 +1,8 @@
+# evalPurency 1.2.4.9004
+
+  - added a new feature: now the function can also perform the blank correction for the data provided (read the readme or description to find out more)
+  - you can now chose with an additional parameter whether to incorporate a division factor (if you just used parts of your sample) for samples and blanks separately. The function will request these factors during processing to avoid confusion and mistakes during function call
+
 # evalPurency 1.1.3.9004
   
   - changed the way how the column summary is calculated to support the following feature

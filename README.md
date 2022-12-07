@@ -4,6 +4,7 @@
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/evalPurency)](https://CRAN.R-project.org/package=evalPurency)
 [![R-CMD-check](https://github.com/Maki-science/evalPurency/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Maki-science/evalPurency/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/Maki-science/evalPurency/branch/main/graph/badge.svg)](https://app.codecov.io/gh/Maki-science/evalPurency?branch=main)
 <!-- badges: end -->
 
 ## Microplastic Finder from Purency
@@ -16,7 +17,7 @@ Commonly in microplastic research, a sample is splitted and filtered on several 
 
 This package and its functions can be used to automate the single file handling and gathering the relevant data for each sample into one file. Commonly the processing requires only a few seconds instead of hours (of copying and pasting).
 
-It will count occurences of fibres, fragments, spheres and pixels, as well as different (customisable) size fractions (<10, 10-20, 20-50, 50-100, 100-150, 150-200,..., >500) for each polymer. Each file (i.e., each measurement) is evaluated separately, as well as summarized for all files (i.e., one sample). For each sample a new excel file will be generated in the folder where the files are placed. If desired, the function returns a data frame to the R environment, which can be used for further processing in R, if desired.
+It will count occurences of fibres, fragments, spheres and pixels, as well as different (customisable) size fractions (<10, 10-20, 20-50, 50-100, 100-150, 150-200,..., >500) for each polymer. Each file (i.e., each measurement) is evaluated separately, as well as summarized for all files (i.e., one sample). Also the blank correction and correction for filter division is done by this function. For each sample a new excel file will be generated in the folder where the files are placed in. One file for each sample and one additional file, containing the data of different processing steps (also raw data) to allow a full track of the processing, if required. If desired, the function returns a list object to the R environment with all produced data sets, which can be used for further processing in R, if desired.
 
 The default parameter settings are based on the requirements of the TOEKI group (AG Laforsch) of the University of Bayreuth. However, the function is highly customisable, and you can change all parameters to your desire. Read further below for detailed instruction what and how you can/should change things.
 
@@ -30,48 +31,55 @@ install.packages("devtools") # just necessary of not already installed
 devtools::install_github("Maki-science/evalPurency")
 ```
 Once installed, you don't need to repeat this step each time! 
-If you want to update, to the newest version, run the second line again.
+If you want to update to the newest version, run the second line again.
 
 ## Workflow
-The (pre-)Purency workflow usually produces several filters (measurements) for each sample. I highly recommend to adopt a common file-naming procedure. The function uses everything of the .csv file names before the first '_' as sample name. The rest is considered as measurement name (e.g., SAMPLENAME_MEASUREMENTX.csv).
+The (pre-)Purency workflow usually produces several filters (measurements) for each sample. We highly recommend to adopt a common file-naming procedure. The function uses everything of the .csv file names before the first '_' as sample name. The rest is considered as measurement name (e.g., SAMPLENAME_MEASUREMENTX.csv). Blanks for the respective samples should be named with the sample name and blank (e.g., SAMPLENAMEBlank). This also allows for one blank for multiple filters/samples from one location (i.e., replicates), by naming the samples accordingly (e.g., SAMPLENAMEFilter1, SAMPLENAMEFilter2, SAMPLENAMEBlank).
+*WARNING: The naming of the files is an important prerequisite for a proper processing. This cannot be done smarter. Thus you need to cautiosly set your file names!*
 
-Put all files you want to process into one folder. I recommend to put all files of a certain project/study or similar into one folder.
+Put all files you want to process including their blank files into one folder. We recommend to put all files of a certain project/study or similar into one folder and process them at once.
 
 To use the package function, just load the package as usual:
 ``` r
 library(evalPurency)
 ```
 
-Now simply run the follwing line, but change the path accordingly to the location where you stored your files to be processed. Make sure to use (or change) '/' and not '\', since only windows uses backslashes. 
+Now simply run the follwing line, but change the path accordingly to the location where you stored your files to be processed. Make sure to use (or change) '/' and not '\\', since only windows uses backslashes. 
 
-This is an example from the TOEKI student server:
 ``` r
-evalPurency(path="//SERVERADDRESS/LSTOEK1_STUDENT/MYNAME/MYFILESTOBEPROCESSED/")
+evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/") # or similar
 ```
 The '/' in the end is required!
-Copy and paste this line into the console press 'enter'.
+Copy and paste this line into the console and press 'enter'.
 
 The function will warn you if there are missing values at some files. The respective files and columns are reported.
 Once it finished the processing it will message that it is done.
 
-It will usually need just very few seconds to process e.g. 100 files. An excel file for each sample is created in the selected folder. On the first sheet, a summary of the whole sample is provided with the counts of particle form and size fractions as well as the sum of each column as the last line. On the second sheet, each measurement is evaluated in case you want trace back the single measurements.
+It will usually need just very few seconds to process e.g. 100 files. An excel file for each sample is created in the selected folder where the sample results are summarized. For all files there is one additional file with the processing data. There you can find data sets of each processing step on separate sheets (also raw data), so you can trace back the calculation and/or load parts of the data into R if required without running the whole function again.
 
 For compatibility the Excel files are of an old version. Therefore, there might occur a message about potential broken file that you have to confirm. However, the warning can be ignored.
 
-Of course you can also use your local hard drive like so:
+## Additional parameters
+The function is made fully dynamic and customisable. You can choose the options further below and combine them to your desire.
+
+### Use not the recommended file naming
+If you choose not to call your blank files as recommended (MYSAMPLENAMEBlank - with a capital *B*) you should change it accordingly. We chose to use case sensitivity here to prevent accidantial choice of the wrong files as blanks. Here an example with a noncapital *b* (i.e., MYSAMPLENAMEblank):
 ``` r
-evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/") # or similar
+evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/",
+            blankKey = "blank")
 ```
+*WARNING: The rest of the naming recommendaton, we would still recommend to adopt. However, feel free to adapt it to your liking as long as the division with the _ (underline) is provided, etc.*
 
 ### Change evaluated polymers
 At the current state, the function evaluates up to 22 polymers (see example).
 If you would like to add polymers, or just evaluate some of them, you can overwrite the default setting by simply change the content of the 'c(...)' accordingly (make sure, that the content is not ending with a , like (... ,). 
-Just delete or add the (un)desired polymers.
+Just delete or add the (un)desired polymers. 
+*WARNING: If you have named the polymers differently in your Purency software, you should set these accordingly here.*
 ``` r
 evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
             polymers = c("PU", "EVAc", "PA", "PAN", "PBT", "PET", "PE", "PMMA", "PP", 
                          "POM", "PS", "PVC", "PC", "ABS", "PPSU", "CA", "PEEK", "EVOH", 
-                         "PSU", "SI", "PLA", "PLAPBAT"))
+                         "PSU", "SILICONE", "PLA", "PLAPBAT"))
 ```
 
 ### Change evaluated size classes
@@ -83,12 +91,13 @@ evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/",
 
 
 ### Keep the data in R as data frame
-If you further want to proceed and analyse the data with R, you can set *dataReturn = TRUE*. The function will then return a data frame consisting of all measurements of all samples of the selected folder.
+If you further want to proceed and analyse the data with R, you can set *dataReturn = TRUE*. The function will then return a data frame consisting of all measurements of all samples of the selected folder as well as the blanks and raw data.
 ``` r
-mydata <- evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
+results <- evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
                       dataReturn = TRUE)
+allSamples <- results$sampleSummary # only use the fully processed data of all samples
 ```
-You can now proceed with *mydata* and do your analyses or plotting as usual.
+You can now proceed with this data and do your analyses or plotting as usual.
 
 
 ### Summary of each column at the bottom
@@ -105,12 +114,12 @@ To make it as generic and convenient to other labs working with this package, yo
 
 A preset can be set in the function call by adding the parameter *labpreset = "MYOWNLABNAME"*.
 
-If no preset is available for your lab, so far, consider the following:
-Parameters to be adjusted (just add the necessary parameters as additional parameter in the function call):
+If no preset is available for your lab, so far, consider the following parameters to be adjusted (just add the necessary parameters as additional parameter in the function call):
 
   - colPol = 6, Column number where the polymer type is stated. In the TOEKI lab this is column 6 (Class Name). Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
   - colL = 17, Column number for the particle length. In the TOEKI lab this is column 17 (Length [5µ]). Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
   - colReqPol = 24, Column number for the particle check, whether the particle is a polymer or not. In the TOEKI lab this is column 24 (Plastik? or Plastik ja/nein). Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
+  - ReqPolKey = "ja", key words that indicates whether it is a plastic particle or not in 'colReqPol'.
   - colShape = 25, Column number for the particle shape. In the TOEKI lab this is column 25 (Form). Could also be provided as column name, but only in ASCII encoding (e.g., special character = . and ä = d).
   - colCol = 26, Column number for the particle color In the TOEKI lab this is column 26 (Farbe). Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
   - colLFib = 27, Column number for the particle length in case of a fibre with corrected length (because of curvy shape). In the TOEKI lab this is column 27 (Länge). Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
@@ -134,11 +143,14 @@ I've commented it quite sophisticated, and changes should be quite easy when you
 
 If there are any issues or wishes for changes, you can send me a mail to info@maki-science.org or open an issue here on github (https://github.com/Maki-science/evalPurency/issues).
 
+  - If an error occurs or you get different results, each time the function runs, make sure that you have only the files in the respective folder that should be processed. If you re-run the function, you will have the previously created files there, so you need to delete them first, and then run the function again. 
+  - Make sure you considered all points before where a *WARNING* was provided.
+
 
 ## Citation
 To cite evalPurency in publications use:
 
-Marvin Kiene (2022). evalPurency: Automated Evaluation of Purency Data. R package version 1.1.1.0002.
+Marvin Kiene, Eva Vizsolyi Cseperke, Martin Löder and Christian Laforsch (2023). evalPurency: Automated Evaluation of Purency Data. R package version 1.2.4.9004.
 https://github.com/Maki-science/evalPurency
 
 
@@ -146,8 +158,8 @@ A BibTeX-entry for LaTeX-user is
 
   @Misc{,
     title = {evalPurency: Automated Evaluation of Purency Data},
-    author = {Marvin Kiene},
-    note = {R package version 1.1.1.0002},
-    year = {2022},
+    author = {Marvin Kiene and Eva {Vizsolyi Cseperke} and Martin Löder and Christian Laforsch},
+    note = {R package version 1.2.4.9004},
+    year = {2023},
     url = {https://github.com/Maki-science/evalPurency},
   }

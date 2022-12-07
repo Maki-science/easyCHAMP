@@ -7,14 +7,18 @@
 evalPurency(
   path,
   polymers = c("PU", "EVAc", "PA", "PAN", "PBT", "PET", "PE", "PMMA", "PP", "POM", "PS",
-    "PVC", "PC", "ABS", "PPSU", "CA", "PEEK", "EVOH", "PSU", "SI", "PLA", "PLAPBAT"),
+    "PVC", "PC", "ABS", "PPSU", "CA", "PEEK", "EVOH", "PSU", "SILICONE", "PLA",
+    "PLAPBAT"),
   sizeclasses = c(10, 20, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500),
+  setDivFactor = FALSE,
   dataReturn = FALSE,
   eocsum = TRUE,
+  blankKey = "Blank",
   labpreset = FALSE,
   colPol = 6,
   colL = 17,
   colReqPol = 24,
+  ReqPolKey = "ja",
   colShape = 25,
   colCol = 26,
   colLFib = 27,
@@ -36,15 +40,26 @@ polymers.}
 It always uses values up to the provided higher number but excluding the former number (e.g., for
 the default values, the function uses 0 to <= 10, >10 to <= 20, >20 to <= 50, ..., all >500).}
 
+\item{setDivFactor}{If set TRUE, the function will request division factors for each filter during the processing.
+sometimes the filters have to be divided because there are too many particles for one measurement. Then
+only a part of the original sample is analysed, which has to be corrected during the blank correction.
+It further might be, that the blank has a different division factor than the sample, since it might be good
+to use the full blank particle numbers and/or if a filter breaks appart, the factor might change for a single
+sample Therefore each sample (and blank) need its own factor. Defaults to FALSE.}
+
 \item{dataReturn}{If set TRUE, a data frame will be returned containing the data of all measurement with
 the necessary information.}
 
 \item{eocsum}{If TRUE (default) it adds a column sum at the end of each column of the summary panel.}
 
+\item{blankKey}{The key word to distinguish blanks from other measurements/samples. It is case sensitive to prevent
+accidental matching. Defaults to "Blank".}
+
 \item{labpreset}{A preset for most of the parameters (except: path, polymers, dataReturn, eocsum).
 Can be requested by other labs, to be implemented, that they don't have to be set manually all the time.}
 
 \item{colPol}{Column number where the polymer type is stated. In the TOEKI lab this is column 6 (Class Name).
+The polymer names (or abbreviations) can be set manually in 'polymers' in case the default does not apply.
 Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).}
 
 \item{colL}{Column number for the particle length. In the TOEKI lab this is column 17 (Length 5µ).
@@ -53,6 +68,8 @@ Could also be provided as column name, but only in ASCII encoding (e.g., special
 \item{colReqPol}{Column number for the particle check, whether the particle is a polymer or not.
 In the TOEKI lab this is column 24 (Plastik? or Plastik ja/nein). Could also be provided as column name, but only
 in ASCII encoding (e.g., special character as . and ä = d).}
+
+\item{ReqPolKey}{key word or sentence of 'colReqPol' that indicates that it is a plastic particle. Default is 'ja'.}
 
 \item{colShape}{Column number for the particle shape. In the TOEKI lab this is column 25 (Form).
 Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).}

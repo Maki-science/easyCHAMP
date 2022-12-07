@@ -2,4 +2,5 @@
 
 export(evalPurency)
 import(writexl)
+importFrom(stats,aggregate)
 importFrom(utils,read.csv)
