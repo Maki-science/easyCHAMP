@@ -89,6 +89,16 @@ evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/",
             sizeclasses = c(10, 20, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500))
 ```
 
+### You analysed only part of a sample?
+In many cases it can happen, that only a part of a sample is measured, if there are too many particles. This might be different between sample and blanks (e.g., it might be that a filter breaks appart). Therefore, you can provide a division factor for each sample and blank separately.
+
+However, to keep it simple and prevent mistakes, you only set *setDivFactor = TRUE*. This will cause the function to request the required values during the processing. Just watch your R console and follow the instructions.
+``` r
+evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
+            setDivFactor = TRUE)
+```
+If you only use a quarter of your sample the factor you should provide here is 0.25. If you did not divide a sample it is 1.
+*WARNING: Make sure to exactly follow the instructions. Keep the order similar to the provided order of the samples/blanks*
 
 ### Keep the data in R as data frame
 If you further want to proceed and analyse the data with R, you can set *dataReturn = TRUE*. The function will then return a data frame consisting of all measurements of all samples of the selected folder as well as the blanks and raw data.
