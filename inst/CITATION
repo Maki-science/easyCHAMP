@@ -1,6 +1,6 @@
 citHeader("To cite evalPurency in publications use:
 
-    Marvin Kiene (2022). evalPurency: Automated Evaluation of Purency Data. R
+    Marvin Kiene (2022). evalPurency: Automated Evaluation of Data of the Purency's Microplastic Finder. R
   package version 1.2.4.9004. https://github.com/Maki-science/evalPurency
     ")
 

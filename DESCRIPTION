@@ -1,6 +1,6 @@
 Package: evalPurency
 Title: Automated Evaluation of Purency Data
-Version: 1.2.4.9004
+Version: 1.2.4.9005
 Authors@R: 
     c(person("Marvin", "Kiene", , "info@maki-science.org", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-9981-5661")),
@@ -22,8 +22,8 @@ Authors@R:
       )
 Maintainer: Marvin Kiene <info@maki-science.org>
 Description: Evaluate a bulk of csv files in one directory, produced by Purency. 
-    It will count occurrences of of fibres, fragments, spheres and pixels, as well as size fractions 
-    (<10, 10-20, 20-50, 50-100, 100-150, 150-200,..., >500) for each polymer. Each 
+    It will count occurrences of of fibres, fragments, spheres and pixels, as well as (customisable 
+    size fractions for each polymer. Each 
     file (i.e., each measurement) is evaluated separately, as well as summarized 
     for all files (i.e., one sample). Also the blank correction is done during the processing.
     For each sample a new excel file will be generated
