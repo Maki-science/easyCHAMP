@@ -1,8 +1,8 @@
 ######## evalPurency() ###########
-#' created by Marvin Kiene, use this function at own risk!
+#' Automated evaluation of Purency data
 #' @description
 #' Evaluate csv files, produced by Purency. It will count occurences of of fibres, fragments, spheres and pixels,
-#' as well as size fractions (<10, 10-20, 20-50, 50-100, 100-150, 150-200,..., >500) for each polymer. Each file (i.e., each measurement)
+#' as well as size fractions (customisable) for each polymer. Each file (i.e., each measurement)
 #' is evaluated separately, as well as summarized for all files (i.e., one sample). 
 #' 
 #' @param path The path where the files can be found. All csv files in this folder will be evaluated. Also saves the
@@ -75,7 +75,7 @@ evalPurency <- function(path,
 ){
   # set the path, where the files are stored, and where the result should be saved
   PATH <- path 
-  
+
   #### lab presets ####
   # if a preset is set, load the respective preset (if available)
   # this is how a preset is created:
@@ -159,6 +159,8 @@ evalPurency <- function(path,
       temp <- rbind(temp, temp2)
     }
   ) # end supressWarnings
+  # until here the sample data are produced. This is what Purency provides
+  
   
   # The length is not always correct for fibres.
   # Thus create a new column with the correct length for all particles (that I don't need to select the correct column further below)

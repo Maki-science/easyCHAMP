@@ -23,20 +23,22 @@ The default parameter settings are based on the requirements of the animal ecolo
 
 
 ## Installation
+After the corresponding paper is published, you should be able to download this package from CRAN (watch the badge on the top of this page). Just go to the upper tool bar of your RStudio and click *tools* > *Install Packages...* > tipe in *evalPurency* > click *install*.
 
-You can install the development version of evalPurency from [GitHub](https://github.com/) with:
+
+You can also install the development version of evalPurency from [GitHub](https://github.com/) with:
 (devtools only has to be installed once)
+If not already installed, you need to have Rtools installed on your system to be able to compile the development version *(https://cran.r-project.org/bin/windows/Rtools/)*
 ``` r
 install.packages("devtools") # just necessary of not already installed
 devtools::install_github("Maki-science/evalPurency")
 ```
 Once installed, you don't need to repeat this step each time! 
-If you want to update to the newest version, run the second line again.
+If you want to update to the newest version, just run the second line again.
 
-After the corresponding paper is published, you should also be able to download this package from CRAN (watch the badge on the top of this page).
 
 ## Workflow
-The (pre-)Purency workflow usually produces several filters (measurements) for each sample. We highly recommend to adopt a common file-naming procedure. The function uses everything of the .csv file names before the first '_' (underline) as sample name. The rest is considered as measurement 'Blank' (e.g., SAMPLENAMEBlank). This also allows for one blank for multiple filters/samples from one location (i.e., replicates), by naming the samples accordingly (e.g., SAMPLENAMEFilter1, SAMPLENAMEFilter2, SAMPLENAMEBlank).
+The (pre-)Purency workflow usually produces several filters (measurements) for each sample. We highly recommend to adopt a common file-naming procedure. The function uses everything of the .csv file names before the first '_' (underline) as sample name. The rest is considered as measurement (e.g., SAMPLENAME_measurement1of3). This also allows for one blank for multiple filters/samples from one location (i.e., replicates), by naming the samples accordingly (e.g., SAMPLENAMEFilter1, SAMPLENAMEFilter2, SAMPLENAMEBlank - or, in case of splitted measurements for each filter: e.g., SAMPLENAMEFilter1_measurement1of3, SAMPLENAMEFilter2_measurement1of3 SAMPLENAMEBlank_measurement1of2).
 
 *WARNING: The naming of the files is an important prerequisite for a proper processing. This cannot be done smarter. Thus you need to cautiously set your file names!*
 

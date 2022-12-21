@@ -4,4 +4,5 @@ test_that("multiplication works", {
 
 
 
-#usethis::use_data(presets, internal = TRUE, overwrite = TRUE)
+# usethis::use_data(sampleData, overwrite = TRUE)
+

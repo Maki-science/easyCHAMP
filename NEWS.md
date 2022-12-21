@@ -1,7 +1,7 @@
 # evalPurency 1.2.4.9005
 
   - added a new major feature: now the function can also perform the blank correction for the data provided (read the readme or description to find out more)
-  - added a new minor feature: you can now chose with an additional parameter whether to incorporate a division factor (if you just used parts of your sample) for samples and blanks separately. The function will request these factors during processing to avoid confusion and mistakes during function call
+  - added a new minor feature: you can now choose with an additional parameter whether to incorporate a division factor (if you just used parts of your sample) for samples and blanks separately. The function will request these factors during processing to avoid confusion and mistakes during function call
   - Silicone particles have been not evaluated so far, since they were implemented as 'SI'. However, the Purency configuration in our lab was 'SILICONE'. This has been corrected and should be evaluated now.
 
 # evalPurency 1.1.3.9004
