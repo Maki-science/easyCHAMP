@@ -2,7 +2,7 @@
 % Please edit documentation in R/evalPurency.R
 \name{evalPurency}
 \alias{evalPurency}
-\title{created by Marvin Kiene, use this function at own risk!}
+\title{Automated evaluation of Purency data}
 \usage{
 evalPurency(
   path,
@@ -90,6 +90,6 @@ In the TOEKI lab this is column 27 (Länge). Could also be provided as column na
 }
 \description{
 Evaluate csv files, produced by Purency. It will count occurences of of fibres, fragments, spheres and pixels,
-as well as size fractions (<10, 10-20, 20-50, 50-100, 100-150, 150-200,..., >500) for each polymer. Each file (i.e., each measurement)
+as well as size fractions (customisable) for each polymer. Each file (i.e., each measurement)
 is evaluated separately, as well as summarized for all files (i.e., one sample).
 }

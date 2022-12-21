@@ -40,7 +40,7 @@ If you want to update to the newest version, just run the second line again.
 ## Workflow
 The (pre-)Purency workflow usually produces several filters (measurements) for each sample. We highly recommend to adopt a common file-naming procedure. The function uses everything of the .csv file names before the first '_' (underline) as sample name. The rest is considered as measurement (e.g., SAMPLENAME_measurement1of3). This also allows for one blank for multiple filters/samples from one location (i.e., replicates), by naming the samples accordingly (e.g., SAMPLENAMEFilter1, SAMPLENAMEFilter2, SAMPLENAMEBlank - or, in case of splitted measurements for each filter: e.g., SAMPLENAMEFilter1_measurement1of3, SAMPLENAMEFilter2_measurement1of3 SAMPLENAMEBlank_measurement1of2).
 
-*WARNING: The naming of the files is an important prerequisite for a proper processing. This cannot be done smarter. Thus you need to cautiously set your file names!*
+*WARNING: The naming of the files is an important prerequisite for a proper processing. Thus you need to cautiously set your file names!*
 
 Put all files you want to process including their blank files into one folder. We recommend to put all files of a certain project/study or similar into one folder and process them at once.
 
@@ -76,7 +76,7 @@ evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/",
             blankKey = "blank")
 ```
 
-*WARNING: The rest of the naming recommendation, we would still recommend to adopt. However, feel free to adapt it to your liking as long as the division with the _ (underline), etc. is provided.*
+*WARNING: The rest of the naming recommendation, we would still recommend to adopt. However, feel free to adapt it to your liking as long as the division with the _ (underline), and the positioning of the blank in the sample name is provided.*
 
 ### Change evaluated polymers
 At the current state, the function evaluates up to 22 polymers (see example).
