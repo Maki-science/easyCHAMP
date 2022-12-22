@@ -26,11 +26,11 @@ The default parameter settings are based on the requirements of the animal ecolo
 After the corresponding paper is published, you should be able to download this package from CRAN (watch the badge on the top of this page). Just go to the upper tool bar of your RStudio and click *tools* > *Install Packages...* > tipe in *evalPurency* > click *install*.
 
 
-You can also install the development version of evalPurency from [GitHub](https://github.com/) with:
+You can also install the development version of evalPurency from [GitHub](https://github.com/). If not already installed, you need to have Rtools installed on your system to be able to compile the development version *(https://cran.r-project.org/bin/windows/Rtools/)*.
 (devtools only has to be installed once)
-If not already installed, you need to have Rtools installed on your system to be able to compile the development version *(https://cran.r-project.org/bin/windows/Rtools/)*
+
 ``` r
-install.packages("devtools") # just necessary of not already installed
+install.packages("devtools") # just necessary if not already installed
 devtools::install_github("Maki-science/evalPurency")
 ```
 Once installed, you don't need to repeat this step each time! 
