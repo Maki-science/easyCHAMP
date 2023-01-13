@@ -1,3 +1,10 @@
+# evalPurency 1.2.4.9008
+
+  - added sep and dec as additional parameters that can be customized to the users' csv-file specifications
+  - The division factors are now requested stepwise for each sample/blank instead of all samples at once
+  - a bug is fixed now, that sometimes produced a minor discrepancy between the real sum and the shown total particle number.
+  - Additionally to the total sample summary, the sample files also contain sheets for each particle shape with a shape-wise summary of the numbers.
+
 # evalPurency 1.2.4.9005
 
   - added a new major feature: now the function can also perform the blank correction for the data provided (read the readme or description to find out more)

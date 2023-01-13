@@ -3,6 +3,5 @@ test_that("multiplication works", {
 })
 
 
-
-# usethis::use_data(sampleData, overwrite = TRUE)
+# usethis::use_data(purencySampleData, overwrite = TRUE)
 

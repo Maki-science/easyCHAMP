@@ -14,6 +14,8 @@ evalPurency(
   dataReturn = FALSE,
   eocsum = TRUE,
   blankKey = "Blank",
+  sep = ";",
+  dec = ",",
   labpreset = FALSE,
   colPol = 6,
   colL = 17,
@@ -25,7 +27,8 @@ evalPurency(
   fibre = "Faser",
   sphere = "Kugel",
   fragment = "Fragment",
-  pixel = "Pixel"
+  pixel = "Pixel",
+  test = FALSE
 )
 }
 \arguments{
@@ -54,6 +57,10 @@ the necessary information.}
 
 \item{blankKey}{The key word to distinguish blanks from other measurements/samples. It is case sensitive to prevent
 accidental matching. Defaults to "Blank".}
+
+\item{sep}{Symbol in your csv files indicating new a column. Defaults to ';'.}
+
+\item{dec}{Symbol in your csv files indicating decimal sign. Defaults to ','.}
 
 \item{labpreset}{A preset for most of the parameters (except: path, polymers, dataReturn, eocsum).
 Can be requested by other labs, to be implemented, that they don't have to be set manually all the time.}
@@ -87,6 +94,8 @@ In the TOEKI lab this is column 27 (Länge). Could also be provided as column na
 \item{fragment}{How fragments are called in colShape (Form). In the TOEKI lab it is 'Fragment'.}
 
 \item{pixel}{How pixels are called in colShape (Form). In the TOEKI lab it is 'Pixel'.}
+
+\item{test}{Can be set TRUE when the function should be run in testing mode.}
 }
 \description{
 Evaluate csv files, produced by Purency. It will count occurences of of fibres, fragments, spheres and pixels,

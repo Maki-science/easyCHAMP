@@ -69,6 +69,14 @@ For compatibility the Excel files are of an old version. Therefore, there might 
 ## Additional parameters
 The function is made fully dynamic and customisable. You can choose the options further below and combine them to your desire.
 
+### Changing separator and decimal sign in csv-files
+Depending on the habits of the country and/or system configuration, the csv files might be different. In default, the function uses ';' as separator, indicating a new column in the csv file, and ',' as a decimal sign. Change it to your liking by adding *sep = ";"* and *dec = ","* and change the sign within the quotes.
+``` r
+evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/",
+            sep = ";",
+            dec = ",")
+```
+
 ### Use not the recommended file naming
 If you choose not to call your blank files as recommended (MYSAMPLENAMEBlank - with a capital *B*) you should change it accordingly. We chose to use case sensitivity here to prevent accidental choice of the wrong files as blanks. Here an example with a noncapital *b* (i.e., MYSAMPLENAMEblank):
 ``` r
