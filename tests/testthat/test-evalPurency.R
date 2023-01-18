@@ -21,6 +21,6 @@ test_that("Skipping eocsum works", {
 })
 
 
-usethis::use_data(presets, testdata.default, testdata.size, testdata.noeocsum,
-                  overwrite = TRUE, internal = TRUE)
+# usethis::use_data(presets, testdata.default, testdata.size, testdata.noeocsum,
+#                   overwrite = TRUE, internal = TRUE)
 
