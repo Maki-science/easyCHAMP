@@ -49,8 +49,24 @@
 #' @param pixel How pixels are called in colShape (Form). In the TOEKI lab it is 'Pixel'.
 #' @param test Can be set TRUE when the function should be run in testing mode.
 #' 
+#' @return If dataReturn = TRUE, the function returns a list object including all processed data of each processing step and the summary values.
+#' 
 #' @examples 
+#' # For this example the path doesn't matter. 
+#' # If you want to analyse your own data, set test = FALSE (or simply delete this parameter).
 #' mydata <- evalPurency(path="//HERE/COMES/YOUR/PATH/", dataReturn = TRUE, test = TRUE)
+#' 
+#' # Change evaluated size classes (evaluate <10, 10-100, 100-500 and >500 µm).
+#' mydata <- evalPurency(path="//HERE/COMES/YOUR/PATH/", sizeclasses = c(10,100,500), dataReturn = TRUE, test = TRUE)
+#'
+#' # Include a division factor for the samples and blanks (in case filters have been divided).
+#' # Only works in interactive Session.
+#' mydata <- evalPurency(path="//HERE/COMES/YOUR/PATH/", setDivFactor = TRUE, dataReturn = TRUE, test = TRUE)
+#'
+#' # Skip the summary row at bottom of each column in the sample summary.
+#' mydata <- evalPurency(path="//HERE/COMES/YOUR/PATH/", eocsum = FALSE, dataReturn = TRUE, test = TRUE)
+#'
+#' @references https://www.purency.ai/microplastics-finder
 #'
 #' @export
 #' @import writexl
