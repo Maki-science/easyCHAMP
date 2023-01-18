@@ -68,5 +68,6 @@ Most settings of evalPurency can be overwritten by a labpreset. If a labpreset i
 selected, it might overwrite or not overwrite the current function settings.
 To manage which settings will be chosen and which not (depending on NAs in labpreset),
 this function handles the configuration with labpresets correctly and returns a config data frame.
-This function is thought to ensure correct configuration and to simplify changes and maintenance.
+This function is thought to ensure correct configuration and to simplify changes and maintenance,
+as well as improving testing.
 }
