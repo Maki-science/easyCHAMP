@@ -102,3 +102,7 @@ Evaluate csv files, produced by Purency. It will count occurences of of fibres, 
 as well as size fractions (customisable) for each polymer. Each file (i.e., each measurement)
 is evaluated separately, as well as summarized for all files (i.e., one sample).
 }
+\examples{
+mydata <- evalPurency(path="//HERE/COMES/YOUR/PATH/", dataReturn = TRUE, test = TRUE)
+
+}

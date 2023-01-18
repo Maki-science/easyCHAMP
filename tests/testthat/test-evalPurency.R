@@ -1,7 +1,8 @@
-test_that("multiplication works", {
-  expect_equal(2 * 2, 4)
+test_that("default processing works", {
+  expect_equal(evalPurency(path="//HERE/COMES/YOUR/PATH/", dataReturn = TRUE, test = TRUE), 
+               testdata.default)
 })
 
 
-# usethis::use_data(purencySampleData, overwrite = TRUE)
+# usethis::use_data(presets, testdata.default, overwrite = TRUE, internal = TRUE)
 

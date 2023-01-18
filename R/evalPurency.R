@@ -48,6 +48,9 @@
 #' @param fragment How fragments are called in colShape (Form). In the TOEKI lab it is 'Fragment'.
 #' @param pixel How pixels are called in colShape (Form). In the TOEKI lab it is 'Pixel'.
 #' @param test Can be set TRUE when the function should be run in testing mode.
+#' 
+#' @examples 
+#' mydata <- evalPurency(path="//HERE/COMES/YOUR/PATH/", dataReturn = TRUE, test = TRUE)
 #'
 #' @export
 #' @import writexl
@@ -80,7 +83,6 @@ evalPurency <- function(path,
                         test = FALSE
 ){
   # set the path, where the files are stored, and where the result should be saved
-  PATH <- path 
 
   #### lab presets ####
   # if a preset is set, load the respective preset (if available)
@@ -119,6 +121,8 @@ evalPurency <- function(path,
   }
   
   if(test == FALSE){
+    PATH <- path 
+    
     #### load files ####
     # get all files in the set folder
     Dateien <- list.files(path=PATH,pattern=".csv") # search for files with .csv ending
@@ -168,7 +172,7 @@ evalPurency <- function(path,
     # until here the sample data are produced. This is what Purency provides
   } # end if test == FALSE
   else{ # if test == TRUE
-    temp <- purencySampleData
+    temp <- evalPurency::purencySampleData
   }  
     
   # The length is not always correct for fibres.
@@ -706,12 +710,14 @@ evalPurency <- function(path,
     
     #### write excel files ####
     # Now we create one excel file for the three data sets in obj (to trace back the process, if desired) and one excel file for each sample
-    writexl::write_xlsx(list(samples_summary = obj$sampleSummary, 
-                             single_measurements_corrected = obj$correctedData,
-                             blanks = obj$blanks,
-                             uncorected_data = obj$sampleDataUncorrected,
-                             raw_data = obj$rawData),
-                        paste(PATH, "processing data.xls", sep=""))
+    if(test == FALSE){
+      writexl::write_xlsx(list(samples_summary = obj$sampleSummary, 
+                               single_measurements_corrected = obj$correctedData,
+                               blanks = obj$blanks,
+                               uncorected_data = obj$sampleDataUncorrected,
+                               raw_data = obj$rawData),
+                          paste(PATH, "processing data.xls", sep=""))
+    }
     
     # for the single samples, there is the option to add a bottom line with the sum of each column (requested feature)
     for(i in 1:length(levels(factor(dataSampleSummary$sample)))){
@@ -794,14 +800,15 @@ evalPurency <- function(path,
         formwiseSums[[j]] <- formSum
       } # end for j
       
-      writexl::write_xlsx(list(sample_summary = dataSubX,
-                               sample_fibres = formwiseSums[[1]],
-                               sample_fragments = formwiseSums[[2]],
-                               sample_spheres = formwiseSums[[3]],
-                               sample_pixels = formwiseSums[[4]]
-                               ),
-                          paste(PATH, levels(factor(dataSampleSummary$sample))[i], "_evaluated.xls", sep=""))
-      
+      if(test == FALSE){
+        writexl::write_xlsx(list(sample_summary = dataSubX,
+                                 sample_fibres = formwiseSums[[1]],
+                                 sample_fragments = formwiseSums[[2]],
+                                 sample_spheres = formwiseSums[[3]],
+                                 sample_pixels = formwiseSums[[4]]
+                                 ),
+                            paste(PATH, levels(factor(dataSampleSummary$sample))[i], "_evaluated.xls", sep=""))
+      }
     } # end for i  
       
     

@@ -17,7 +17,7 @@ A data frame with 2313 rows and 7 variables:
 }
 }
 \source{
-\url{http://www.diamondse.info/}
+\url{https://github.com/Maki-science/evalPurency}
 }
 \usage{
 purencySampleData

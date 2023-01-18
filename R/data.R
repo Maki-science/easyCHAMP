@@ -13,8 +13,7 @@
 #'   \item{color}{Color of the particle (not used, yet).}
 #'   \item{lengthFibre}{If particle is a fibre, the lenght has to be measured manually. In that case, the length is stated here.}
 #' }
-#' @source \url{http://www.diamondse.info/}
-#' 
+#' @source \url{https://github.com/Maki-science/evalPurency}
 "purencySampleData"
 
 
