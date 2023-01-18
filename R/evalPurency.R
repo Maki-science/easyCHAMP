@@ -49,7 +49,8 @@
 #' @param pixel How pixels are called in colShape (Form). In the TOEKI lab it is 'Pixel'.
 #' @param test Can be set TRUE when the function should be run in testing mode.
 #' 
-#' @return If dataReturn = TRUE, the function returns a list object including all processed data of each processing step and the summary values.
+#' @return If dataReturn = TRUE, the function returns a list object including all 
+#'  processed data of each processing step and the summary values.
 #' 
 #' @examples 
 #' # For this example the path doesn't matter. 
@@ -57,14 +58,17 @@
 #' mydata <- evalPurency(path="//HERE/COMES/YOUR/PATH/", dataReturn = TRUE, test = TRUE)
 #' 
 #' # Change evaluated size classes (evaluate <10, 10-100, 100-500 and >500 µm).
-#' mydata <- evalPurency(path="//HERE/COMES/YOUR/PATH/", sizeclasses = c(10,100,500), dataReturn = TRUE, test = TRUE)
+#' mydata <- evalPurency(path="//HERE/COMES/YOUR/PATH/", 
+#'                       sizeclasses = c(10,100,500), dataReturn = TRUE, test = TRUE)
 #'
 #' # Include a division factor for the samples and blanks (in case filters have been divided).
 #' # Only works in interactive Session.
-#' mydata <- evalPurency(path="//HERE/COMES/YOUR/PATH/", setDivFactor = TRUE, dataReturn = TRUE, test = TRUE)
+#' mydata <- evalPurency(path="//HERE/COMES/YOUR/PATH/", 
+#'                      setDivFactor = TRUE, dataReturn = TRUE, test = TRUE)
 #'
 #' # Skip the summary row at bottom of each column in the sample summary.
-#' mydata <- evalPurency(path="//HERE/COMES/YOUR/PATH/", eocsum = FALSE, dataReturn = TRUE, test = TRUE)
+#' mydata <- evalPurency(path="//HERE/COMES/YOUR/PATH/", 
+#'                       eocsum = FALSE, dataReturn = TRUE, test = TRUE)
 #'
 #' @references https://www.purency.ai/microplastics-finder
 #'
@@ -81,10 +85,10 @@ evalPurency <- function(path,
                         setDivFactor = FALSE,
                         dataReturn = FALSE,
                         eocsum = TRUE,
+                        labpreset = FALSE,
                         blankKey = "Blank",
                         sep = ";",
                         dec = ",",
-                        labpreset = FALSE,
                         colPol = 6, 
                         colL = 17,
                         colReqPol = 24, 
@@ -98,45 +102,26 @@ evalPurency <- function(path,
                         pixel = "Pixel",
                         test = FALSE
 ){
-  # set the path, where the files are stored, and where the result should be saved
-
-  #### lab presets ####
-  # if a preset is set, load the respective preset (if available)
-  # this is how a preset is created:
-  # presets <- data.frame(
-  #   labname = "Laforsch",
-  #   blankKey = "blank",
-  #   colPol = 6,
-  #   colL = 17,
-  #   colReqPol = 24,
-  #   ReqPolKey = "ja",
-  #   colShape = 25,
-  #   colCol = 26,
-  #   colLFib = 27,
-  #   fibre = "Faser",
-  #   sphere = "Kugel",
-  #   fragment = "Fragment",
-  #   pixel = "Pixel"
-  # )
-  # usethis::use_data(presets, internal = TRUE, overwrite = TRUE)
-  if(labpreset != FALSE){
-    if( length(presets$labname[which(presets$labname == labpreset)]) == 0){
-      stop("You selected a labpreset, that does not exist. Please check this parameter for typo or request a new labpreset for your lab. \n")
-    }
-    
-    colPol <- presets$colPol[which(presets$labname == labpreset)]
-    colL <- presets$colL[which(presets$labname == labpreset)]
-    colReqPol <- presets$colReqPol[which(presets$labname == labpreset)]
-    colShape <- presets$colShape[which(presets$labname == labpreset)]
-    colCol <- presets$colCol[which(presets$labname == labpreset)]
-    colLFib <- presets$colLFib[which(presets$labname == labpreset)]
-    fibre <- presets$fibre[which(presets$labname == labpreset)]
-    sphere <- presets$sphere[which(presets$labname == labpreset)]
-    fragment <- presets$fragment[which(presets$labname == labpreset)]
-    pixel <- presets$pixel[which(presets$labname == labpreset)]
-  }
+  
+  # set/correct the configuration (if labpreset was chosen)
+  config <- eP.config.helper(labpreset,
+                             blankKey,
+                             sep,
+                             dec,
+                             colPol, 
+                             colL,
+                             colReqPol, 
+                             ReqPolKey,
+                             colShape, 
+                             colCol,
+                             colLFib,
+                             fibre,
+                             sphere,
+                             fragment,
+                             pixel)
   
   if(test == FALSE){
+    # set the path, where the files are stored, and where the result should be saved
     PATH <- path 
     
     #### load files ####
@@ -161,27 +146,27 @@ evalPurency <- function(path,
     suppressWarnings(
       for (i in 1:length(Dateien)){
         # need to read data as ASCII. Otherwise it sometimes makes problems with the column names with special character
-        assign("Hilfsobjekt",read.csv(paste0(PATH,Dateien[i]),sep=sep, dec=dec, skip=40, fileEncoding = "ASCII")) # read data and skip the first 40 lines
+        assign("Hilfsobjekt",read.csv(paste0(PATH,Dateien[i]),sep=config$sep, dec=config$dec, skip=40, fileEncoding = "ASCII")) # read data and skip the first 40 lines
         
         # I need to check whether the column was called Plastik? (Eva) or Plastik ja/nein (Martin)
         # otherwise it does not work properly in all cases
         # if(length(Hilfsobjekt$Plastik.ja.nein) > 0){
-        #   Hilfsobjekt <- droplevels(subset(Hilfsobjekt, Hilfsobjekt$Plastik.ja.nein == ReqPolKey))
+        #   Hilfsobjekt <- droplevels(subset(Hilfsobjekt, Hilfsobjekt$Plastik.ja.nein == config$ReqPolKey))
         #   
         # }
         # else{
-        #   Hilfsobjekt <- droplevels(subset(Hilfsobjekt, Hilfsobjekt$Plastik. == ReqPolKey))
+        #   Hilfsobjekt <- droplevels(subset(Hilfsobjekt, Hilfsobjekt$Plastik. == config$ReqPolKey))
         # }
         # now with column numbers in the default form, but can also be provided als column name
-        Hilfsobjekt <- droplevels(subset(Hilfsobjekt, Hilfsobjekt[colReqPol] == ReqPolKey))
+        Hilfsobjekt <- droplevels(subset(Hilfsobjekt, Hilfsobjekt[config$colReqPol] == config$ReqPolKey))
         
         temp2 <- data.frame(sample = name_measurement[i],
                             measurement = Dateien[i],
-                            className = Hilfsobjekt[, colPol], # polymer type
-                            length = Hilfsobjekt[, colL], # length of the particle
-                            form = Hilfsobjekt[, colShape], # fragment, pixel, fibre, sphere
-                            color = Hilfsobjekt[, colCol],
-                            lengthFibre = Hilfsobjekt[, colLFib]) # in case the fibre is curved, the length can be found here
+                            className = Hilfsobjekt[, config$colPol], # polymer type
+                            length = Hilfsobjekt[, config$colL], # length of the particle
+                            form = Hilfsobjekt[, config$colShape], # fragment, pixel, fibre, sphere
+                            color = Hilfsobjekt[, config$colCol],
+                            lengthFibre = Hilfsobjekt[, config$colLFib]) # in case the fibre is curved, the length can be found here
         temp <- rbind(temp, temp2)
       }
     ) # end supressWarnings
@@ -196,7 +181,7 @@ evalPurency <- function(path,
   temp$actualLength <- NA
   for(i in 1:nrow(temp)){
     # If lengthFibre is NA, but form is still Faser, the length is the value to be taken.
-    if(temp$form[i] == fibre && !is.na(temp$lengthFibre[i]) == TRUE){
+    if(temp$form[i] == config$fibre && !is.na(temp$lengthFibre[i]) == TRUE){
       temp$actualLength[i] <- temp$lengthFibre[i]
     }
     else{
@@ -206,12 +191,12 @@ evalPurency <- function(path,
       # To add a quality control, I check whether the field of form or length is na. If yes, a warning will be
       # thrown, including the sample and measurement.
       if(is.na(temp$form[i]) == TRUE || temp$form[i] == ""){
-        cat(warning(paste("Warning: There is a value missing in column ", colnames(Hilfsobjekt[colShape]), " in ", temp$measurement[i], "\n")))
+        cat(warning(paste("Warning: There is a value missing in column ", colnames(Hilfsobjekt[config$colShape]), " in ", temp$measurement[i], "\n")))
       }
     ) # end supressWarnings
     suppressWarnings(
       if(is.na(temp$length[i]) == TRUE || temp$length[i] == ""){
-        cat(warning(paste("Warning: There is a value missing in column ", colnames(Hilfsobjekt[colL]), " in ", temp$measurement[i], "\n")))
+        cat(warning(paste("Warning: There is a value missing in column ", colnames(Hilfsobjekt[config$colL]), " in ", temp$measurement[i], "\n")))
       }
     ) # end supressWarnings
   } # end for(i)
@@ -370,8 +355,8 @@ evalPurency <- function(path,
     
     # now we need the blanks, calculate a mean over all blanks for each sample and 
     # substract this mean number from each sample after adding up all measurements of each sample
-    dataBlanks <- dataBlankCorr[grepl(blankKey, dataBlankCorr$sample, fixed = TRUE) == TRUE,]
-    dataMeasurements <- dataBlankCorr[grepl(blankKey, dataBlankCorr$sample, fixed = TRUE) != TRUE,]
+    dataBlanks <- dataBlankCorr[grepl(config$blankKey, dataBlankCorr$sample, fixed = TRUE) == TRUE,]
+    dataMeasurements <- dataBlankCorr[grepl(config$blankKey, dataBlankCorr$sample, fixed = TRUE) != TRUE,]
     
     # the summing of the sample values should be done before the blank correction
     # thus, we will sum up all values of the samples form-size wise perform the correction and then summarize the sample without the form-size wise columns
@@ -389,9 +374,9 @@ evalPurency <- function(path,
     # check whether each sample has a blank to use for correction
     # otherwise throw a warning message
     sampleBlankChecklist <- c(rep(FALSE, length(levels(factor(data.agg.formwise$sample)))))
-    for(i in 1:length(levels(factor(unlist(strsplit(dataBlanks$sample, blankKey)))))){
+    for(i in 1:length(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey)))))){
       for(j in 1:length(levels(factor(data.agg.formwise$sample)))){
-        if(grepl(levels(factor(unlist(strsplit(dataBlanks$sample, blankKey))))[i], levels(factor(data.agg.formwise$sample))[j], fixed = TRUE) == TRUE){
+        if(grepl(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey))))[i], levels(factor(data.agg.formwise$sample))[j], fixed = TRUE) == TRUE){
           sampleBlankChecklist[j] <- TRUE
         }
       }
@@ -546,15 +531,15 @@ evalPurency <- function(path,
     
     #### perform blank correction #### 
     # iterate over the samples (with existing Blanks - should be all, though)
-    for(i in 1:length(levels(factor(unlist(strsplit(dataBlanks$sample, blankKey)))))){
+    for(i in 1:length(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey)))))){
       # iterate over all rows of the data to be corrected
       for(j in 1:nrow(data.agg.formwise)){
         # only perform a correction when the sample is the same
-        if(grepl(levels(factor(unlist(strsplit(dataBlanks$sample, blankKey))))[i], data.agg.formwise$sample[j], fixed = TRUE) == TRUE){
+        if(grepl(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey))))[i], data.agg.formwise$sample[j], fixed = TRUE) == TRUE){
           
           # calculate a correction factor. It is the mean of all Blanks for this sample of the respective polymer and form rounded to the next higher integer (to be conservative)
           # to calculate the mean we take the sum and divide manually by the number of blanks, since there are NAs (0 particles) in many cases and mean() would not count them in for the division
-              # corrFactorParticleSum <- ceiling(sum(dataBlanks[,"particleSum"][grepl(levels(factor(unlist(strsplit(dataBlanks$sample, blankKey))))[i], dataBlanks$sample, fixed = TRUE) & dataBlanks$polymer == data.agg.formwise$polymer[j] & dataBlanks$form == data.agg.formwise$form[j]], na.rm = TRUE)/length(levels(factor(dataBlanks$measurement[grepl(levels(factor(unlist(strsplit(dataBlanks$sample, blankKey))))[i], dataBlanks$sample, fixed = TRUE)]))))
+              # corrFactorParticleSum <- ceiling(sum(dataBlanks[,"particleSum"][grepl(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey))))[i], dataBlanks$sample, fixed = TRUE) & dataBlanks$polymer == data.agg.formwise$polymer[j] & dataBlanks$form == data.agg.formwise$form[j]], na.rm = TRUE)/length(levels(factor(dataBlanks$measurement[grepl(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey))))[i], dataBlanks$sample, fixed = TRUE)]))))
               # # if there is no value for this polymer in the blanks the value is NA (which means it has to be set to 0)
               # if(is.na(corrFactorParticleSum)){
               #   corrFactorParticleSum <- 0
@@ -571,7 +556,7 @@ evalPurency <- function(path,
             if(k == 1){ # for the first number it's 0 to <=x
               # calculate a correction factor. It is the mean of all Blanks for this sample of the respective polymer, form and size class, rounded to the next higher integer (to be conservative)
               # added a 0 to the vector for mean calculation, to have a 0 if NA (no data in Blanks available for this polymer)
-              corrFactor <- ceiling(sum(dataBlanks[,paste("from", "0", "to", sizeclasses[k], sep="")][grepl(levels(factor(unlist(strsplit(dataBlanks$sample, blankKey))))[i], dataBlanks$sample, fixed = TRUE) & dataBlanks$polymer == data.agg.formwise$polymer[j] & dataBlanks$form == data.agg.formwise$form[j]], na.rm = TRUE)/length(levels(factor(dataBlanks$measurement[grepl(levels(factor(unlist(strsplit(dataBlanks$sample, blankKey))))[i], dataBlanks$sample, fixed = TRUE)]))))
+              corrFactor <- ceiling(sum(dataBlanks[,paste("from", "0", "to", sizeclasses[k], sep="")][grepl(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey))))[i], dataBlanks$sample, fixed = TRUE) & dataBlanks$polymer == data.agg.formwise$polymer[j] & dataBlanks$form == data.agg.formwise$form[j]], na.rm = TRUE)/length(levels(factor(dataBlanks$measurement[grepl(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey))))[i], dataBlanks$sample, fixed = TRUE)]))))
               # if no data is available, set 0 (in this case no observations have been done)
               if(is.na(corrFactor)){
                 corrFactor <- 0
@@ -586,7 +571,7 @@ evalPurency <- function(path,
             else if(k == (length(sizeclasses)+1)){ # for the last number it's >x to infinite
               # calculate a correction factor. It is the mean of all Blanks for this sample of the respective polymer, form and size class, rounded to the next higher integer (to be conservative)
               # added a 0 to the vector for mean calculation, to have a 0 if NA (no data in Blanks available for this polymer)
-              corrFactor <- ceiling(sum(dataBlanks[,paste("above", sizeclasses[k-1], sep="")][grepl(levels(factor(unlist(strsplit(dataBlanks$sample, blankKey))))[i], dataBlanks$sample, fixed = TRUE) & dataBlanks$polymer == data.agg.formwise$polymer[j] & dataBlanks$form == data.agg.formwise$form[j]], na.rm = TRUE)/length(levels(factor(dataBlanks$measurement[grepl(levels(factor(unlist(strsplit(dataBlanks$sample, blankKey))))[i], dataBlanks$sample, fixed = TRUE)]))))
+              corrFactor <- ceiling(sum(dataBlanks[,paste("above", sizeclasses[k-1], sep="")][grepl(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey))))[i], dataBlanks$sample, fixed = TRUE) & dataBlanks$polymer == data.agg.formwise$polymer[j] & dataBlanks$form == data.agg.formwise$form[j]], na.rm = TRUE)/length(levels(factor(dataBlanks$measurement[grepl(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey))))[i], dataBlanks$sample, fixed = TRUE)]))))
               # if no data is available, set 0 (in this case no observations have been done)
               if(is.na(corrFactor)){
                 corrFactor <- 0
@@ -601,7 +586,7 @@ evalPurency <- function(path,
             else{
               # calculate a correction factor. It is the mean of all Blanks for this sample of the respective polymer, form and size class, rounded to the next higher integer (to be conservative)
               # added a 0 to the vector for mean calculation, to have a 0 if NA (no data in Blanks available for this polymer)
-              corrFactor <- ceiling(sum(dataBlanks[,paste("from", sizeclasses[k-1], "to", sizeclasses[k], sep="")][grepl(levels(factor(unlist(strsplit(dataBlanks$sample, blankKey))))[i], dataBlanks$sample, fixed = TRUE) & dataBlanks$polymer == data.agg.formwise$polymer[j] & dataBlanks$form == data.agg.formwise$form[j]], na.rm = TRUE)/length(levels(factor(dataBlanks$measurement[grepl(levels(factor(unlist(strsplit(dataBlanks$sample, blankKey))))[i], dataBlanks$sample, fixed = TRUE)]))))
+              corrFactor <- ceiling(sum(dataBlanks[,paste("from", sizeclasses[k-1], "to", sizeclasses[k], sep="")][grepl(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey))))[i], dataBlanks$sample, fixed = TRUE) & dataBlanks$polymer == data.agg.formwise$polymer[j] & dataBlanks$form == data.agg.formwise$form[j]], na.rm = TRUE)/length(levels(factor(dataBlanks$measurement[grepl(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey))))[i], dataBlanks$sample, fixed = TRUE)]))))
               # if no data is available, set 0 (in this case no observations have been done)
               if(is.na(corrFactor)){
                 corrFactor <- 0
@@ -695,10 +680,10 @@ evalPurency <- function(path,
         currentPolymer <- levels(factor(polymers))[j]
 
         rowX$polymer <- currentPolymer
-        rowX$fibres <- sum(c(0, sum(data.agg.formwise[which(data.agg.formwise$Group.1 == currentSample & data.agg.formwise$Group.2 == currentPolymer & data.agg.formwise$Group.3 == fibre), 4:length(colnames(data.agg.formwise))], na.rm = TRUE)))
-        rowX$fragments <- sum(c(0, sum(data.agg.formwise[which(data.agg.formwise$Group.1 == currentSample & data.agg.formwise$Group.2 == currentPolymer & data.agg.formwise$Group.3 == fragment), 4:length(colnames(data.agg.formwise))], na.rm = TRUE)))
-        rowX$spheres <- sum(c(0, sum(data.agg.formwise[which(data.agg.formwise$Group.1 == currentSample & data.agg.formwise$Group.2 == currentPolymer & data.agg.formwise$Group.3 == sphere), 4:length(colnames(data.agg.formwise))], na.rm = TRUE)))
-        rowX$pixels <- sum(c(0, sum(data.agg.formwise[which(data.agg.formwise$Group.1 == currentSample & data.agg.formwise$Group.2 == currentPolymer & data.agg.formwise$Group.3 == pixel), 4:length(colnames(data.agg.formwise))], na.rm = TRUE)))
+        rowX$fibres <- sum(c(0, sum(data.agg.formwise[which(data.agg.formwise$Group.1 == currentSample & data.agg.formwise$Group.2 == currentPolymer & data.agg.formwise$Group.3 == config$fibre), 4:length(colnames(data.agg.formwise))], na.rm = TRUE)))
+        rowX$fragments <- sum(c(0, sum(data.agg.formwise[which(data.agg.formwise$Group.1 == currentSample & data.agg.formwise$Group.2 == currentPolymer & data.agg.formwise$Group.3 == config$fragment), 4:length(colnames(data.agg.formwise))], na.rm = TRUE)))
+        rowX$spheres <- sum(c(0, sum(data.agg.formwise[which(data.agg.formwise$Group.1 == currentSample & data.agg.formwise$Group.2 == currentPolymer & data.agg.formwise$Group.3 == config$sphere), 4:length(colnames(data.agg.formwise))], na.rm = TRUE)))
+        rowX$pixels <- sum(c(0, sum(data.agg.formwise[which(data.agg.formwise$Group.1 == currentSample & data.agg.formwise$Group.2 == currentPolymer & data.agg.formwise$Group.3 == config$pixel), 4:length(colnames(data.agg.formwise))], na.rm = TRUE)))
         rowX$particlesTotal <- sum(c(0, rowX$fibres, rowX$fragments, rowX$spheres, rowX$pixels), na.rm = TRUE)
 
         # add columns for sizeclasses
@@ -775,7 +760,7 @@ evalPurency <- function(path,
       # additionally to the total summary, a form-wise summary was requested (Martin):
       colnames(data.agg.formwise) <- c("sample", "polymer", "form", colnames(data.agg.formwise)[4:length(colnames(data.agg.formwise))])
       
-      forms <- c(fibre, fragment, sphere, pixel)
+      forms <- c(config$fibre, config$fragment, config$sphere, config$pixel)
       formwiseSums <- list()
       
       for(j in 1:length(forms)){
@@ -917,10 +902,10 @@ evalPurency <- function(path,
   #       measurementX$sample[k] <- levels(factor(temp$sample))[i]
   #       measurementX$measurement[k] <- levels(factor(tempSample$measurement))[j]
   #       measurementX$polymer[k] <- levels(factor(tempMeasurement$className))[k]
-  #       measurementX$fibres[k] <- nrow(tempMeasurement[which(tempMeasurement$form == fibre & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
-  #       measurementX$fragments[k] <- nrow(tempMeasurement[which(tempMeasurement$form == fragment & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
-  #       measurementX$spheres[k] <- nrow(tempMeasurement[which(tempMeasurement$form == sphere & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
-  #       measurementX$pixels[k] <- nrow(tempMeasurement[which(tempMeasurement$form == pixel & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
+  #       measurementX$fibres[k] <- nrow(tempMeasurement[which(tempMeasurement$form == config$fibre & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
+  #       measurementX$fragments[k] <- nrow(tempMeasurement[which(tempMeasurement$form == config$fragment & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
+  #       measurementX$spheres[k] <- nrow(tempMeasurement[which(tempMeasurement$form == config$sphere & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
+  #       measurementX$pixels[k] <- nrow(tempMeasurement[which(tempMeasurement$form == config$pixel & tempMeasurement$className == levels(factor(tempMeasurement$className))[k]),])
   #       measurementX$particlesTotal[k] <- measurementX$fibres[k] + measurementX$fragments[k] + measurementX$pixels[k] + measurementX$spheres[k]
   #       # fill fields of sizeclasses
   #       for(l in 1:(length(sizeclasses)+1)){

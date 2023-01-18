@@ -13,10 +13,10 @@ evalPurency(
   setDivFactor = FALSE,
   dataReturn = FALSE,
   eocsum = TRUE,
+  labpreset = FALSE,
   blankKey = "Blank",
   sep = ";",
   dec = ",",
-  labpreset = FALSE,
   colPol = 6,
   colL = 17,
   colReqPol = 24,
@@ -55,15 +55,15 @@ the necessary information.}
 
 \item{eocsum}{If TRUE (default) it adds a column sum at the end of each column of the summary panel.}
 
+\item{labpreset}{A preset for most of the parameters (except: path, polymers, dataReturn, eocsum).
+Can be requested by other labs, to be implemented, that they don't have to be set manually all the time.}
+
 \item{blankKey}{The key word to distinguish blanks from other measurements/samples. It is case sensitive to prevent
 accidental matching. Defaults to "Blank".}
 
 \item{sep}{Symbol in your csv files indicating new a column. Defaults to ';'.}
 
 \item{dec}{Symbol in your csv files indicating decimal sign. Defaults to ','.}
-
-\item{labpreset}{A preset for most of the parameters (except: path, polymers, dataReturn, eocsum).
-Can be requested by other labs, to be implemented, that they don't have to be set manually all the time.}
 
 \item{colPol}{Column number where the polymer type is stated. In the TOEKI lab this is column 6 (Class Name).
 The polymer names (or abbreviations) can be set manually in 'polymers' in case the default does not apply.
@@ -98,7 +98,8 @@ In the TOEKI lab this is column 27 (Länge). Could also be provided as column na
 \item{test}{Can be set TRUE when the function should be run in testing mode.}
 }
 \value{
-If dataReturn = TRUE, the function returns a list object including all processed data of each processing step and the summary values.
+If dataReturn = TRUE, the function returns a list object including all
+processed data of each processing step and the summary values.
 }
 \description{
 Evaluate csv files, produced by Purency. It will count occurences of of fibres, fragments, spheres and pixels,
@@ -111,14 +112,17 @@ is evaluated separately, as well as summarized for all files (i.e., one sample).
 mydata <- evalPurency(path="//HERE/COMES/YOUR/PATH/", dataReturn = TRUE, test = TRUE)
 
 # Change evaluated size classes (evaluate <10, 10-100, 100-500 and >500 µm).
-mydata <- evalPurency(path="//HERE/COMES/YOUR/PATH/", sizeclasses = c(10,100,500), dataReturn = TRUE, test = TRUE)
+mydata <- evalPurency(path="//HERE/COMES/YOUR/PATH/", 
+                      sizeclasses = c(10,100,500), dataReturn = TRUE, test = TRUE)
 
 # Include a division factor for the samples and blanks (in case filters have been divided).
 # Only works in interactive Session.
-mydata <- evalPurency(path="//HERE/COMES/YOUR/PATH/", setDivFactor = TRUE, dataReturn = TRUE, test = TRUE)
+mydata <- evalPurency(path="//HERE/COMES/YOUR/PATH/", 
+                     setDivFactor = TRUE, dataReturn = TRUE, test = TRUE)
 
 # Skip the summary row at bottom of each column in the sample summary.
-mydata <- evalPurency(path="//HERE/COMES/YOUR/PATH/", eocsum = FALSE, dataReturn = TRUE, test = TRUE)
+mydata <- evalPurency(path="//HERE/COMES/YOUR/PATH/", 
+                      eocsum = FALSE, dataReturn = TRUE, test = TRUE)
 
 }
 \references{

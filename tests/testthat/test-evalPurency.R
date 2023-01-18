@@ -4,6 +4,13 @@ test_that("Default processing works", {
                testdata.default)
 })
 
+test_that("Labpresets works", {
+  expect_equal(evalPurency(path="//HERE/COMES/YOUR/PATH/",
+                           labpreset = "Laforsch",
+                           dataReturn = TRUE, test = TRUE), 
+               testdata.default)
+})
+
 
 test_that("Changing size classes works", {
   expect_equal(evalPurency(path="//HERE/COMES/YOUR/PATH/", 
@@ -20,7 +27,7 @@ test_that("Skipping eocsum works", {
                testdata.noeocsum)
 })
 
-
-# usethis::use_data(presets, testdata.default, testdata.size, testdata.noeocsum,
+# check whether this is similar with eP-config-helper.R
+# usethis::use_data(evalPurencyPresets, testdata.default, testdata.size, testdata.noeocsum,
 #                   overwrite = TRUE, internal = TRUE)
 
