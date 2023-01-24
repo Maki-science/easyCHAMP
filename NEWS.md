@@ -1,3 +1,7 @@
+# evalPurency 1.2.4.9009
+
+  - a bug is fixed now that caused an error if missing values occured in the data (which was indicated by a warning message before). Now those rows containing missing data, are excluded from further processing.
+
 # evalPurency 1.2.4.9008
 
   - added sep and dec as additional parameters that can be customized to the users' csv-file specifications

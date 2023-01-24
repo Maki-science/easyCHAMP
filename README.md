@@ -59,6 +59,8 @@ Copy and paste this line into the console and press 'enter'.
 
 *WARNING: This runs the function with its default configuration. You might need to adopt some further parameters. See below for details.*
 
+*WARNING: Make sure that your csv file has the correct column separator (; in default) and decimal sign (, in default). Otherwise read further below how to change it in the function, or make sure to save the csv file properly.*
+
 The function will warn you if there are missing values at some files. The respective files and columns are reported.
 Once it finished the processing it will message that it is done.
 

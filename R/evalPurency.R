@@ -164,6 +164,32 @@ evalPurency <- function(path,
     # load data from package sample data
     temp <- evalPurency::purencySampleData
   }  
+  
+  # quality control
+  rowstodelete <- c()
+  for(i in 1:nrow(temp)){
+    check <- FALSE
+    suppressWarnings( # I supress the warnings to have a simpler message that can be interpreted fast.
+      # To add a quality control, I check whether the field of form or length is NA. If yes, a warning will be
+      # thrown, including the sample and measurement.
+      if(is.na(temp$form[i]) == TRUE || temp$form[i] == ""){
+        check <- TRUE
+        cat(warning(paste("Warning: There is a value missing in column ", colnames(Hilfsobjekt[config$colShape]), " in ", temp$measurement[i], "\n")))
+      }
+    ) # end supressWarnings
+    suppressWarnings(
+      if(is.na(temp$length[i]) == TRUE || temp$length[i] == ""){
+        check <- TRUE
+        cat(warning(paste("Warning: There is a value missing in column ", colnames(Hilfsobjekt[config$colL]), " in ", temp$measurement[i], "\n")))
+      }
+    ) # end supressWarnings
+    if(check == TRUE){
+      rowstodelete <- c(rowstodelete, i)
+    }
+  } # end for(i)
+  if(length(rowstodelete) > 0){
+    temp <- temp[-c(rowstodelete),]
+  }
     
   # The length is not always correct for fibres.
   # Thus create a new column with the correct length for all particles (that I don't need to select the correct column further below)
@@ -176,19 +202,7 @@ evalPurency <- function(path,
     else{
       temp$actualLength[i] <- temp$length[i]
     }
-    suppressWarnings( # I supress the warnings to have a simpler message that can be interpreted fast.
-      # To add a quality control, I check whether the field of form or length is na. If yes, a warning will be
-      # thrown, including the sample and measurement.
-      if(is.na(temp$form[i]) == TRUE || temp$form[i] == ""){
-        cat(warning(paste("Warning: There is a value missing in column ", colnames(Hilfsobjekt[config$colShape]), " in ", temp$measurement[i], "\n")))
-      }
-    ) # end supressWarnings
-    suppressWarnings(
-      if(is.na(temp$length[i]) == TRUE || temp$length[i] == ""){
-        cat(warning(paste("Warning: There is a value missing in column ", colnames(Hilfsobjekt[config$colL]), " in ", temp$measurement[i], "\n")))
-      }
-    ) # end supressWarnings
-  } # end for(i)
+  } # end for i
 
   
   #### start processing ####
@@ -475,7 +489,7 @@ evalPurency <- function(path,
     dataBlanks$divFactor <- NULL
     
     #cat("Division correction done.\n")
-  }
+  } # end if setdivisionfactor = TRUE
   #else{}
 
   
@@ -629,8 +643,8 @@ evalPurency <- function(path,
   if(test == FALSE){
     writexl::write_xlsx(list(samples_summary = obj$sampleSummary, 
                              single_measurements_corrected = obj$correctedData,
-                             blanks = obj$blanks,
-                             uncorected_data = obj$sampleDataUncorrected,
+                             unprocessed_blanks = obj$blanks,
+                             unprocessed_data = obj$sampleDataUncorrected,
                              raw_data = obj$rawData),
                         paste(path, "processing data.xls", sep=""))
   }
