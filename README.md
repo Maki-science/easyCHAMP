@@ -38,7 +38,25 @@ If you want to update to the newest version, just run the second line again.
 
 
 ## Workflow
-The (pre-)Purency workflow usually produces several filters (measurements) for each sample. We highly recommend to adopt a common file-naming procedure. The function uses everything of the .csv file names before the first '_' (underline) as sample name. The rest is considered as measurement (e.g., SAMPLENAME_measurement1of3). This also allows for one blank for multiple filters/samples from one location (i.e., replicates), by naming the samples accordingly (e.g., SAMPLENAMEFilter1, SAMPLENAMEFilter2, SAMPLENAMEBlank - or, in case of splitted measurements for each filter: e.g., SAMPLENAMEFilter1_measurement1of3, SAMPLENAMEFilter2_measurement1of3 SAMPLENAMEBlank_measurement1of2).
+The (pre-)Purency workflow usually produces several filters (or measurements) for each sample. We highly recommend to adopt a common file-naming procedure. The function uses everything of the .csv file names before the first '_' (underline) as sample name. The rest is considered as filter/measurement (e.g., SAMPLENAME_Filter1of3). This also allows for one blank for multiple filters/samples from one location (i.e., replicates), by naming the samples accordingly.
+
+Here are some examples how to apply the naming for different blank application:
+
+For each sample one or more own blank filters. You can still have several filters for each sample and/or blank, which are summed together before processing:
+
+  - Samples: SAMPLENAME1_Filter1, SAMPLENAME2_Filter1
+  - Blanks: SAMPLENAME1Blank_Filter1, SAMPLENAME2BLank_filter1
+  
+Samples should use the same blank(s):
+
+  - Samples: SAMPLENAME1_Filter1, SAMPLENAME2_Filter1
+  - Blank: SAMPLENAMEBlank_Filter1 (notice the missing number)
+  
+You have several blanks, but they should be gathered and used as combined blank for all samples:
+
+  - Samples: PREFIXSAMPLENAME1_Filter1, PREFIXSAMPLENAME2_Filter1 (set a prefix)
+  - Blanks: PREFIXBlank_Filter1, PREFIXBLank_filter1 (use the same prefix but directly state 'Blank_')
+  
 
 *WARNING: The naming of the files is an important prerequisite for a proper processing. Thus you need to cautiously set your file names!*
 
@@ -120,6 +138,8 @@ evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/",
 If you only use a quarter of your sample the factor you should provide here is 0.25. If you did not divide a sample it is 1.
 
 *WARNING: Make sure to exactly follow the instructions. Keep the order similar to the provided order of the samples/blanks.*
+
+*WARNING: If you use several blanks summed for all samples (like example 3 in the beginning) you can only chose a common division factor.*
 
 ### Keep the data in R as data frame
 If you further want to proceed and analyse the data with R, you can set *dataReturn = TRUE*. The function will then return a data frame consisting of all measurements of all samples of the selected folder as well as the blanks and raw data.
