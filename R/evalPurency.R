@@ -609,10 +609,32 @@ evalPurency <- function(path,
       currentPolymer <- levels(factor(polymers))[j]
 
       rowX$polymer <- currentPolymer
-      rowX$fibres <- sum(c(0, sum(data.agg.formwise[which(data.agg.formwise$Group.1 == currentSample & data.agg.formwise$Group.2 == currentPolymer & data.agg.formwise$Group.3 == config$fibre), 4:length(colnames(data.agg.formwise))], na.rm = TRUE)))
-      rowX$fragments <- sum(c(0, sum(data.agg.formwise[which(data.agg.formwise$Group.1 == currentSample & data.agg.formwise$Group.2 == currentPolymer & data.agg.formwise$Group.3 == config$fragment), 4:length(colnames(data.agg.formwise))], na.rm = TRUE)))
-      rowX$spheres <- sum(c(0, sum(data.agg.formwise[which(data.agg.formwise$Group.1 == currentSample & data.agg.formwise$Group.2 == currentPolymer & data.agg.formwise$Group.3 == config$sphere), 4:length(colnames(data.agg.formwise))], na.rm = TRUE)))
-      rowX$pixels <- sum(c(0, sum(data.agg.formwise[which(data.agg.formwise$Group.1 == currentSample & data.agg.formwise$Group.2 == currentPolymer & data.agg.formwise$Group.3 == config$pixel), 4:length(colnames(data.agg.formwise))], na.rm = TRUE)))
+      # since at some systems (Paulines) an error occurs if there is no available row for a case, I adpot this code.
+      # it is not very elegant way, but I could not figure out the reason thus far...
+      if(nrow(data.agg.formwise[which(data.agg.formwise$Group.1 == currentSample & data.agg.formwise$Group.2 == currentPolymer & data.agg.formwise$Group.3 == config$fibre), 4:length(colnames(data.agg.formwise))]) == 0){
+        rowX$fibres <- 0
+      }
+      else{
+        rowX$fibres <- sum(c(0, sum(data.agg.formwise[which(data.agg.formwise$Group.1 == currentSample & data.agg.formwise$Group.2 == currentPolymer & data.agg.formwise$Group.3 == config$fibre), 4:length(colnames(data.agg.formwise))], na.rm = TRUE)))
+      }
+      if(nrow(data.agg.formwise[which(data.agg.formwise$Group.1 == currentSample & data.agg.formwise$Group.2 == currentPolymer & data.agg.formwise$Group.3 == config$fragment), 4:length(colnames(data.agg.formwise))]) == 0){
+        rowX$fragments <- 0
+      }
+      else{
+        rowX$fragments <- sum(c(0, sum(data.agg.formwise[which(data.agg.formwise$Group.1 == currentSample & data.agg.formwise$Group.2 == currentPolymer & data.agg.formwise$Group.3 == config$fragment), 4:length(colnames(data.agg.formwise))], na.rm = TRUE)))
+      }
+      if(nrow(data.agg.formwise[which(data.agg.formwise$Group.1 == currentSample & data.agg.formwise$Group.2 == currentPolymer & data.agg.formwise$Group.3 == config$sphere), 4:length(colnames(data.agg.formwise))]) == 0){
+        rowX$spheres <- 0
+      }
+      else{
+        rowX$spheres <- sum(c(0, sum(data.agg.formwise[which(data.agg.formwise$Group.1 == currentSample & data.agg.formwise$Group.2 == currentPolymer & data.agg.formwise$Group.3 == config$sphere), 4:length(colnames(data.agg.formwise))], na.rm = TRUE)))
+      }
+      if(nrow(data.agg.formwise[which(data.agg.formwise$Group.1 == currentSample & data.agg.formwise$Group.2 == currentPolymer & data.agg.formwise$Group.3 == config$pixel), 4:length(colnames(data.agg.formwise))]) == 0){
+        rowX$pixels <- 0
+      }
+      else{
+        rowX$pixels <- sum(c(0, sum(data.agg.formwise[which(data.agg.formwise$Group.1 == currentSample & data.agg.formwise$Group.2 == currentPolymer & data.agg.formwise$Group.3 == config$pixel), 4:length(colnames(data.agg.formwise))], na.rm = TRUE)))
+      }
       rowX$particlesTotal <- sum(c(0, rowX$fibres, rowX$fragments, rowX$spheres, rowX$pixels), na.rm = TRUE)
 
       # now sum for the sizeclasses
