@@ -57,6 +57,7 @@ You have several blanks, but they should be gathered and used as combined blank 
   - Samples: PREFIXSAMPLENAME1_Filter1, PREFIXSAMPLENAME2_Filter1 (set a prefix)
   - Blanks: PREFIXBlank_Filter1, PREFIXBLank_filter1 (use the same prefix but directly state 'Blank_')
   
+If you don't have any blanks to process, you can skip the blank processing with setting *noBlank = TRUE*.
 
 *WARNING: The naming of the files is an important prerequisite for a proper processing. Thus you need to cautiously set your file names!*
 
@@ -210,7 +211,7 @@ A BibTeX-entry for LaTeX-user is
 
   @Misc{,
     title = {evalPurency: Automated Evaluation of Purency Data},
-    author = {Marvin Kiene and Eva {Vizsolyi Cseperke} and Martin Löder and Christian Laforsch},
+    author = {Marvin Kiene and Eva {Cseperke Vizsolyi} and Martin Löder and Christian Laforsch},
     note = {R package version 1.2.4.9004},
     year = {2023},
     url = {https://github.com/Maki-science/evalPurency},

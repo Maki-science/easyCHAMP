@@ -15,6 +15,7 @@ evalPurency(
   eocsum = TRUE,
   labpreset = FALSE,
   blankKey = "Blank",
+  noBlank = FALSE,
   sep = ";",
   dec = ",",
   colPol = 6,
@@ -28,7 +29,8 @@ evalPurency(
   sphere = "Kugel",
   fragment = "Fragment",
   pixel = "Pixel",
-  test = FALSE
+  test = FALSE,
+  startrow = 40
 )
 }
 \arguments{
@@ -60,6 +62,8 @@ Can be requested by other labs, to be implemented, that they don't have to be se
 
 \item{blankKey}{The key word to distinguish blanks from other measurements/samples. It is case sensitive to prevent
 accidental matching. Defaults to "Blank".}
+
+\item{noBlank}{Can be set TRUE if you don't have a blank at all and just want to summarize your data (defaults to FALSE).}
 
 \item{sep}{Symbol in your csv files indicating new a column. Defaults to ';'.}
 
@@ -96,6 +100,10 @@ In the TOEKI lab this is column 27 (Länge). Could also be provided as column na
 \item{pixel}{How pixels are called in colShape (Form). In the TOEKI lab it is 'Pixel'.}
 
 \item{test}{Can be set TRUE when the function should be run in testing mode.}
+
+\item{startrow}{Only required rarely. If you use a Purency version that saves the csv files slightly
+differently, you might check at which line the data starts (including header). This number of line should
+be set here (default 41).}
 }
 \value{
 If dataReturn = TRUE, the function returns a list object including all

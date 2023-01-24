@@ -1,3 +1,8 @@
+# evalPurency 1.2.5.9009+
+
+  - added a minor feature: you can now set *noBlank = TRUE* to skip the blank processing. Thus, you don't require a blank in your folder.
+  - added the parameter startrow. This should only be changed if you work with an experimental Purency version that changed the way how the excelfiles are saved.
+
 # evalPurency 1.2.4.9009
 
   - a bug is fixed now that caused an error if missing values occured in the data (which was indicated by a warning message before). Now those rows containing missing data, are excluded from further processing.

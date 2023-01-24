@@ -26,6 +26,7 @@
 #' Can be requested by other labs, to be implemented, that they don't have to be set manually all the time. 
 #' @param blankKey The key word to distinguish blanks from other measurements/samples. It is case sensitive to prevent
 #' accidental matching. Defaults to "Blank".
+#' @param noBlank Can be set TRUE if you don't have a blank at all and just want to summarize your data (defaults to FALSE).
 #' @param sep Symbol in your csv files indicating new a column. Defaults to ';'.
 #' @param dec Symbol in your csv files indicating decimal sign. Defaults to ','.
 #' @param colPol Column number where the polymer type is stated. In the TOEKI lab this is column 6 (Class Name). 
@@ -48,6 +49,9 @@
 #' @param fragment How fragments are called in colShape (Form). In the TOEKI lab it is 'Fragment'.
 #' @param pixel How pixels are called in colShape (Form). In the TOEKI lab it is 'Pixel'.
 #' @param test Can be set TRUE when the function should be run in testing mode.
+#' @param startrow Only required rarely. If you use a Purency version that saves the csv files slightly
+#' differently, you might check at which line the data starts (including header). This number of line should
+#' be set here (default 41).
 #' 
 #' @return If dataReturn = TRUE, the function returns a list object including all 
 #'  processed data of each processing step and the summary values.
@@ -87,6 +91,7 @@ evalPurency <- function(path,
                         eocsum = TRUE,
                         labpreset = FALSE,
                         blankKey = "Blank",
+                        noBlank = FALSE,
                         sep = ";",
                         dec = ",",
                         colPol = 6, 
@@ -100,7 +105,8 @@ evalPurency <- function(path,
                         sphere = "Kugel",
                         fragment = "Fragment",
                         pixel = "Pixel",
-                        test = FALSE
+                        test = FALSE,
+                        startrow = 40
 ){
   
   # set/correct the configuration (if labpreset was chosen)
@@ -143,10 +149,13 @@ evalPurency <- function(path,
     suppressWarnings(
       for (i in 1:length(Dateien)){
         # need to read data as ASCII. Otherwise it sometimes makes problems with the column names with special character
-        assign("Hilfsobjekt",read.csv(paste0(path,Dateien[i]),sep=config$sep, dec=config$dec, skip=40, fileEncoding = "ASCII")) # read data and skip the first 40 lines
+        assign("Hilfsobjekt",read.csv(paste0(path,Dateien[i]),sep=config$sep, dec=config$dec, skip=startrow, fileEncoding = "ASCII")) # read data and skip the first 40 lines
         
         # now with column numbers in the default form, but can also be provided als column name
         Hilfsobjekt <- droplevels(subset(Hilfsobjekt, Hilfsobjekt[config$colReqPol] == config$ReqPolKey))
+        
+        
+        
         
         temp2 <- data.frame(sample = name_measurement[i],
                             measurement = Dateien[i],
@@ -359,23 +368,26 @@ evalPurency <- function(path,
   obj$sampleDataUncorrected <- data.agg.formwise
   obj$blanks <- dataBlanks
   
-  #### check for blank existence ####
-  # check whether each sample has a blank to use for correction
-  # otherwise throw a warning message
-  sampleBlankChecklist <- c(rep(FALSE, length(levels(factor(data.agg.formwise$sample)))))
-  for(i in 1:length(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey)))))){
-    for(j in 1:length(levels(factor(data.agg.formwise$sample)))){
-      if(grepl(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey))))[i], levels(factor(data.agg.formwise$sample))[j], fixed = TRUE) == TRUE){
-        sampleBlankChecklist[j] <- TRUE
+  
+  if(noBlank == FALSE){
+    #### check for blank existence ####
+    # check whether each sample has a blank to use for correction
+    # otherwise throw a warning message
+    sampleBlankChecklist <- c(rep(FALSE, length(levels(factor(data.agg.formwise$sample)))))
+    for(i in 1:length(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey)))))){
+      for(j in 1:length(levels(factor(data.agg.formwise$sample)))){
+        if(grepl(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey))))[i], levels(factor(data.agg.formwise$sample))[j], fixed = TRUE) == TRUE){
+          sampleBlankChecklist[j] <- TRUE
+        }
       }
     }
-  }
   
-  for(i in 1:length(levels(factor(data.agg.formwise$sample)))){
-    if(sampleBlankChecklist[i] == FALSE){
-      cat(paste("Warning: There is no blank for ", levels(factor(data.agg.formwise$sample))[i], sep = ""))
+    for(i in 1:length(levels(factor(data.agg.formwise$sample)))){
+      if(sampleBlankChecklist[i] == FALSE){
+        cat(paste("Warning: There is no blank for ", levels(factor(data.agg.formwise$sample))[i], sep = ""))
+      }
     }
-  }
+  } # end if noBlank == FALSE
   
   #### apply division factors ####
   # sometimes the filters have to be divided because there are too many particles for one measurement. Then 
@@ -414,26 +426,28 @@ evalPurency <- function(path,
       sampleDivFactors <- c(sampleDivFactors, newDivFactor)
     }
     )
-
-    cat("And now do the same for the blanks (if similar to the samples, just insert the same numbers):\n")
     
-    blankDivFactors <- c()
-    
-    i <- 0
-    suppressWarnings(
-    while(length(blankFilters) != length(blankDivFactors)){
-      i <- i+1
-      newDivFactor <- as.numeric(readline(paste("Set the factors for the blank '", blankFilters[i], "': ", sep = "")))
-      while(newDivFactor <= 0 || newDivFactor > 1 || is.na(newDivFactor) == TRUE){
-        reDivFactor <- readline(paste("Entry is invalid for the blank '", blankFilters[i], "'! Please try again: ", sep = ""))
-        if(reDivFactor == "stop" || reDivFactor == "stop()"){
-          stop("You manually stopped the program.")
+    if(noBlank == FALSE){
+      cat("And now do the same for the blanks (if similar to the samples, just insert the same numbers):\n")
+      
+      blankDivFactors <- c()
+      
+      i <- 0
+      suppressWarnings(
+      while(length(blankFilters) != length(blankDivFactors)){
+        i <- i+1
+        newDivFactor <- as.numeric(readline(paste("Set the factors for the blank '", blankFilters[i], "': ", sep = "")))
+        while(newDivFactor <= 0 || newDivFactor > 1 || is.na(newDivFactor) == TRUE){
+          reDivFactor <- readline(paste("Entry is invalid for the blank '", blankFilters[i], "'! Please try again: ", sep = ""))
+          if(reDivFactor == "stop" || reDivFactor == "stop()"){
+            stop("You manually stopped the program.")
+          }
+          newDivFactor <- as.numeric(reDivFactor)
         }
-        newDivFactor <- as.numeric(reDivFactor)
+        blankDivFactors <- c(blankDivFactors, newDivFactor)
       }
-      blankDivFactors <- c(blankDivFactors, newDivFactor)
-    }
-    )
+      )
+    } # end noBlank == FALSE
     
     # set the division factor for each line in the data set
     # for samples
@@ -444,31 +458,33 @@ evalPurency <- function(path,
         }
       }
     }
-    # for blanks
-    for(i in 1:length(blankDivFactors)){
-      for(j in 1:nrow(dataBlanks)){
-        if(dataBlanks$sample[j] == blankFilters[i]){
-          dataBlanks$divFactor[j] <- blankDivFactors[i]
+    if(noBlank == FALSE){
+      # for blanks
+      for(i in 1:length(blankDivFactors)){
+        for(j in 1:nrow(dataBlanks)){
+          if(dataBlanks$sample[j] == blankFilters[i]){
+            dataBlanks$divFactor[j] <- blankDivFactors[i]
+          }
         }
       }
-    }
-    
-    # divide all numbers by the division factor
-    for(j in 1:nrow(dataBlanks)){
-      # iterate over the size classes to perform the division factor processing for each size class
-      for(k in 1:(length(sizeclasses)+1)){
-        if(k == 1){ # for the first number it's 0 to <=x
-          dataBlanks[,paste("from", "0", "to", sizeclasses[k], sep="")][j] <- ceiling(dataBlanks[,paste("from", "0", "to", sizeclasses[k], sep="")][j] / dataBlanks$divFactor[j])
-        }
-        else if(k == (length(sizeclasses)+1)){ # for the last number it's >x to infinite
-          dataBlanks[,paste("above", sizeclasses[k-1], sep="")][j] <- ceiling(dataBlanks[,paste("above", sizeclasses[k-1], sep="")][j] / dataBlanks$divFactor[j])
-        }
-        else{
-          dataBlanks[,paste("from", sizeclasses[k-1], "to", sizeclasses[k], sep="")][j] <- ceiling(dataBlanks[,paste("from", sizeclasses[k-1], "to", sizeclasses[k], sep="")][j] / dataBlanks$divFactor[j])
-        }
-      } # end for k
-    } # end for j
-    
+
+      # divide all numbers by the division factor
+      for(j in 1:nrow(dataBlanks)){
+        # iterate over the size classes to perform the division factor processing for each size class
+        for(k in 1:(length(sizeclasses)+1)){
+          if(k == 1){ # for the first number it's 0 to <=x
+            dataBlanks[,paste("from", "0", "to", sizeclasses[k], sep="")][j] <- ceiling(dataBlanks[,paste("from", "0", "to", sizeclasses[k], sep="")][j] / dataBlanks$divFactor[j])
+          }
+          else if(k == (length(sizeclasses)+1)){ # for the last number it's >x to infinite
+            dataBlanks[,paste("above", sizeclasses[k-1], sep="")][j] <- ceiling(dataBlanks[,paste("above", sizeclasses[k-1], sep="")][j] / dataBlanks$divFactor[j])
+          }
+          else{
+            dataBlanks[,paste("from", sizeclasses[k-1], "to", sizeclasses[k], sep="")][j] <- ceiling(dataBlanks[,paste("from", sizeclasses[k-1], "to", sizeclasses[k], sep="")][j] / dataBlanks$divFactor[j])
+          }
+        } # end for k
+      } # end for j
+    } # end if noBlanks == FALSE
+      
     for(j in 1:nrow(data.agg.formwise)){
       # iterate over the size classes to perform the division factor processing for each size class
       for(k in 1:(length(sizeclasses)+1)){
@@ -495,70 +511,72 @@ evalPurency <- function(path,
   
   #cat("Data sorted \n")
   
+  if(noBlank == FALSE){
   #### perform blank correction #### 
-  # iterate over the samples (with existing Blanks - should be all, though)
-  for(i in 1:length(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey)))))){
-    # iterate over all rows of the data to be corrected
-    for(j in 1:nrow(data.agg.formwise)){
-      # only perform a correction when the sample is the same
-      if(grepl(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey))))[i], data.agg.formwise$sample[j], fixed = TRUE) == TRUE){
-        
-        # calculate a correction factor. It is the mean of all Blanks for this sample of the respective polymer and form rounded to the next higher integer (to be conservative)
-        # to calculate the mean we take the sum and divide manually by the number of blanks, since there are NAs (0 particles) in many cases and mean() would not count them in for the division
-        
-        # iterate over the size classes to perform the blank processing for each size class
-        for(k in 1:(length(sizeclasses)+1)){
-          if(k == 1){ # for the first number it's 0 to <=x
-            # calculate a correction factor. It is the mean of all Blanks for this sample of the respective polymer, form and size class, rounded to the next higher integer (to be conservative)
-            # added a 0 to the vector for mean calculation, to have a 0 if NA (no data in Blanks available for this polymer)
-            corrFactor <- ceiling(sum(dataBlanks[,paste("from", "0", "to", sizeclasses[k], sep="")][grepl(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey))))[i], dataBlanks$sample, fixed = TRUE) & dataBlanks$polymer == data.agg.formwise$polymer[j] & dataBlanks$form == data.agg.formwise$form[j]], na.rm = TRUE)/length(levels(factor(dataBlanks$measurement[grepl(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey))))[i], dataBlanks$sample, fixed = TRUE)]))))
-            # if no data is available, set 0 (in this case no observations have been done)
-            if(is.na(corrFactor)){
-              corrFactor <- 0
+    # iterate over the samples (with existing Blanks - should be all, though)
+    for(i in 1:length(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey)))))){
+      # iterate over all rows of the data to be corrected
+      for(j in 1:nrow(data.agg.formwise)){
+        # only perform a correction when the sample is the same
+        if(grepl(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey))))[i], data.agg.formwise$sample[j], fixed = TRUE) == TRUE){
+          
+          # calculate a correction factor. It is the mean of all Blanks for this sample of the respective polymer and form rounded to the next higher integer (to be conservative)
+          # to calculate the mean we take the sum and divide manually by the number of blanks, since there are NAs (0 particles) in many cases and mean() would not count them in for the division
+          
+          # iterate over the size classes to perform the blank processing for each size class
+          for(k in 1:(length(sizeclasses)+1)){
+            if(k == 1){ # for the first number it's 0 to <=x
+              # calculate a correction factor. It is the mean of all Blanks for this sample of the respective polymer, form and size class, rounded to the next higher integer (to be conservative)
+              # added a 0 to the vector for mean calculation, to have a 0 if NA (no data in Blanks available for this polymer)
+              corrFactor <- ceiling(sum(dataBlanks[,paste("from", "0", "to", sizeclasses[k], sep="")][grepl(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey))))[i], dataBlanks$sample, fixed = TRUE) & dataBlanks$polymer == data.agg.formwise$polymer[j] & dataBlanks$form == data.agg.formwise$form[j]], na.rm = TRUE)/length(levels(factor(dataBlanks$measurement[grepl(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey))))[i], dataBlanks$sample, fixed = TRUE)]))))
+              # if no data is available, set 0 (in this case no observations have been done)
+              if(is.na(corrFactor)){
+                corrFactor <- 0
+              }
+              # correct the number of particles by substracting the mean of the blanks
+              data.agg.formwise[,paste("from", "0", "to", sizeclasses[k], sep="")][j] <- data.agg.formwise[,paste("from", "0", "to", sizeclasses[k], sep="")][j] - corrFactor
+              
+              if(data.agg.formwise[,paste("from", "0", "to", sizeclasses[k], sep="")][j] < 0){
+                data.agg.formwise[,paste("from", "0", "to", sizeclasses[k], sep="")][j] <- 0
+              }
             }
-            # correct the number of particles by substracting the mean of the blanks
-            data.agg.formwise[,paste("from", "0", "to", sizeclasses[k], sep="")][j] <- data.agg.formwise[,paste("from", "0", "to", sizeclasses[k], sep="")][j] - corrFactor
-            
-            if(data.agg.formwise[,paste("from", "0", "to", sizeclasses[k], sep="")][j] < 0){
-              data.agg.formwise[,paste("from", "0", "to", sizeclasses[k], sep="")][j] <- 0
+            else if(k == (length(sizeclasses)+1)){ # for the last number it's >x to infinite
+              # calculate a correction factor. It is the mean of all Blanks for this sample of the respective polymer, form and size class, rounded to the next higher integer (to be conservative)
+              # added a 0 to the vector for mean calculation, to have a 0 if NA (no data in Blanks available for this polymer)
+              corrFactor <- ceiling(sum(dataBlanks[,paste("above", sizeclasses[k-1], sep="")][grepl(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey))))[i], dataBlanks$sample, fixed = TRUE) & dataBlanks$polymer == data.agg.formwise$polymer[j] & dataBlanks$form == data.agg.formwise$form[j]], na.rm = TRUE)/length(levels(factor(dataBlanks$measurement[grepl(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey))))[i], dataBlanks$sample, fixed = TRUE)]))))
+              # if no data is available, set 0 (in this case no observations have been done)
+              if(is.na(corrFactor)){
+                corrFactor <- 0
+              }
+              # correct the number of particles by substracting the mean of the blanks
+              data.agg.formwise[,paste("above", sizeclasses[k-1], sep="")][j] <- data.agg.formwise[,paste("above", sizeclasses[k-1], sep="")][j] - corrFactor
+              
+              if(data.agg.formwise[,paste("above", sizeclasses[k-1], sep="")][j] < 0){
+                data.agg.formwise[,paste("above", sizeclasses[k-1], sep="")][j] <- 0
+              }
+            }
+            else{
+              # calculate a correction factor. It is the mean of all Blanks for this sample of the respective polymer, form and size class, rounded to the next higher integer (to be conservative)
+              # added a 0 to the vector for mean calculation, to have a 0 if NA (no data in Blanks available for this polymer)
+              corrFactor <- ceiling(sum(dataBlanks[,paste("from", sizeclasses[k-1], "to", sizeclasses[k], sep="")][grepl(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey))))[i], dataBlanks$sample, fixed = TRUE) & dataBlanks$polymer == data.agg.formwise$polymer[j] & dataBlanks$form == data.agg.formwise$form[j]], na.rm = TRUE)/length(levels(factor(dataBlanks$measurement[grepl(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey))))[i], dataBlanks$sample, fixed = TRUE)]))))
+              # if no data is available, set 0 (in this case no observations have been done)
+              if(is.na(corrFactor)){
+                corrFactor <- 0
+              }
+              # correct the number of particles by substracting the mean of the blanks
+              data.agg.formwise[,paste("from", sizeclasses[k-1], "to", sizeclasses[k], sep="")][j] <- data.agg.formwise[,paste("from", sizeclasses[k-1], "to", sizeclasses[k], sep="")][j] - corrFactor
+              
+              if(data.agg.formwise[,paste("from", sizeclasses[k-1], "to", sizeclasses[k], sep="")][j] < 0){
+                data.agg.formwise[,paste("from", sizeclasses[k-1], "to", sizeclasses[k], sep="")][j] <- 0
+              }
             }
           }
-          else if(k == (length(sizeclasses)+1)){ # for the last number it's >x to infinite
-            # calculate a correction factor. It is the mean of all Blanks for this sample of the respective polymer, form and size class, rounded to the next higher integer (to be conservative)
-            # added a 0 to the vector for mean calculation, to have a 0 if NA (no data in Blanks available for this polymer)
-            corrFactor <- ceiling(sum(dataBlanks[,paste("above", sizeclasses[k-1], sep="")][grepl(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey))))[i], dataBlanks$sample, fixed = TRUE) & dataBlanks$polymer == data.agg.formwise$polymer[j] & dataBlanks$form == data.agg.formwise$form[j]], na.rm = TRUE)/length(levels(factor(dataBlanks$measurement[grepl(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey))))[i], dataBlanks$sample, fixed = TRUE)]))))
-            # if no data is available, set 0 (in this case no observations have been done)
-            if(is.na(corrFactor)){
-              corrFactor <- 0
-            }
-            # correct the number of particles by substracting the mean of the blanks
-            data.agg.formwise[,paste("above", sizeclasses[k-1], sep="")][j] <- data.agg.formwise[,paste("above", sizeclasses[k-1], sep="")][j] - corrFactor
-            
-            if(data.agg.formwise[,paste("above", sizeclasses[k-1], sep="")][j] < 0){
-              data.agg.formwise[,paste("above", sizeclasses[k-1], sep="")][j] <- 0
-            }
-          }
-          else{
-            # calculate a correction factor. It is the mean of all Blanks for this sample of the respective polymer, form and size class, rounded to the next higher integer (to be conservative)
-            # added a 0 to the vector for mean calculation, to have a 0 if NA (no data in Blanks available for this polymer)
-            corrFactor <- ceiling(sum(dataBlanks[,paste("from", sizeclasses[k-1], "to", sizeclasses[k], sep="")][grepl(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey))))[i], dataBlanks$sample, fixed = TRUE) & dataBlanks$polymer == data.agg.formwise$polymer[j] & dataBlanks$form == data.agg.formwise$form[j]], na.rm = TRUE)/length(levels(factor(dataBlanks$measurement[grepl(levels(factor(unlist(strsplit(dataBlanks$sample, config$blankKey))))[i], dataBlanks$sample, fixed = TRUE)]))))
-            # if no data is available, set 0 (in this case no observations have been done)
-            if(is.na(corrFactor)){
-              corrFactor <- 0
-            }
-            # correct the number of particles by substracting the mean of the blanks
-            data.agg.formwise[,paste("from", sizeclasses[k-1], "to", sizeclasses[k], sep="")][j] <- data.agg.formwise[,paste("from", sizeclasses[k-1], "to", sizeclasses[k], sep="")][j] - corrFactor
-            
-            if(data.agg.formwise[,paste("from", sizeclasses[k-1], "to", sizeclasses[k], sep="")][j] < 0){
-              data.agg.formwise[,paste("from", sizeclasses[k-1], "to", sizeclasses[k], sep="")][j] <- 0
-            }
-          }
+          
         }
-        
-      }
-    } # end for j
-  } # end for i
-
+      } # end for j
+    } # end for i
+  } # end if noBlank == FALSE
+  
   dataMeasurementsCorrected <- data.agg.formwise
   # add the corrected data (sample-measurement-polymer-form-wise) to to obj
   obj$correctedData <- dataMeasurementsCorrected
