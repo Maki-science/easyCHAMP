@@ -1,4 +1,8 @@
-# evalPurency 1.2.5.9009+
+# evalPurency 1.2.5.9010
+
+  - the function now checks whether the provided forms are found in the provided data. If there are discrepancies in a field, the respective line will be excluded and a Warning message will appear. Those unknown values caused wierd output tables.
+
+# evalPurency 1.2.5.9009
 
   - added a minor feature: you can now set *noBlank = TRUE* to skip the blank processing. Thus, you don't require a blank in your folder.
   - added the parameter startrow. This should only be changed if you work with an experimental Purency version that changed the way how the excelfiles are saved.

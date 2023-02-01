@@ -85,7 +85,7 @@ Once it finished the processing it will message that it is done.
 
 It will usually need just very few seconds to process e.g. 100 files. An excel file for each sample is created in the selected folder where the sample results are summarized. For all files there is one additional file with the processing data. There you can find data sets of each processing step on separate sheets (also raw data), so you can trace back the calculation and/or load parts of the data into R if required without running the whole function again.
 
-For compatibility the Excel files are of an old version. Therefore, there might occur a message about potential broken file that you have to confirm. However, the warning can be ignored.
+For compatibility the Excel files are of an old version. Therefore, there might occur a message about potential broken file that you have to confirm. However, the warning can be ignored. Note that the excel file will be coded with '.' as decimal sign!
 
 ## Additional parameters
 The function is made fully dynamic and customisable. You can choose the options further below and combine them to your desire.

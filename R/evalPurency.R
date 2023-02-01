@@ -181,13 +181,18 @@ evalPurency <- function(path,
     suppressWarnings( # I supress the warnings to have a simpler message that can be interpreted fast.
       # To add a quality control, I check whether the field of form or length is NA. If yes, a warning will be
       # thrown, including the sample and measurement.
-      if(is.na(temp$form[i]) == TRUE || temp$form[i] == ""){
+      if(is.na(temp$form[i]) == TRUE || (temp$form[i] == fibre || temp$form[i] == fragment || temp$form[i] == pixel || temp$form[i] == sphere) == FALSE){
         check <- TRUE
-        cat(warning(paste("Warning: There is a value missing in column ", colnames(Hilfsobjekt[config$colShape]), " in ", temp$measurement[i], "\n")))
+        if(is.na(temp$form[i]) == TRUE){
+          cat(warning(paste("Warning: There is a value missing in column ", colnames(Hilfsobjekt[config$colShape]), " in ", temp$measurement[i], "\n")))
+        }
+        else{
+          cat(warning(paste("Warning: There is an unknown value in column ", colnames(Hilfsobjekt[config$colShape]), " in ", temp$measurement[i], "\n")))
+        }
       }
     ) # end supressWarnings
     suppressWarnings(
-      if(is.na(temp$length[i]) == TRUE || temp$length[i] == ""){
+      if(is.na(as.numeric(temp$length[i])) == TRUE){
         check <- TRUE
         cat(warning(paste("Warning: There is a value missing in column ", colnames(Hilfsobjekt[config$colL]), " in ", temp$measurement[i], "\n")))
       }
