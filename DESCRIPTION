@@ -5,7 +5,7 @@ Authors@R:
     c(person("Marvin", "Kiene", , "info@maki-science.org", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-9981-5661")),
        person(
-          "Eva", "Vizsolyi Cseperke",
+          "Eva", "Cseperke Vizsolyi",
           role = c("aut"),
           comment = c(ORCID = "0000-0002-9786-1071")
           ),
