@@ -29,7 +29,7 @@ Description: Evaluate a bulk of csv files in one directory, produced by Purency.
     For each sample a new excel file will be generated
     in the folder where the files are placed. The function is highly customisable and each 
     parameter can be changed to your desire.
-License: CC BY 4.0
+License: GPL (>= 3)
 BugReports: https://github.com/Maki-science/evalPurency/issues
 URL: https://github.com/Maki-science/evalPurency
 Encoding: UTF-8
