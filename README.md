@@ -129,14 +129,18 @@ evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/",
 ```
 
 ### You analysed only parts of a sample?
-In many cases it can happen, that only a part of a sample is measured, if there are too many particles. This might be different between sample and blanks (e.g., it might be that a filter breaks appart). Therefore, you can provide a division factor for each sample and blank separately.
+In many cases it can happen, that only a part of a sample is measured, if there are too many particles. This might be different between sample and blanks (e.g., it might be that a filter breaks appart). Therefore, you can provide a division factor for each sample and blank separately, or even for each filter separately.
 
-However, to keep it simple and prevent mistakes, you only set *setDivFactor = TRUE* when calling the function. This will cause the function to request the required values during the processing. Just watch your R console and follow the instructions.
+However, to keep it simple and prevent mistakes, you only set *setDivFactor* when calling the function. There are three options available: *setDivFactor = FALSE* will ignore this parameter (default). If *setDivFactor = "samplewise"*, this will cause the function to request the required values during the processing for each sample (i.e., all filters of one sample have the same factor). If set to *setDivFactor = "filterwise"*, a division factor will be requested for each filter separately. 
+
+Just watch your R console and follow the instructions. 
 ``` r
 evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
             setDivFactor = TRUE)
 ```
 If you only use a quarter of your sample the factor you should provide here is 0.25. If you did not divide a sample it is 1.
+
+We implemented these two ways, to reduce the effort and possibility of mistakes in typing in the factors, if they are similar for all filters of a sample, but still provide the opportunity to choose the factors for each filter, in case there have been issues during the sample preparation, causing different factors for each filter.
 
 *WARNING: Make sure to exactly follow the instructions. Keep the order similar to the provided order of the samples/blanks.*
 
@@ -212,7 +216,7 @@ A BibTeX-entry for LaTeX-user is
   @Misc{,
     title = {evalPurency: Automated Evaluation of Purency Data},
     author = {Marvin Kiene and Eva {Cseperke Vizsolyi} and Martin Löder and Christian Laforsch},
-    note = {R package version 1.2.4.9004},
+    note = {R package version 1.2.5.9011},
     year = {2023},
     url = {https://github.com/Maki-science/evalPurency},
   }

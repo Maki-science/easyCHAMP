@@ -13,12 +13,13 @@
 #' 200, 250, 300, 350, 400, 450, 500) The function starts at 0 and then uses the set steps. 
 #' It always uses values up to the provided higher number but excluding the former number (e.g., for
 #' the default values, the function uses 0 to <= 10, >10 to <= 20, >20 to <= 50, ..., all >500).
-#' @param setDivFactor If set TRUE, the function will request division factors for each filter during the processing.
-#' sometimes the filters have to be divided because there are too many particles for one measurement. Then 
+#' @param setDivFactor If set to 'filterwise', the function will request division factors for each filter during the processing.
+#' If set to 'samplewise', the function will request division factors for each sample (all filters of one sample).
+#' Sometimes the filters have to be divided because there are too many particles for one measurement. Then 
 #' only a part of the original sample is analysed, which has to be corrected during the blank correction.
 #' It further might be, that the blank has a different division factor than the sample, since it might be good
 #' to use the full blank particle numbers and/or if a filter breaks appart, the factor might change for a single
-#' sample Therefore each sample (and blank) need its own factor. Defaults to FALSE.
+#' sample. Therefore each sample (and blank) need its own factor. Defaults to FALSE.
 #' @param dataReturn If set TRUE, a data frame will be returned containing the data of all measurement with 
 #' the necessary information.
 #' @param eocsum If TRUE (default) it adds a column sum at the end of each column of the summary panel.
@@ -68,7 +69,7 @@
 #' # Include a division factor for the samples and blanks (in case filters have been divided).
 #' # Only works in interactive Session.
 #' mydata <- evalPurency(path="//HERE/COMES/YOUR/PATH/", 
-#'                      setDivFactor = TRUE, dataReturn = TRUE, test = TRUE)
+#'                      setDivFactor = "samplewise", dataReturn = TRUE, test = TRUE)
 #'
 #' # Skip the summary row at bottom of each column in the sample summary.
 #' mydata <- evalPurency(path="//HERE/COMES/YOUR/PATH/", 
@@ -366,13 +367,19 @@ evalPurency <- function(path,
   
   #### sort data form-size wise ####
   # aggregate the data set to get the sums of particle numbers for each size class (form-polymerwise)
-  data.agg.formwise <- aggregate(dataMeasurements[5:(length(sizeclasses)+5)], by=list(factor(dataMeasurements$sample), factor(dataMeasurements$polymer), factor(dataMeasurements$form)), sum, na.rm = TRUE)
-  colnames(data.agg.formwise) <- c("sample", "polymer", "form", colnames(data.agg.formwise)[4:length(colnames(data.agg.formwise))])
+  if(setDivFactor == "filterwise"){
+    data.agg.formwise <- aggregate(dataMeasurements[5:(length(sizeclasses)+5)], by=list(factor(dataMeasurements$sample), factor(dataMeasurements$measurement), factor(dataMeasurements$polymer), factor(dataMeasurements$form)), sum, na.rm = TRUE)
+    colnames(data.agg.formwise) <- c("sample", "measurement", "polymer", "form", colnames(data.agg.formwise)[5:length(colnames(data.agg.formwise))])
+  }
+  else{
+    data.agg.formwise <- aggregate(dataMeasurements[5:(length(sizeclasses)+5)], by=list(factor(dataMeasurements$sample), factor(dataMeasurements$polymer), factor(dataMeasurements$form)), sum, na.rm = TRUE)
+    colnames(data.agg.formwise) <- c("sample", "polymer", "form", colnames(data.agg.formwise)[4:length(colnames(data.agg.formwise))])
+  }
   
   # add uncorrected data and blanks to obj
   obj$sampleDataUncorrected <- data.agg.formwise
   obj$blanks <- dataBlanks
-  
+
   
   if(noBlank == FALSE){
     #### check for blank existence ####
@@ -401,113 +408,164 @@ evalPurency <- function(path,
   # to use the full blank particle numbers and/or if a filter breaks appart, the factor might change for a single
   # sample Therefore each sample (and blank) need its own factor.
   
-  if(interactive() && setDivFactor == TRUE){
+  if(interactive() && setDivFactor != FALSE){
     # add a new column with the division factor (default = 1, meaning no division)
     data.agg.formwise$divFactor <- 1
-    dataBlanks$divFactor <- 1
-    
-    # get the sample/blank names
-    sampleFilters <- levels(factor(data.agg.formwise$sample))
-    blankFilters <- levels(factor(dataBlanks$sample))
-    
-    cat(
-        "\nYou chose to set division factors for your samples. \nPlease insert the factors in the same order like the samples are requested below with a single number between 0 and 1 and press 'enter' (e.g., 1 or 0.25, etc.):")
-    #cat(sampleFilters)
-    
-    sampleDivFactors <- c()
-    
-    i <- 0
-    suppressWarnings(
-    while(length(sampleFilters) != length(sampleDivFactors)){
-      i <- i+1
-      newDivFactor <- as.numeric(readline(paste("Set the factors for the sample '", sampleFilters[i], "': ", sep = "")))
-      while(newDivFactor <= 0 || newDivFactor > 1 || is.na(newDivFactor) == TRUE){
-        reDivFactor <- readline(paste("Entry is invalid for the sample '", sampleFilters[i], "'! Please try again: ", sep = ""))
-        if(reDivFactor == "stop" || reDivFactor == "stop()"){
-          stop("You manually stopped the program.")
-        }
-        newDivFactor <- as.numeric(reDivFactor)
-      }
-      sampleDivFactors <- c(sampleDivFactors, newDivFactor)
-    }
-    )
-    
     if(noBlank == FALSE){
-      cat("And now do the same for the blanks (if similar to the samples, just insert the same numbers):\n")
+      dataBlanks$divFactor <- 1
+    }
+    
+    # if setDivFactor is not set correctly
+    if((setDivFactor == "samplewise" || setDivFactor == "filterwise" || setDivFactor == TRUE) != TRUE){
+      stop(paste("You defined setDivFactor with unknown value: ", setDivFactor, sep=""))
+    }
+    else{
       
-      blankDivFactors <- c()
+      # get the sample/blank names if setDivFactor == "samplewise" or TRUE or the filter names if setDivFactor == "filterwise"
+      if(setDivFactor == "samplewise" || setDivFactor == TRUE){
+        sampleFilters <- levels(factor(data.agg.formwise$sample))
+        if(noBlank == FALSE){
+          blankFilters <- levels(factor(dataBlanks$sample))
+        }
+      }
+      if(setDivFactor == "filterwise"){
+        sampleFilters <- levels(factor(data.agg.formwise$measurement))
+        if(noBlank == FALSE){
+          blankFilters <- levels(factor(dataBlanks$measurement))
+        }
+      }
+      
+      cat(
+          "\nYou chose to set division factors for your samples/filters. \nPlease insert the factors in the same order like the samples are requested below with a single number between 0 and 1 and press 'enter' (e.g., 1 or 0.25, etc.):")
+      #cat(sampleFilters)
+      
+      sampleDivFactors <- c()
       
       i <- 0
       suppressWarnings(
-      while(length(blankFilters) != length(blankDivFactors)){
+      while(length(sampleFilters) != length(sampleDivFactors)){
         i <- i+1
-        newDivFactor <- as.numeric(readline(paste("Set the factors for the blank '", blankFilters[i], "': ", sep = "")))
+        newDivFactor <- as.numeric(readline(paste("Set the factors for the sample '", sampleFilters[i], "': ", sep = "")))
         while(newDivFactor <= 0 || newDivFactor > 1 || is.na(newDivFactor) == TRUE){
-          reDivFactor <- readline(paste("Entry is invalid for the blank '", blankFilters[i], "'! Please try again: ", sep = ""))
+          reDivFactor <- readline(paste("Entry is invalid for the sample '", sampleFilters[i], "'! Please try again: ", sep = ""))
           if(reDivFactor == "stop" || reDivFactor == "stop()"){
             stop("You manually stopped the program.")
           }
           newDivFactor <- as.numeric(reDivFactor)
         }
-        blankDivFactors <- c(blankDivFactors, newDivFactor)
+        sampleDivFactors <- c(sampleDivFactors, newDivFactor)
       }
       )
-    } # end noBlank == FALSE
-    
-    # set the division factor for each line in the data set
-    # for samples
-    for(i in 1:length(sampleDivFactors)){
-      for(j in 1:nrow(data.agg.formwise)){
-        if(data.agg.formwise$sample[j] == sampleFilters[i]){
-          data.agg.formwise$divFactor[j] <- sampleDivFactors[i]
+      
+      if(noBlank == FALSE){
+        cat("And now do the same for the blanks (if similar to the samples, just insert the same numbers):\n")
+        
+        blankDivFactors <- c()
+        
+        i <- 0
+        suppressWarnings(
+        while(length(blankFilters) != length(blankDivFactors)){
+          i <- i+1
+          newDivFactor <- as.numeric(readline(paste("Set the factors for the blank '", blankFilters[i], "': ", sep = "")))
+          while(newDivFactor <= 0 || newDivFactor > 1 || is.na(newDivFactor) == TRUE){
+            reDivFactor <- readline(paste("Entry is invalid for the blank '", blankFilters[i], "'! Please try again: ", sep = ""))
+            if(reDivFactor == "stop" || reDivFactor == "stop()"){
+              stop("You manually stopped the program.")
+            }
+            newDivFactor <- as.numeric(reDivFactor)
+          }
+          blankDivFactors <- c(blankDivFactors, newDivFactor)
         }
-      }
-    }
-    if(noBlank == FALSE){
-      # for blanks
-      for(i in 1:length(blankDivFactors)){
-        for(j in 1:nrow(dataBlanks)){
-          if(dataBlanks$sample[j] == blankFilters[i]){
-            dataBlanks$divFactor[j] <- blankDivFactors[i]
+        )
+      } # end noBlank == FALSE
+      
+      # set the division factor for each line in the data set
+      if(setDivFactor == "samplewise" || setDivFactor == TRUE){
+        # for samples
+        for(i in 1:length(sampleDivFactors)){
+          for(j in 1:nrow(data.agg.formwise)){
+            if(data.agg.formwise$sample[j] == sampleFilters[i]){
+              data.agg.formwise$divFactor[j] <- sampleDivFactors[i]
+            }
           }
         }
-      }
-
+        if(noBlank == FALSE){
+          # for blanks
+          for(i in 1:length(blankDivFactors)){
+            for(j in 1:nrow(dataBlanks)){
+              if(dataBlanks$sample[j] == blankFilters[i]){
+                dataBlanks$divFactor[j] <- blankDivFactors[i]
+              }
+            }
+          }
+        }
+      } # end if setDivFactor == "samplewise"
+      if(setDivFactor == "filterwise"){
+        # for filters
+        for(i in 1:length(sampleDivFactors)){
+          for(j in 1:nrow(data.agg.formwise)){
+            if(data.agg.formwise$measurement[j] == sampleFilters[i]){
+              data.agg.formwise$divFactor[j] <- sampleDivFactors[i]
+            }
+          }
+        }
+        if(noBlank == FALSE){
+          # for blanks
+          for(i in 1:length(blankDivFactors)){
+            for(j in 1:nrow(dataBlanks)){
+              if(dataBlanks$measurement[j] == blankFilters[i]){
+                dataBlanks$divFactor[j] <- blankDivFactors[i]
+              }
+            }
+          }
+        }
+      } # end setDivFactor == "filterwise"
+      
       # divide all numbers by the division factor
-      for(j in 1:nrow(dataBlanks)){
+      if(noBlank == FALSE){
+        for(j in 1:nrow(dataBlanks)){
+          # iterate over the size classes to perform the division factor processing for each size class
+          for(k in 1:(length(sizeclasses)+1)){
+            if(k == 1){ # for the first number it's 0 to <=x
+              dataBlanks[,paste("from", "0", "to", sizeclasses[k], sep="")][j] <- ceiling(dataBlanks[,paste("from", "0", "to", sizeclasses[k], sep="")][j] / dataBlanks$divFactor[j])
+            }
+            else if(k == (length(sizeclasses)+1)){ # for the last number it's >x to infinite
+              dataBlanks[,paste("above", sizeclasses[k-1], sep="")][j] <- ceiling(dataBlanks[,paste("above", sizeclasses[k-1], sep="")][j] / dataBlanks$divFactor[j])
+            }
+            else{
+              dataBlanks[,paste("from", sizeclasses[k-1], "to", sizeclasses[k], sep="")][j] <- ceiling(dataBlanks[,paste("from", sizeclasses[k-1], "to", sizeclasses[k], sep="")][j] / dataBlanks$divFactor[j])
+            }
+          } # end for k
+        } # end for j
+      } # end if noBlank == FALSE
+        
+      for(j in 1:nrow(data.agg.formwise)){
         # iterate over the size classes to perform the division factor processing for each size class
         for(k in 1:(length(sizeclasses)+1)){
           if(k == 1){ # for the first number it's 0 to <=x
-            dataBlanks[,paste("from", "0", "to", sizeclasses[k], sep="")][j] <- ceiling(dataBlanks[,paste("from", "0", "to", sizeclasses[k], sep="")][j] / dataBlanks$divFactor[j])
+            data.agg.formwise[,paste("from", "0", "to", sizeclasses[k], sep="")][j] <- ceiling(data.agg.formwise[,paste("from", "0", "to", sizeclasses[k], sep="")][j] / data.agg.formwise$divFactor[j])
           }
           else if(k == (length(sizeclasses)+1)){ # for the last number it's >x to infinite
-            dataBlanks[,paste("above", sizeclasses[k-1], sep="")][j] <- ceiling(dataBlanks[,paste("above", sizeclasses[k-1], sep="")][j] / dataBlanks$divFactor[j])
+            data.agg.formwise[,paste("above", sizeclasses[k-1], sep="")][j] <- ceiling(data.agg.formwise[,paste("above", sizeclasses[k-1], sep="")][j] / data.agg.formwise$divFactor[j])
           }
           else{
-            dataBlanks[,paste("from", sizeclasses[k-1], "to", sizeclasses[k], sep="")][j] <- ceiling(dataBlanks[,paste("from", sizeclasses[k-1], "to", sizeclasses[k], sep="")][j] / dataBlanks$divFactor[j])
+            data.agg.formwise[,paste("from", sizeclasses[k-1], "to", sizeclasses[k], sep="")][j] <- ceiling(data.agg.formwise[,paste("from", sizeclasses[k-1], "to", sizeclasses[k], sep="")][j] / data.agg.formwise$divFactor[j])
           }
         } # end for k
       } # end for j
-    } # end if noBlanks == FALSE
       
-    for(j in 1:nrow(data.agg.formwise)){
-      # iterate over the size classes to perform the division factor processing for each size class
-      for(k in 1:(length(sizeclasses)+1)){
-        if(k == 1){ # for the first number it's 0 to <=x
-          data.agg.formwise[,paste("from", "0", "to", sizeclasses[k], sep="")][j] <- ceiling(data.agg.formwise[,paste("from", "0", "to", sizeclasses[k], sep="")][j] / data.agg.formwise$divFactor[j])
-        }
-        else if(k == (length(sizeclasses)+1)){ # for the last number it's >x to infinite
-          data.agg.formwise[,paste("above", sizeclasses[k-1], sep="")][j] <- ceiling(data.agg.formwise[,paste("above", sizeclasses[k-1], sep="")][j] / data.agg.formwise$divFactor[j])
-        }
-        else{
-          data.agg.formwise[,paste("from", sizeclasses[k-1], "to", sizeclasses[k], sep="")][j] <- ceiling(data.agg.formwise[,paste("from", sizeclasses[k-1], "to", sizeclasses[k], sep="")][j] / data.agg.formwise$divFactor[j])
-        }
-      } # end for k
-    } # end for j
+      # delete the division factor column because they are not needed any more
+      data.agg.formwise$divFactor <- NULL
+      if(noBlank == FALSE){
+        dataBlanks$divFactor <- NULL
+      }
+    }# end else if setDivFactor = samplewise or filterwise
     
-    # delete the division factor column because they are not needed any more
-    data.agg.formwise$divFactor <- NULL
-    dataBlanks$divFactor <- NULL
+    # create sample summary if the div factor was set filterwise (sum again on sample level, not measurement level)
+    if(setDivFactor == "filterwise"){
+      data.agg.formwise <- aggregate(data.agg.formwise[c(5:length(colnames(data.agg.formwise)))], by=list(data.agg.formwise$sample, data.agg.formwise$polymer, data.agg.formwise$form), sum, na.rm = TRUE)
+      colnames(data.agg.formwise) <- c("sample", "polymer", "form", colnames(data.agg.formwise)[4:length(colnames(data.agg.formwise))])
+    }
     
     #cat("Division correction done.\n")
   } # end if setdivisionfactor = TRUE

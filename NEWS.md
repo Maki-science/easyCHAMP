@@ -1,3 +1,7 @@
+# evalPurency 1.2.5.9011
+
+  - we extended the functionality for the division factors to allow also a filterwise setup for the factors. Now you can choose the parameter *setDivFactor* to be *TRUE*, which is equal to *samplewise*, which now requests the factors samplewise (i.e., all filters of one sample have the same factor), or to *filterwise*, which requests the factors filterwise.
+
 # evalPurency 1.2.5.9010
 
   - the function now checks whether the provided forms are found in the provided data. If there are discrepancies in a field, the respective line will be excluded and a Warning message will appear. Those unknown values caused wierd output tables.
