@@ -1,3 +1,7 @@
+# evalPurency 1.2.5.9012
+
+  - fixed a bug that led to the division of blank particles by the number of blank filters (even of one blank), that should be summed together.
+  
 # evalPurency 1.2.5.9011
 
   - we extended the functionality for the division factors to allow also a filterwise setup for the factors. Now you can choose the parameter *setDivFactor* to be *TRUE*, which is equal to *samplewise*, which now requests the factors samplewise (i.e., all filters of one sample have the same factor), or to *filterwise*, which requests the factors filterwise.

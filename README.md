@@ -136,7 +136,7 @@ However, to keep it simple and prevent mistakes, you only set *setDivFactor* whe
 Just watch your R console and follow the instructions. 
 ``` r
 evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
-            setDivFactor = TRUE)
+            setDivFactor = "samplewise")
 ```
 If you only use a quarter of your sample the factor you should provide here is 0.25. If you did not divide a sample it is 1.
 
@@ -216,7 +216,7 @@ A BibTeX-entry for LaTeX-user is
   @Misc{,
     title = {evalPurency: Automated Evaluation of Purency Data},
     author = {Marvin Kiene and Eva {Cseperke Vizsolyi} and Martin Löder and Christian Laforsch},
-    note = {R package version 1.2.5.9011},
+    note = {R package version 1.2.5.9012},
     year = {2023},
     url = {https://github.com/Maki-science/evalPurency},
   }
