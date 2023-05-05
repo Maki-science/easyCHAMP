@@ -1,6 +1,6 @@
 # evalPurency 1.2.5.9012
 
-  - fixed a bug that led to the division of blank particles by the number of blank filters (even of one blank), that should be summed together.
+  - fixed a bug that led to the division of blank particles by the number of blank filters (even of one blank), that should be summed together. By that I extended the code (to make it work even better) so one can use several filters of one blank to sum and several blanks for one or more samples to be averaged. Find more about that in the updated readme.
   
 # evalPurency 1.2.5.9011
 

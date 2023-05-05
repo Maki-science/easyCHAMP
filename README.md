@@ -45,17 +45,19 @@ Here are some examples how to apply the naming for different blank application:
 For each sample one or more own blank filters. You can still have several filters for each sample and/or blank, which are summed together before processing:
 
   - Samples: SAMPLENAME1_Filter1, SAMPLENAME2_Filter1
-  - Blanks: SAMPLENAME1Blank_Filter1, SAMPLENAME2BLank_filter1
+  - Blanks: SAMPLENAME1Blank_Filter1, SAMPLENAME2Blank_filter1
   
 Samples should use the same blank(s):
 
   - Samples: SAMPLENAME1_Filter1, SAMPLENAME2_Filter1
   - Blank: SAMPLENAMEBlank_Filter1 (notice the missing number)
   
-You have several blanks, but they should be gathered and used as combined blank for all samples:
+You have several blanks, but they should be averaged as combined blank for your samples (still, each blank can constitute several filters that are summed before averaging over the blanks):
 
-  - Samples: PREFIXSAMPLENAME1_Filter1, PREFIXSAMPLENAME2_Filter1 (set a prefix)
-  - Blanks: PREFIXBlank_Filter1, PREFIXBLank_filter1 (use the same prefix but directly state 'Blank_')
+  - Samples: SAMPLENAME1_Filter1, SAMPLENAME2_Filter1
+  - Blanks: SAMPLENAME1Blank1_Filter1, SAMPLENAME1Blank2_filter1, SAMPLENAME2Blank1_Filter1, SAMPLENAME2Blank2_filter1 (note the number (or any other sign) behind 'Blank' but before '_')
+  
+You can also use a mix of all those versions, if necessary, though, we think this might be a bad sampling design.
   
 If you don't have any blanks to process, you can skip the blank processing with setting *noBlank = TRUE*.
 
