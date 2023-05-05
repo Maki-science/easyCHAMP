@@ -57,6 +57,11 @@ You have several blanks, but they should be averaged as combined blank for your 
   - Samples: SAMPLENAME1_Filter1, SAMPLENAME2_Filter1
   - Blanks: SAMPLENAME1Blank1_Filter1, SAMPLENAME1Blank2_filter1, SAMPLENAME2Blank1_Filter1, SAMPLENAME2Blank2_filter1 (note the number (or any other sign) behind 'Blank' but before '_')
   
+You want to use one (or several averaged) blanks for all samples:
+
+  - Samples: PREFIXSAMPLENAME1_Filter1, PREFIXSAMPLENAME2_Filter1 (set a prefix)
+  - Blanks: PREFIXBlank_Filter1, PREFIXBLank_filter1 (use the same prefix but directly state 'Blank_')
+  
 You can also use a mix of all those versions, if necessary, though, we think this might be a bad sampling design.
   
 If you don't have any blanks to process, you can skip the blank processing with setting *noBlank = TRUE*.
