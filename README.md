@@ -223,7 +223,7 @@ A BibTeX-entry for LaTeX-user is
   @Misc{,
     title = {evalPurency: Automated Evaluation of Purency Data},
     author = {Marvin Kiene and Eva {Cseperke Vizsolyi} and Martin Löder and Christian Laforsch},
-    note = {R package version 1.2.5.9013},
+    note = {R package version 1.2.5.9014},
     year = {2023},
     url = {https://github.com/Maki-science/evalPurency},
   }

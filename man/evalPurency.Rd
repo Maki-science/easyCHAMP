@@ -25,6 +25,8 @@ evalPurency(
   colShape = 25,
   colCol = 26,
   colLFib = 27,
+  colArea = 4,
+  colWidth = 18,
   fibre = "Faser",
   sphere = "Kugel",
   fragment = "Fragment",
@@ -91,6 +93,12 @@ Could also be provided as column name, but only in ASCII encoding (e.g., special
 
 \item{colLFib}{Column number for the particle length in case of a fibre with corrected length (because of curvy shape)
 In the TOEKI lab this is column 27 (Länge). Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).}
+
+\item{colArea}{Column number for the particle length in case of a fibre with corrected length (because of curvy shape)
+In the TOEKI lab this is column 4 (Area µm²). Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).}
+
+\item{colWidth}{Column number for the particle length in case of a fibre with corrected length (because of curvy shape)
+In the TOEKI lab this is column 18 (Width µm). Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).}
 
 \item{fibre}{How fibres are called in colShape (Form). In the TOEKI lab it is 'Faser'.}
 

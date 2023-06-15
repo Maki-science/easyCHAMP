@@ -1,3 +1,7 @@
+# evalPurency 1.2.5.9014
+
+  - following a request (Eva), the function now retains the information on area and width of the particles and provides it in the processing data on the raw data sheet.
+  
 # evalPurency 1.2.5.9013
 
   - fixed a bug that caused an error message under rare circumstances. However, the calculation was not affected by that.

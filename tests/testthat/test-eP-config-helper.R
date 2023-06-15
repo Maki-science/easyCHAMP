@@ -10,10 +10,13 @@ test_that("No labpreset works", {
                                 colShape = 25,
                                 colCol = 26,
                                 colLFib = 27,
+                                colArea = 4,
+                                colWidth = 18,
                                 fibre = "Faser",
                                 sphere = "Kugel",
                                 fragment = "Fragment",
-                                pixel = "Pixel"), 
+                                pixel = "Pixel",
+                                startrow = 40), 
                data.frame(
                  labname = FALSE,
                  blankKey = "Blank",
@@ -26,10 +29,13 @@ test_that("No labpreset works", {
                  colShape = 25,
                  colCol = 26,
                  colLFib = 27,
+                 colArea = 4,
+                 colWidth = 18,
                  fibre = "Faser",
                  sphere = "Kugel",
                  fragment = "Fragment",
-                 pixel = "Pixel"
+                 pixel = "Pixel",
+                 startrow = 40
                ))
 })
 
@@ -46,10 +52,13 @@ test_that("Set labpreset works", {
                                 colShape = 25,
                                 colCol = 26,
                                 colLFib = 27,
+                                colArea = 4,
+                                colWidth = 18,
                                 fibre = "blub",
                                 sphere = "Kugel",
                                 fragment = "Fragment",
-                                pixel = "Pixel"), 
+                                pixel = "Pixel",
+                                startrow = 40), 
                data.frame(
                  labname = "Laforsch",
                  blankKey = "Blank",
@@ -62,9 +71,12 @@ test_that("Set labpreset works", {
                  colShape = 25,
                  colCol = 26,
                  colLFib = 27,
+                 colArea = 4,
+                 colWidth = 18,
                  fibre = "Faser",
                  sphere = "Kugel",
                  fragment = "Fragment",
-                 pixel = "Pixel"
+                 pixel = "Pixel",
+                 startrow = 40
                ))
 })

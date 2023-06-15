@@ -16,10 +16,13 @@ eP.config.helper(
   colShape,
   colCol,
   colLFib,
+  colArea,
+  colWidth,
   fibre,
   sphere,
   fragment,
-  pixel
+  pixel,
+  startrow
 )
 }
 \arguments{
@@ -55,6 +58,12 @@ Could also be provided as column name, but only in ASCII encoding (e.g., special
 \item{colLFib}{Column number for the particle length in case of a fibre with corrected length (because of curvy shape)
 In the TOEKI lab this is column 27 (Länge). Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).}
 
+\item{colArea}{Column number for the particle length in case of a fibre with corrected length (because of curvy shape)
+In the TOEKI lab this is column 4 (Area µm²). Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).}
+
+\item{colWidth}{Column number for the particle length in case of a fibre with corrected length (because of curvy shape)
+In the TOEKI lab this is column 18 (Width µm). Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).}
+
 \item{fibre}{How fibres are called in colShape (Form). In the TOEKI lab it is 'Faser'.}
 
 \item{sphere}{How spheres are called in colShape (Form). In the TOEKI lab it is 'Kugel'.}
@@ -62,6 +71,8 @@ In the TOEKI lab this is column 27 (Länge). Could also be provided as column na
 \item{fragment}{How fragments are called in colShape (Form). In the TOEKI lab it is 'Fragment'.}
 
 \item{pixel}{How pixels are called in colShape (Form). In the TOEKI lab it is 'Pixel'.}
+
+\item{startrow}{The row where the data begin within the .csv file of purency (usually at 40).}
 }
 \description{
 Most settings of evalPurency can be overwritten by a labpreset. If a labpreset is

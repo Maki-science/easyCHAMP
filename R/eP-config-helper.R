@@ -29,10 +29,15 @@
 #' Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
 #' @param colLFib Column number for the particle length in case of a fibre with corrected length (because of curvy shape)
 #' In the TOEKI lab this is column 27 (Länge). Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
+#' @param colArea Column number for the particle length in case of a fibre with corrected length (because of curvy shape)
+#' In the TOEKI lab this is column 4 (Area µm²). Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
+#' @param colWidth Column number for the particle length in case of a fibre with corrected length (because of curvy shape)
+#' In the TOEKI lab this is column 18 (Width µm). Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
 #' @param fibre How fibres are called in colShape (Form). In the TOEKI lab it is 'Faser'.
 #' @param sphere How spheres are called in colShape (Form). In the TOEKI lab it is 'Kugel'.
 #' @param fragment How fragments are called in colShape (Form). In the TOEKI lab it is 'Fragment'.
 #' @param pixel How pixels are called in colShape (Form). In the TOEKI lab it is 'Pixel'.
+#' @param startrow The row where the data begin within the .csv file of purency (usually at 40).
 #' 
 eP.config.helper <- function(labpreset,
                              blankKey,
@@ -45,10 +50,13 @@ eP.config.helper <- function(labpreset,
                              colShape, 
                              colCol,
                              colLFib,
+                             colArea,
+                             colWidth,
                              fibre,
                              sphere,
                              fragment,
-                             pixel){
+                             pixel,
+                             startrow){
   
   #### lab presets ####
   # if a preset is set, load the respective preset (if available)
@@ -65,10 +73,13 @@ eP.config.helper <- function(labpreset,
   #   colShape = 25,
   #   colCol = 26,
   #   colLFib = 27,
+  #   colArea = 4,
+  #   colWidth = 18,
   #   fibre = "Faser",
   #   sphere = "Kugel",
   #   fragment = "Fragment",
-  #   pixel = "Pixel"
+  #   pixel = "Pixel",
+  #   startrow = 40
   # )
   
   # check whether this is similar with eP-config-helper.R
@@ -87,10 +98,13 @@ eP.config.helper <- function(labpreset,
     colShape = colShape,
     colCol = colCol,
     colLFib = colLFib,
+    colArea = colArea,
+    colWidth = colWidth,
     fibre = fibre,
     sphere = sphere,
     fragment = fragment,
-    pixel = pixel
+    pixel = pixel,
+    startrow = startrow
   )
   
   # Check whether a labpreset was chosen
@@ -120,6 +134,12 @@ eP.config.helper <- function(labpreset,
     if(!is.na(evalPurencyPresets$colLFib)){
       config$colLFib <- evalPurencyPresets$colLFib[which(evalPurencyPresets$labname == labpreset)]
     }
+    if(!is.na(evalPurencyPresets$colArea)){
+      config$colArea <- evalPurencyPresets$colArea[which(evalPurencyPresets$labname == labpreset)]
+    }
+    if(!is.na(evalPurencyPresets$colWidth)){
+      config$colWidth <- evalPurencyPresets$colWidth[which(evalPurencyPresets$labname == labpreset)]
+    }
     if(!is.na(evalPurencyPresets$fibre)){
       config$fibre <- evalPurencyPresets$fibre[which(evalPurencyPresets$labname == labpreset)]
     }
@@ -131,6 +151,9 @@ eP.config.helper <- function(labpreset,
     }
     if(!is.na(evalPurencyPresets$pixel)){
       config$pixel <- evalPurencyPresets$pixel[which(evalPurencyPresets$labname == labpreset)]
+    }
+    if(!is.na(evalPurencyPresets$startrow)){
+      config$startrow <- evalPurencyPresets$startrow[which(evalPurencyPresets$labname == labpreset)]
     }
   }
   

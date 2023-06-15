@@ -45,6 +45,10 @@
 #' Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
 #' @param colLFib Column number for the particle length in case of a fibre with corrected length (because of curvy shape)
 #' In the TOEKI lab this is column 27 (Länge). Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
+#' @param colArea Column number for the particle length in case of a fibre with corrected length (because of curvy shape)
+#' In the TOEKI lab this is column 4 (Area µm²). Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
+#' @param colWidth Column number for the particle length in case of a fibre with corrected length (because of curvy shape)
+#' In the TOEKI lab this is column 18 (Width µm). Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
 #' @param fibre How fibres are called in colShape (Form). In the TOEKI lab it is 'Faser'.
 #' @param sphere How spheres are called in colShape (Form). In the TOEKI lab it is 'Kugel'.
 #' @param fragment How fragments are called in colShape (Form). In the TOEKI lab it is 'Fragment'.
@@ -102,6 +106,8 @@ evalPurency <- function(path,
                         colShape = 25, 
                         colCol = 26,
                         colLFib = 27,
+                        colArea = 4,
+                        colWidth = 18,
                         fibre = "Faser",
                         sphere = "Kugel",
                         fragment = "Fragment",
@@ -111,21 +117,24 @@ evalPurency <- function(path,
 ){
   
   # set/correct the configuration (if labpreset was chosen)
-  config <- eP.config.helper(labpreset,
-                             blankKey,
-                             sep,
-                             dec,
-                             colPol, 
-                             colL,
-                             colReqPol, 
-                             ReqPolKey,
-                             colShape, 
-                             colCol,
-                             colLFib,
-                             fibre,
-                             sphere,
-                             fragment,
-                             pixel)
+  config <- eP.config.helper(labpreset = labpreset,
+                             blankKey = blankKey,
+                             sep = sep,
+                             dec = dec,
+                             colPol = colPol, 
+                             colL = colL,
+                             colReqPol = colReqPol, 
+                             ReqPolKey = ReqPolKey,
+                             colShape = colShape, 
+                             colCol = colCol,
+                             colLFib = colLFib,
+                             colArea = colArea,
+                             colWidth = colWidth,
+                             fibre = fibre,
+                             sphere = sphere,
+                             fragment = fragment,
+                             pixel = pixel,
+                             startrow = startrow)
   
   if(test == FALSE){
     #### load files ####
@@ -163,8 +172,10 @@ evalPurency <- function(path,
                             className = Hilfsobjekt[, config$colPol], # polymer type
                             length = Hilfsobjekt[, config$colL], # length of the particle
                             form = Hilfsobjekt[, config$colShape], # fragment, pixel, fibre, sphere
-                            color = Hilfsobjekt[, config$colCol],
-                            lengthFibre = Hilfsobjekt[, config$colLFib]) # in case the fibre is curved, the length can be found here
+                            lengthFibre = Hilfsobjekt[, config$colLFib], # in case the fibre is curved, the length can be found here
+                            color = Hilfsobjekt[, config$colCol], # color, Area and width are just for completeness of raw data. Not important for any calculation
+                            area = Hilfsobjekt[, config$colArea],
+                            width = Hilfsobjekt[, config$colWidth]) 
         temp <- rbind(temp, temp2)
       }
     ) # end supressWarnings
@@ -372,18 +383,22 @@ evalPurency <- function(path,
     data.agg.formwise <- aggregate(dataMeasurements[5:(length(sizeclasses)+5)], by=list(factor(dataMeasurements$sample), factor(dataMeasurements$measurement), factor(dataMeasurements$polymer), factor(dataMeasurements$form)), sum, na.rm = TRUE)
     colnames(data.agg.formwise) <- c("sample", "measurement", "polymer", "form", colnames(data.agg.formwise)[5:length(colnames(data.agg.formwise))])
     
-    # blanks
-    dataBlanks <- aggregate(dataBlanks[5:(length(sizeclasses)+5)], by=list(factor(dataBlanks$sample), factor(dataBlanks$measurement), factor(dataBlanks$polymer), factor(dataBlanks$form)), sum, na.rm = TRUE)
-    colnames(dataBlanks) <- c("sample", "measurement", "polymer", "form", colnames(dataBlanks)[5:length(colnames(dataBlanks))])
+    if(noBlank == FALSE){
+      # blanks
+      dataBlanks <- aggregate(dataBlanks[5:(length(sizeclasses)+5)], by=list(factor(dataBlanks$sample), factor(dataBlanks$measurement), factor(dataBlanks$polymer), factor(dataBlanks$form)), sum, na.rm = TRUE)
+      colnames(dataBlanks) <- c("sample", "measurement", "polymer", "form", colnames(dataBlanks)[5:length(colnames(dataBlanks))])
+    }
   }
   else{
     # samples
     data.agg.formwise <- aggregate(dataMeasurements[5:(length(sizeclasses)+5)], by=list(factor(dataMeasurements$sample), factor(dataMeasurements$polymer), factor(dataMeasurements$form)), sum, na.rm = TRUE)
     colnames(data.agg.formwise) <- c("sample", "polymer", "form", colnames(data.agg.formwise)[4:length(colnames(data.agg.formwise))])
     
-    # blanks
-    dataBlanks <- aggregate(dataBlanks[5:(length(sizeclasses)+5)], by=list(factor(dataBlanks$sample), factor(dataBlanks$polymer), factor(dataBlanks$form)), sum, na.rm = TRUE)
-    colnames(dataBlanks) <- c("sample", "polymer", "form", colnames(dataBlanks)[4:length(colnames(dataBlanks))])
+    if(noBlank == FALSE){
+      # blanks
+      dataBlanks <- aggregate(dataBlanks[5:(length(sizeclasses)+5)], by=list(factor(dataBlanks$sample), factor(dataBlanks$polymer), factor(dataBlanks$form)), sum, na.rm = TRUE)
+      colnames(dataBlanks) <- c("sample", "polymer", "form", colnames(dataBlanks)[4:length(colnames(dataBlanks))])
+    }
   }
   
   # add uncorrected data and blanks to obj
