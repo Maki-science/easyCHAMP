@@ -13,7 +13,7 @@ Microplastics can be found in any part of an environmental or nutritional sample
 
 
 ## Purpose of this package
-Commonly in microplastic research, a sample is splitted and filtered on several filters. These filters have to be measured separately via FTIR and can be then evaluated using the Purency software (https://www.purency.ai/). This produces .csv files for each measurement.
+Commonly in microplastic research, a sample is splitted and filtered on several filters. These filters have to be measured separately via FTIR and can be then evaluated using the Purency software (https://www.purency.ai/). This produces *.csv files for each measurement.
 
 This package and its functions can be used to automate the single file handling and gathering the relevant data for each sample into one file. The processing requires only a few seconds instead of hours (of copying and pasting) in manual work. Furthermore, the chance of mistakes is reduced by generic computation.
 
@@ -223,7 +223,7 @@ A BibTeX-entry for LaTeX-user is
   @Misc{,
     title = {evalPurency: Automated Evaluation of Purency Data},
     author = {Marvin Kiene and Eva {Cseperke Vizsolyi} and Martin Löder and Christian Laforsch},
-    note = {R package version 1.2.5.9014},
+    note = {R package version 1.2.5.9015},
     year = {2023},
     url = {https://github.com/Maki-science/evalPurency},
   }

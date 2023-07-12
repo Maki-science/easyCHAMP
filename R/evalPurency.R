@@ -1,7 +1,7 @@
 ######## evalPurency() ###########
-#' Automated evaluation of Purency data
+#' Automated evaluation of Purency data. 
 #' @description
-#' Evaluate csv files, produced by Purency. It will count occurences of of fibres, fragments, spheres and pixels,
+#' Evaluate *.csv files, produced by Purency. It will count occurences of of fibres, fragments, spheres and pixels,
 #' as well as size fractions (customisable) for each polymer. Each file (i.e., each measurement)
 #' is evaluated separately, as well as summarized for all files (i.e., one sample). 
 #' 
@@ -56,7 +56,7 @@
 #' @param test Can be set TRUE when the function should be run in testing mode.
 #' @param startrow Only required rarely. If you use a Purency version that saves the csv files slightly
 #' differently, you might check at which line the data starts (including header). This number of line should
-#' be set here (default 41).
+#' be set here (default 40).
 #' 
 #' @return If dataReturn = TRUE, the function returns a list object including all 
 #'  processed data of each processing step and the summary values.
@@ -136,100 +136,26 @@ evalPurency <- function(path,
                              pixel = pixel,
                              startrow = startrow)
   
-  if(test == FALSE){
-    #### load files ####
-    # get all files in the set folder
-    Dateien <- list.files(path=path,pattern=".csv") # search for files with .csv ending
-    # get the number of files
-    name_measurement <- c(1:length(Dateien))
-    
-    # prepare files names to be used in read.csv()
-    # and get the sample names (all before the fist _)
-    for (i in 1:length(Dateien)){  
-      names(Dateien)[i] <-Dateien[i] # generate names for values
-      names(Dateien)[i] <-strsplit(names(Dateien)[i],".csv")[[1]][1]  # cut of '.txt' of the name
-      name_measurement[i] <- strsplit(names(Dateien)[i],"_")[[1]][1]  # cut of '.txt' of the name
-    }
-    
-    # temp data frame to store content of all files
-    temp <- data.frame()
-    
-    # read all files and gather their data in temp
-    # each particle will be stored in one line with the measurement number and sample name (unique combination).
-    suppressWarnings(
-      for (i in 1:length(Dateien)){
-        # need to read data as ASCII. Otherwise it sometimes makes problems with the column names with special character
-        assign("Hilfsobjekt",read.csv(paste0(path,Dateien[i]),sep=config$sep, dec=config$dec, skip=startrow, fileEncoding = "ASCII")) # read data and skip the first 40 lines
-        
-        # now with column numbers in the default form, but can also be provided als column name
-        Hilfsobjekt <- droplevels(subset(Hilfsobjekt, Hilfsobjekt[config$colReqPol] == config$ReqPolKey))
-        
-        
-        
-        
-        temp2 <- data.frame(sample = name_measurement[i],
-                            measurement = Dateien[i],
-                            className = Hilfsobjekt[, config$colPol], # polymer type
-                            length = Hilfsobjekt[, config$colL], # length of the particle
-                            form = Hilfsobjekt[, config$colShape], # fragment, pixel, fibre, sphere
-                            lengthFibre = Hilfsobjekt[, config$colLFib], # in case the fibre is curved, the length can be found here
-                            color = Hilfsobjekt[, config$colCol], # color, Area and width are just for completeness of raw data. Not important for any calculation
-                            area = Hilfsobjekt[, config$colArea],
-                            width = Hilfsobjekt[, config$colWidth]) 
-        temp <- rbind(temp, temp2)
-      }
-    ) # end supressWarnings
-    # until here the sample data are produced. This is what Purency provides
-  } # end if test == FALSE
-  else{ # if test == TRUE
-    # load data from package sample data
-    temp <- evalPurency::purencySampleData
-  }  
-  
-  # quality control
-  rowstodelete <- c()
-  for(i in 1:nrow(temp)){
-    check <- FALSE
-    suppressWarnings( # I supress the warnings to have a simpler message that can be interpreted fast.
-      # To add a quality control, I check whether the field of form or length is NA. If yes, a warning will be
-      # thrown, including the sample and measurement.
-      if(is.na(temp$form[i]) == TRUE || (temp$form[i] == fibre || temp$form[i] == fragment || temp$form[i] == pixel || temp$form[i] == sphere) == FALSE){
-        check <- TRUE
-        if(is.na(temp$form[i]) == TRUE){
-          cat(warning(paste("Warning: There is a value missing in column ", colnames(Hilfsobjekt[config$colShape]), " in ", temp$measurement[i], "\n")))
-        }
-        else{
-          cat(warning(paste("Warning: There is an unknown value in column ", colnames(Hilfsobjekt[config$colShape]), " in ", temp$measurement[i], "\n")))
-        }
-      }
-    ) # end supressWarnings
-    suppressWarnings(
-      if(is.na(as.numeric(temp$length[i])) == TRUE){
-        check <- TRUE
-        cat(warning(paste("Warning: There is a value missing in column ", colnames(Hilfsobjekt[config$colL]), " in ", temp$measurement[i], "\n")))
-      }
-    ) # end supressWarnings
-    if(check == TRUE){
-      rowstodelete <- c(rowstodelete, i)
-    }
-  } # end for(i)
-  if(length(rowstodelete) > 0){
-    temp <- temp[-c(rowstodelete),]
-  }
-    
-  # The length is not always correct for fibres.
-  # Thus create a new column with the correct length for all particles (that I don't need to select the correct column further below)
-  temp$actualLength <- NA
-  for(i in 1:nrow(temp)){
-    # If lengthFibre is NA, but form is still Faser, the length is the value to be taken.
-    if(temp$form[i] == config$fibre && !is.na(temp$lengthFibre[i]) == TRUE){
-      temp$actualLength[i] <- temp$lengthFibre[i]
-    }
-    else{
-      temp$actualLength[i] <- temp$length[i]
-    }
-  } # end for i
-
+  #### load data #####
+  temp <- ep.load.helper(path = path, 
+                         sep = config$sep, 
+                         dec = config$dec, 
+                         colL = config$colL,
+                         colPol = config$colPol,
+                         startrow = config$startrow, 
+                         colReqPol = config$colReqPol, 
+                         ReqPolKey = config$ReqPolKey, 
+                         colShape = config$colShape, 
+                         colCol = config$colCol, 
+                         colLFib = config$colLFib,
+                         colArea = config$colArea,
+                         colWidth = config$colWidth,
+                         test = test,
+                         fibre = config$fibre,
+                         sphere = config$sphere,
+                         fragment = config$fragment,
+                         pixel = config$pixel
+                         )
   
   #### start processing ####
   obj <- list() # object to be returned holding the rawdata, as well as the corrected and summarized data

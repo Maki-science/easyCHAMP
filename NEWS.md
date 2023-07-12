@@ -1,3 +1,8 @@
+# evalPurency 1.2.5.9015
+
+  - apparently it happens, that Purency produces a file, that has special characters or is differently encoded (I didn't figure out yet). This causes evalPurency to have issues with reading the files (since it is usually just one out of several files that is somewhat different). Before the function applied 'ASCII' encoding. With this update I switched to 'latin1'. 
+  - Some restructuring of the code was applied in preparation of an additional functionality coming soon.
+
 # evalPurency 1.2.5.9014
 
   - following a request (Eva), the function now retains the information on area and width of the particles and provides it in the processing data on the raw data sheet.
