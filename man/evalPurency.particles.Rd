@@ -9,7 +9,7 @@ evalPurency.particles(
   polymers = c("PU", "EVAc", "PA", "PAN", "PBT", "PET", "PE", "PMMA", "PP", "POM", "PS",
     "PVC", "PC", "ABS", "PPSU", "CA", "PEEK", "EVOH", "PSU", "SILICONE", "PLA",
     "PLAPBAT"),
-  DivFactor = 1,
+  divFactor = 1,
   colourSep = FALSE,
   dataReturn = FALSE,
   labpreset = FALSE,
@@ -40,6 +40,9 @@ resulting files in this directory.}
 
 \item{polymers}{A vector containing the abbreviations of polymers to be considered. Default vector contains 22
 polymers.}
+
+\item{divFactor}{Set a division factor, that is used to divide the results by this factor. All samples/filters
+and blanks must have the same factor (otherwise apply manually after running the function). Defaults to 1.}
 
 \item{colourSep}{Whether a special color of particles should be treated separately from other colours. Colours are
 usually difficult to distinguish in the FTIR pictures. But e.g., black and non-blacks are distinguishable.
@@ -102,9 +105,6 @@ In the TOEKI lab this is column 18 (Width µm). Could also be provided as column
 \item{startrow}{Only required rarely. If you use a Purency version that saves the csv files slightly
 differently, you might check at which line the data starts (including header). This number of line should
 be set here (default 40).}
-
-\item{divFactor}{Set a division factor, that is used to divide the results by this factor. All samples/filters
-and blanks must have the same factor (otherwise apply manually after running the function). Defaults to 1.}
 }
 \value{
 If dataReturn = TRUE, the function returns a list object including all
