@@ -209,6 +209,7 @@ If there are any issues or wishes for changes, you can send me a mail to info@ma
 
   - If an error occurs or you get different results, each time the function runs, make sure that you have only the files in the respective folder that should be processed. If you re-run the function, you will have the previously created files there, so you need to delete them first, and then run the function again. 
   - Make sure you considered all points before, where a *WARNING* was provided.
+  - If the error "Error in read.table(file = file, header = header, sep = sep, quote = quote,  : more columns than column names" occurs, it is likely caused by an excess line in the header of your *.csv file. For unkown reason, Purency once in a while creates a file that contains an additional line in its meta-data header (the first 40 or 41 lines, respektively). Usually, the real data set starts at line 41 (with the column header). However, in this case, the data start at line 42. The solution is simple: just delete one of the first 41 lines in the respective file (watch out to respect the correct decimal sign) and run the function again. Now it should run through, as long as there is no further file with that issue.
 
 
 ## Citation
