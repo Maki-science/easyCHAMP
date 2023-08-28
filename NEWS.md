@@ -1,3 +1,7 @@
+# evalPurency 1.2.5.9016
+
+  - fixed an issue, which caused problems in processing files without any measured plastic particles. Additionally, a warning is thrown in such a case, if this was not intended (e.g., mistakenly empty column).
+  
 # evalPurency 1.2.5.9015
 
   - apparently it happens, that Purency produces a file, that has special characters or is differently encoded (I didn't figure out yet). This causes evalPurency to have issues with reading the files (since it is usually just one out of several files that is somewhat different). Before the function applied 'ASCII' encoding. With this update I switched to 'latin1'. 

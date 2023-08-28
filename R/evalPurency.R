@@ -167,19 +167,22 @@ evalPurency <- function(path,
   vdata$sizeClass <- NA
   
   for(i in 1:nrow(vdata)){
-    for(j in 1:length(sizeclasses)){
-      if(vdata$actualLength[i] <= sizeclasses[1]){
-        vdata$sizeClass[i] <- paste("from", "0", "to", sizeclasses[1], sep="")
-      }
-      else if(vdata$actualLength[i] > sizeclasses[length(sizeclasses)]){
-        vdata$sizeClass[i] <- paste("above", sizeclasses[length(sizeclasses)], sep="")
-      }
-      else if(j > 1 && vdata$actualLength[i] > sizeclasses[j-1] && vdata$actualLength[i] <= sizeclasses[j]){
-        vdata$sizeClass[i] <- paste("from", sizeclasses[j-1], "to", sizeclasses[j], sep="")
-      }
-      else{ # otherwise do nothing and go on to the next
-      }
-    } # end for j
+    if(vdata$className[i] == "none"){} # if no particle was found in one sample, no sizeclass can be assigned
+    else{
+      for(j in 1:length(sizeclasses)){
+        if(vdata$actualLength[i] <= sizeclasses[1]){
+          vdata$sizeClass[i] <- paste("from", "0", "to", sizeclasses[1], sep="")
+        }
+        else if(vdata$actualLength[i] > sizeclasses[length(sizeclasses)]){
+          vdata$sizeClass[i] <- paste("above", sizeclasses[length(sizeclasses)], sep="")
+        }
+        else if(j > 1 && vdata$actualLength[i] > sizeclasses[j-1] && vdata$actualLength[i] <= sizeclasses[j]){
+          vdata$sizeClass[i] <- paste("from", sizeclasses[j-1], "to", sizeclasses[j], sep="")
+        }
+        else{ # otherwise do nothing and go on to the next
+        }
+      } # end for j
+    } # end else
   } # end for i
   
   # add raw data to return object
@@ -233,59 +236,98 @@ evalPurency <- function(path,
       for(j in 1:length(levels(factor(vdatam$className)))){
         vdataj <- droplevels(subset(vdatam, vdatam$className == levels(factor(vdatam$className))[j]))
         
-        for(k in 1:length(levels(factor(vdataj$form)))){
-          vdatak <- droplevels(subset(vdataj, vdataj$form == levels(factor(vdataj$form))[k]))
+        if(levels(factor(vdatam$className))[j] == "none"){# no particle measured in this sample
           
           dataBlankCorrTemprow <- data.frame(
             sample = levels(factor(vdata$sample))[i],
             measurement = levels(factor(vdatai$measurement))[m],
             polymer = levels(factor(vdatam$className))[j],
-            form = levels(factor(vdataj$form))[k]
+            form = "none"
           )
-          # create a new column for each size class and count the number of observations
+          
+          # create a new column for each size class and set NA
           for(l in 1:(length(sizeclasses)+1)){
             if(l == 1){ # for the first number it's 0 to <=x
-  
+              
               dataBlankCorrTemprow <- cbind(dataBlankCorrTemprow, data.frame(x = NA))
               colnames(dataBlankCorrTemprow) <- c(colnames(dataBlankCorrTemprow)[-length(colnames(dataBlankCorrTemprow))], paste("from", "0", "to", sizeclasses[l], sep=""))
               
-              dataBlankCorrTemprow[,paste("from", "0", "to", sizeclasses[l], sep="")] <- nrow(
-                vdatak[
-                  which(vdatak$sizeClass == paste("from", "0", "to", sizeclasses[l], sep="")
-                        ),
-                  ]
-                )
+              dataBlankCorrTemprow[,paste("from", "0", "to", sizeclasses[l], sep="")] <- 0
             }
             else if(l == (length(sizeclasses)+1)){ # for the last number it's >x to infinite
               dataBlankCorrTemprow <- cbind(dataBlankCorrTemprow, data.frame(x = NA))
               colnames(dataBlankCorrTemprow) <- c(colnames(dataBlankCorrTemprow)[-length(colnames(dataBlankCorrTemprow))], paste("above", sizeclasses[l-1], sep=""))
-            
-              dataBlankCorrTemprow[,paste("above", sizeclasses[l-1], sep="")] <- nrow(
-                vdatak[
-                  which(
-                        vdatak$sizeClass == paste("above", sizeclasses[l-1], sep="")
-                  ),
-                ]
-              )
+              
+              dataBlankCorrTemprow[,paste("above", sizeclasses[l-1], sep="")] <- 0
               
             }
             else{ # all other size classes
               dataBlankCorrTemprow <- cbind(dataBlankCorrTemprow, data.frame(x = NA))
               colnames(dataBlankCorrTemprow) <- c(colnames(dataBlankCorrTemprow)[-length(colnames(dataBlankCorrTemprow))], paste("from", sizeclasses[l-1], "to", sizeclasses[l], sep=""))
-            
-              dataBlankCorrTemprow[,paste("from", sizeclasses[l-1], "to", sizeclasses[l], sep="")] <- nrow(
-                vdatak[
-                  which(
-                        vdatak$sizeClass == paste("from", sizeclasses[l-1], "to", sizeclasses[l], sep="")
-                  ),
-                ]
-              )
               
-              }
+              dataBlankCorrTemprow[,paste("from", sizeclasses[l-1], "to", sizeclasses[l], sep="")] <- 0
+            }
           }
           
           dataBlankCorr <- rbind(dataBlankCorr, dataBlankCorrTemprow)
-        } # end for k
+
+        
+        } # end if no particle measured in this sample
+        else{ 
+          for(k in 1:length(levels(factor(vdataj$form)))){
+            vdatak <- droplevels(subset(vdataj, vdataj$form == levels(factor(vdataj$form))[k]))
+            
+            dataBlankCorrTemprow <- data.frame(
+              sample = levels(factor(vdata$sample))[i],
+              measurement = levels(factor(vdatai$measurement))[m],
+              polymer = levels(factor(vdatam$className))[j],
+              form = levels(factor(vdataj$form))[k]
+            )
+            # create a new column for each size class and count the number of observations
+            for(l in 1:(length(sizeclasses)+1)){
+              if(l == 1){ # for the first number it's 0 to <=x
+    
+                dataBlankCorrTemprow <- cbind(dataBlankCorrTemprow, data.frame(x = NA))
+                colnames(dataBlankCorrTemprow) <- c(colnames(dataBlankCorrTemprow)[-length(colnames(dataBlankCorrTemprow))], paste("from", "0", "to", sizeclasses[l], sep=""))
+                
+                dataBlankCorrTemprow[,paste("from", "0", "to", sizeclasses[l], sep="")] <- nrow(
+                  vdatak[
+                    which(vdatak$sizeClass == paste("from", "0", "to", sizeclasses[l], sep="")
+                          ),
+                    ]
+                  )
+              }
+              else if(l == (length(sizeclasses)+1)){ # for the last number it's >x to infinite
+                dataBlankCorrTemprow <- cbind(dataBlankCorrTemprow, data.frame(x = NA))
+                colnames(dataBlankCorrTemprow) <- c(colnames(dataBlankCorrTemprow)[-length(colnames(dataBlankCorrTemprow))], paste("above", sizeclasses[l-1], sep=""))
+              
+                dataBlankCorrTemprow[,paste("above", sizeclasses[l-1], sep="")] <- nrow(
+                  vdatak[
+                    which(
+                          vdatak$sizeClass == paste("above", sizeclasses[l-1], sep="")
+                    ),
+                  ]
+                )
+                
+              }
+              else{ # all other size classes
+                dataBlankCorrTemprow <- cbind(dataBlankCorrTemprow, data.frame(x = NA))
+                colnames(dataBlankCorrTemprow) <- c(colnames(dataBlankCorrTemprow)[-length(colnames(dataBlankCorrTemprow))], paste("from", sizeclasses[l-1], "to", sizeclasses[l], sep=""))
+              
+                dataBlankCorrTemprow[,paste("from", sizeclasses[l-1], "to", sizeclasses[l], sep="")] <- nrow(
+                  vdatak[
+                    which(
+                          vdatak$sizeClass == paste("from", sizeclasses[l-1], "to", sizeclasses[l], sep="")
+                    ),
+                  ]
+                )
+                
+                }
+            }
+            
+            dataBlankCorr <- rbind(dataBlankCorr, dataBlankCorrTemprow)
+          } # end for k
+        } # end else (no particle measured)
       } # end for j
     } # end for m
   } # end for i
@@ -537,14 +579,15 @@ evalPurency <- function(path,
     blanklevels <- levels(factor(unlist(strsplit(as.character(dataBlanks$sample),"_"))))
     if(!is.na(strsplit(blanklevels[i], config$blankKey)[[1]][2]) == TRUE){ 
       # when there is a number behind Blank, take the average of all with a similar level
-      dataBlanks <- aggregate(dataBlanks[c(4:length(colnames(dataBlanks)))], by=list(unlist(sapply(strsplit(as.character(dataBlanks$sample), config$blankKey, fixed = TRUE), getElement, 1)), dataBlanks$polymer, dataBlanks$form), mean, na.rm = TRUE)
+      dataBlanks <- aggregate(dataBlanks[c(4:length(colnames(dataBlanks)))], by=list(unlist(sapply(strsplit(as.character(dataBlanks$sample), config$blankKey, fixed = TRUE), getElement, 1)), dataBlanks$polymer, dataBlanks$form), FUN = sum, na.rm = TRUE)
+      dataBlanks[, 4:length(colnames(dataBlanks))] <- dataBlanks[, 4:length(colnames(dataBlanks))] / length(blanklevels)
       colnames(dataBlanks) <- c("sample", "polymer", "form", colnames(dataBlanks)[4:length(colnames(dataBlanks))])
       # reset the sample column (that the word "Blank" is included again)
       dataBlanks$sample <- paste(unlist(strsplit(as.character(dataBlanks$sample), config$blankKey)), config$blankKey, sep = "")
     }
   }  
     
-    
+  
   #### perform blank correction #### 
     # iterate over the samples (with existing Blanks - should be all, though)
     for(i in 1:length(levels(factor(unlist(strsplit(as.character(dataBlanks$sample), config$blankKey)))))){

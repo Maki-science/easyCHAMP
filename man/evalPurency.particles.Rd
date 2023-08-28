@@ -9,12 +9,14 @@ evalPurency.particles(
   polymers = c("PU", "EVAc", "PA", "PAN", "PBT", "PET", "PE", "PMMA", "PP", "POM", "PS",
     "PVC", "PC", "ABS", "PPSU", "CA", "PEEK", "EVOH", "PSU", "SILICONE", "PLA",
     "PLAPBAT"),
+  sizeclasses = c(10, 20, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500),
   divFactor = 1,
   colourSep = FALSE,
   dataReturn = FALSE,
   labpreset = FALSE,
-  blankKey = "Blank",
   noBlank = FALSE,
+  test = FALSE,
+  blankKey = "Blank",
   sep = ";",
   dec = ",",
   colPol = 6,
@@ -30,7 +32,6 @@ evalPurency.particles(
   sphere = "Kugel",
   fragment = "Fragment",
   pixel = "Pixel",
-  test = FALSE,
   startrow = 40
 )
 }
@@ -40,6 +41,11 @@ resulting files in this directory.}
 
 \item{polymers}{A vector containing the abbreviations of polymers to be considered. Default vector contains 22
 polymers.}
+
+\item{sizeclasses}{A vector containing desired sizeclasses to be evaluated. Default is c(10, 20, 50, 100, 150,
+200, 250, 300, 350, 400, 450, 500) The function starts at 0 and then uses the set steps.
+It always uses values up to the provided higher number but excluding the former number (e.g., for
+the default values, the function uses 0 to <= 10, >10 to <= 20, >20 to <= 50, ..., all >500).}
 
 \item{divFactor}{Set a division factor, that is used to divide the results by this factor. All samples/filters
 and blanks must have the same factor (otherwise apply manually after running the function). Defaults to 1.}
@@ -55,10 +61,12 @@ the necessary information.}
 \item{labpreset}{A preset for most of the parameters (except: path, polymers, dataReturn, eocsum).
 Can be requested by other labs, to be implemented, that they don't have to be set manually all the time.}
 
+\item{noBlank}{Can be set TRUE if you don't have a blank at all and just want to summarize your data (defaults to FALSE).}
+
+\item{test}{Can be set TRUE when the function should be run in testing mode.}
+
 \item{blankKey}{The key word to distinguish blanks from other measurements/samples. It is case sensitive to prevent
 accidental matching. Defaults to "Blank".}
-
-\item{noBlank}{Can be set TRUE if you don't have a blank at all and just want to summarize your data (defaults to FALSE).}
 
 \item{sep}{Symbol in your *.csv files indicating new a column. Defaults to ';'.}
 
@@ -99,8 +107,6 @@ In the TOEKI lab this is column 18 (Width µm). Could also be provided as column
 \item{fragment}{How fragments are called in colShape (Form). In the TOEKI lab it is 'Fragment'.}
 
 \item{pixel}{How pixels are called in colShape (Form). In the TOEKI lab it is 'Pixel'.}
-
-\item{test}{Can be set TRUE when the function should be run in testing mode.}
 
 \item{startrow}{Only required rarely. If you use a Purency version that saves the csv files slightly
 differently, you might check at which line the data starts (including header). This number of line should

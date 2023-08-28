@@ -85,8 +85,8 @@ ep.load.helper <- function(path,
     # read all files and gather their data in temp
     # each particle will be stored in one line with the measurement number and sample name (unique combination).
     suppressWarnings(
-      for (i in 1:length(Dateien)){
-        
+      for(i in 1:length(Dateien)){
+        #print(paste(i, Dateien[i], sep="\n"))
         # need to read data as ASCII. Otherwise it sometimes makes problems with the column names with special character
         assign("Hilfsobjekt",read.csv(paste0(path,Dateien[i]),sep=sep, dec=dec, skip=startrow, fileEncoding = "latin1")) # read data and skip the first 40 lines
         
@@ -94,17 +94,32 @@ ep.load.helper <- function(path,
         Hilfsobjekt <- droplevels(subset(Hilfsobjekt, Hilfsobjekt[colReqPol] == ReqPolKey))
         
         
-        
-        
-        temp2 <- data.frame(sample = name_measurement[i],
-                            measurement = Dateien[i],
-                            className = Hilfsobjekt[, colPol], # polymer type
-                            length = Hilfsobjekt[, colL], # length of the particle
-                            form = Hilfsobjekt[, colShape], # fragment, pixel, fibre, sphere
-                            lengthFibre = Hilfsobjekt[, colLFib], # in case the fibre is curved, the length can be found here
-                            color = Hilfsobjekt[, colCol], # color, Area and width are just for completeness of raw data. Not important for any calculation
-                            area = Hilfsobjekt[, colArea],
-                            width = Hilfsobjekt[, colWidth]) 
+        # in case there is an empty data frame, set one line with NAs
+        # Thus, the file is registered as sample, but with no content.
+        # Otherwise an error occurred.
+        if(identical(Hilfsobjekt[, colPol], character(0))){ 
+          temp2 <- data.frame(sample = name_measurement[i],
+                              measurement = Dateien[i],
+                              className = "none", # polymer type
+                              length = NA, # length of the particle
+                              form = NA, # fragment, pixel, fibre, sphere
+                              lengthFibre = NA, # in case the fibre is curved, the length can be found here
+                              color = NA, # color, Area and width are just for completeness of raw data. Not important for any calculation
+                              area = NA,
+                              width = NA) 
+        }
+        # If not empty, set the columns as usual
+        else{
+          temp2 <- data.frame(sample = name_measurement[i],
+                              measurement = Dateien[i],
+                              className = Hilfsobjekt[, colPol], # polymer type
+                              length = Hilfsobjekt[, colL], # length of the particle
+                              form = Hilfsobjekt[, colShape], # fragment, pixel, fibre, sphere
+                              lengthFibre = Hilfsobjekt[, colLFib], # in case the fibre is curved, the length can be found here
+                              color = Hilfsobjekt[, colCol], # color, Area and width are just for completeness of raw data. Not important for any calculation
+                              area = Hilfsobjekt[, colArea],
+                              width = Hilfsobjekt[, colWidth]) 
+        }
         temp <- rbind(temp, temp2)
       }
     ) # end supressWarnings
@@ -118,26 +133,34 @@ ep.load.helper <- function(path,
   # quality control
   rowstodelete <- c()
   for(i in 1:nrow(temp)){
-    check <- FALSE
+    check <- FALSE # if set TRUE, this line will be deleted below
     suppressWarnings( # I supress the warnings to have a simpler message that can be interpreted fast.
       # To add a quality control, I check whether the field of form or length is NA. If yes, a warning will be
       # thrown, including the sample and measurement.
-      if(is.na(temp$form[i]) == TRUE || (temp$form[i] == fibre || temp$form[i] == fragment || temp$form[i] == pixel || temp$form[i] == sphere) == FALSE){
-        check <- TRUE
-        if(is.na(temp$form[i]) == TRUE){
-          cat(warning(paste("Warning: There is a value missing in column ", colnames(Hilfsobjekt[colShape]), " in ", temp$measurement[i], "\n")))
-        }
-        else{
-          cat(warning(paste("Warning: There is an unknown value in column ", colnames(Hilfsobjekt[colShape]), " in ", temp$measurement[i], "\n")))
-        }
+      if(temp$className[i] == "none"){
+        cat(warning(paste("Warning: There is no plastic particle measured in ", temp$measurement[i], "\n")))
+        check <- FALSE
       }
+      else{
+        if(is.na(temp$form[i]) == TRUE || (temp$form[i] == fibre || temp$form[i] == fragment || temp$form[i] == pixel || temp$form[i] == sphere) == FALSE){
+          check <- TRUE
+          if(is.na(temp$form[i]) == TRUE){
+            cat(warning(paste("Warning: There is a value missing in column ", colnames(Hilfsobjekt[colShape]), " in ", temp$measurement[i], "\n")))
+          }
+          else{
+            cat(warning(paste("Warning: There is an unknown value in column ", colnames(Hilfsobjekt[colShape]), " in ", temp$measurement[i], "\n")))
+          }
+        }
+      #) # end supressWarnings
+      #suppressWarnings(
+        if(is.na(as.numeric(temp$length[i])) == TRUE){
+          check <- TRUE
+          cat(warning(paste("Warning: There is a value missing in column ", colnames(Hilfsobjekt[colL]), " in ", temp$measurement[i], "\n")))
+        }
+      #) # end supressWarnings
+    }# end else form == none
     ) # end supressWarnings
-    suppressWarnings(
-      if(is.na(as.numeric(temp$length[i])) == TRUE){
-        check <- TRUE
-        cat(warning(paste("Warning: There is a value missing in column ", colnames(Hilfsobjekt[colL]), " in ", temp$measurement[i], "\n")))
-      }
-    ) # end supressWarnings
+    # lines with NAs will be deleted, since they cannot be evaluated
     if(check == TRUE){
       rowstodelete <- c(rowstodelete, i)
     }

@@ -8,6 +8,10 @@
 #' resulting files in this directory.
 #' @param polymers A vector containing the abbreviations of polymers to be considered. Default vector contains 22 
 #' polymers.
+#' @param sizeclasses A vector containing desired sizeclasses to be evaluated. Default is c(10, 20, 50, 100, 150, 
+#' 200, 250, 300, 350, 400, 450, 500) The function starts at 0 and then uses the set steps. 
+#' It always uses values up to the provided higher number but excluding the former number (e.g., for
+#' the default values, the function uses 0 to <= 10, >10 to <= 20, >20 to <= 50, ..., all >500).
 #' @param divFactor Set a division factor, that is used to divide the results by this factor. All samples/filters
 #' and blanks must have the same factor (otherwise apply manually after running the function). Defaults to 1.
 #' @param colourSep Whether a special color of particles should be treated separately from other colours. Colours are
@@ -72,12 +76,14 @@ evalPurency.particles <- function(path,
                                   polymers = c("PU", "EVAc", "PA", "PAN", "PBT", "PET", "PE", "PMMA", "PP", 
                                                "POM", "PS", "PVC", "PC", "ABS", "PPSU", "CA", "PEEK", "EVOH", 
                                                "PSU", "SILICONE", "PLA", "PLAPBAT"),
+                                  sizeclasses = c(10, 20, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500),
                                   divFactor = 1,
                                   colourSep = FALSE,
                                   dataReturn = FALSE,
                                   labpreset = FALSE,
-                                  blankKey = "Blank",
                                   noBlank = FALSE,
+                                  test = FALSE,
+                                  blankKey = "Blank",
                                   sep = ";",
                                   dec = ",",
                                   colPol = 6, 
@@ -93,7 +99,6 @@ evalPurency.particles <- function(path,
                                   sphere = "Kugel",
                                   fragment = "Fragment",
                                   pixel = "Pixel",
-                                  test = FALSE,
                                   startrow = 40
                                   ){
   
@@ -143,20 +148,56 @@ evalPurency.particles <- function(path,
   
   obj$rawData <- temp
   
+  #### keep data vertically ####
+  # This way a shapewise size classification can be realized, further allowing a blank correction processing
+  
+  vdata <- temp
+  vdata$sizeClass <- NA
+  
+  for(i in 1:nrow(vdata)){
+    for(j in 1:length(sizeclasses)){
+      if(vdata$actualLength[i] <= sizeclasses[1]){
+        vdata$sizeClass[i] <- paste("from", "0", "to", sizeclasses[1], sep="")
+      }
+      else if(vdata$actualLength[i] > sizeclasses[length(sizeclasses)]){
+        vdata$sizeClass[i] <- paste("above", sizeclasses[length(sizeclasses)], sep="")
+      }
+      else if(j > 1 && vdata$actualLength[i] > sizeclasses[j-1] && vdata$actualLength[i] <= sizeclasses[j]){
+        vdata$sizeClass[i] <- paste("from", sizeclasses[j-1], "to", sizeclasses[j], sep="")
+      }
+      else{ # otherwise do nothing and go on to the next
+      }
+    } # end for j
+  } # end for i
+  
+  
   if(noBlank == FALSE){
     
     # split blanks and samples
-    dataBlanks <- temp[grepl(config$blankKey, temp$sample, fixed = TRUE) == TRUE,]
-    dataMeasurements <- temp[grepl(config$blankKey, temp$sample, fixed = TRUE) != TRUE,]
+    dataBlanks <- vdata[grepl(config$blankKey, vdata$sample, fixed = TRUE) == TRUE,]
+    dataMeasurements <- vdata[grepl(config$blankKey, vdata$sample, fixed = TRUE) != TRUE,]
 
     # add blank and sample list to obj
     obj$blanks <- dataBlanks
     obj$samples <- dataMeasurements
     
-    #### TODO: colourSep = "schwarz"
     
-    #### Q: How to treat several blanks for one sample ("average" or sum?)
+    #### TODO: colourSep = "schwarz"
+    #### For this, in every step I have to check, whether colourSep != FALSE. 
+    #### In case, an additionall loop has to be included to separate the given colour from all others.
+    
+    
+    
     #### TODO: compare blanks and calculate a mean of very similar particles - delete the original
+    #### take blanks of the same sample, and check whether there are 
+    #### similar particles (polymer, shape, color, sizeclass).
+    #### For each of x similar particles, take the median particle into a new correction list 
+    #### (x = amount of blanks for this sample), and delete the one from the blanks (or a temp).
+    #### If there are more than x similar particles, take another median from the rest particles, etc..
+    #### This will result in a particles correction list, used for the blank correction in the next step
+    
+    # create a correctionList, containing the particles that should be substracted from sample
+    correctionList <- data.frame()
     
     # iterate over blank samples
     for(i in 1:length(levels(factor(dataBlanks$sample)))){
@@ -165,15 +206,10 @@ evalPurency.particles <- function(path,
         # how many blank replicates are there?
         n_lev <- length(levels(factor(dataBlanks$measurement[which(dataBlanks$sample == levels(factor(dataBlanks$sample))[i])])))
         
-        # make subset with only the replicates of one blank. 
-        # take one as main frame
-        # compare with others the particles. if similar particles can be found:
-        # take average of all (what if its more than the number of replicates? - is it then 2 exact same
-        # average particles?).
-        # OR 
-        # pick randomly one or more particles from the similar ones? Should the other be deleted, or
-        # remain for further comparisons (-> some particles might be counted several times -> number of
-        # blank particles inceases)?
+        # iterate over polymers
+        for(j in 1:length(polymers)){
+          
+        }
         
       }
     }
@@ -192,6 +228,7 @@ evalPurency.particles <- function(path,
   }
   else{ # noBlank == TRUE
     # without blanks, no processing must take place. Thus, just the raw data table is provided
+    obj$samples <- vdata
   }
   
   
