@@ -6,6 +6,7 @@
 \usage{
 ep.load.helper(
   path,
+  particleNumbers,
   sep,
   dec,
   colL,

@@ -215,7 +215,7 @@ If there are any issues or wishes for changes, you can send me a mail to info@ma
 ## Citation
 To cite evalPurency in publications use:
 
-Marvin Kiene, Eva Vizsolyi Cseperke, Martin Löder and Christian Laforsch (2023). evalPurency: Automated Evaluation of Data of the Purency's Microplastic Finder. R package version 1.2.4.9004.
+Marvin Kiene, Eva Vizsolyi Cseperke, Martin Löder and Christian Laforsch (2023). evalPurency: Automated Evaluation of Data of the Purency's Microplastic Finder. R package version 1.2.5.9017.
 https://github.com/Maki-science/evalPurency
 
 
@@ -224,7 +224,7 @@ A BibTeX-entry for LaTeX-user is
   @Misc{,
     title = {evalPurency: Automated Evaluation of Purency Data},
     author = {Marvin Kiene and Eva {Cseperke Vizsolyi} and Martin Löder and Christian Laforsch},
-    note = {R package version 1.2.5.9015},
+    note = {R package version 1.2.5.9017},
     year = {2023},
     url = {https://github.com/Maki-science/evalPurency},
   }

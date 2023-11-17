@@ -45,7 +45,8 @@
 #' @return Returns a data frame containing a list of all particles and their properties.
 
 
-ep.load.helper <- function(path, 
+ep.load.helper <- function(path,
+                           particleNumbers,
                            sep, 
                            dec, 
                            colL,
@@ -81,6 +82,10 @@ ep.load.helper <- function(path,
     
     # temp data frame to store content of all files
     temp <- data.frame()
+    # create a data frame containing particle numbers for plastic and non-plastic (Anja)
+    particlenumbers <- data.frame(File = names(Dateien),
+                                  particlesTotal = NA,
+                                  particlesPlastic = NA)
     
     # read all files and gather their data in temp
     # each particle will be stored in one line with the measurement number and sample name (unique combination).
@@ -90,9 +95,12 @@ ep.load.helper <- function(path,
         # need to read data as ASCII. Otherwise it sometimes makes problems with the column names with special character
         assign("Hilfsobjekt",read.csv(paste0(path,Dateien[i]),sep=sep, dec=dec, skip=startrow, fileEncoding = "latin1")) # read data and skip the first 40 lines
         
+        particlenumbers$particlesTotal[i] <- nrow(Hilfsobjekt)
+        
         # now with column numbers in the default form, but can also be provided als column name
         Hilfsobjekt <- droplevels(subset(Hilfsobjekt, Hilfsobjekt[colReqPol] == ReqPolKey))
         
+        particlenumbers$particlesPlastic[i] <- nrow(Hilfsobjekt)
         
         # in case there is an empty data frame, set one line with NAs
         # Thus, the file is registered as sample, but with no content.
@@ -181,6 +189,13 @@ ep.load.helper <- function(path,
       temp$actualLength[i] <- temp$length[i]
     }
   } # end for i
+  
+  if(particleNumbers == TRUE){
+    writexl::write_xlsx(list(particle_numbers = particlenumbers
+                              ),
+                        paste(path, "particle numbers.xls", sep="")
+                        )
+  }
   
   return(temp)  
 

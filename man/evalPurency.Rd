@@ -13,6 +13,7 @@ evalPurency(
   setDivFactor = FALSE,
   dataReturn = FALSE,
   eocsum = TRUE,
+  particleNumbers = FALSE,
   labpreset = FALSE,
   blankKey = "Blank",
   noBlank = FALSE,
@@ -59,6 +60,9 @@ sample. Therefore each sample (and blank) need its own factor. Defaults to FALSE
 the necessary information.}
 
 \item{eocsum}{If TRUE (default) it adds a column sum at the end of each column of the summary panel.}
+
+\item{particleNumbers}{set TRUE if you would like to get an extra file with just plastic and non-plastic
+particle numbers for each file loaded.}
 
 \item{labpreset}{A preset for most of the parameters (except: path, polymers, dataReturn, eocsum).
 Can be requested by other labs, to be implemented, that they don't have to be set manually all the time.}

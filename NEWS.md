@@ -1,3 +1,8 @@
+# evalPurency 1.2.5.9017
+
+  - fixed bug: expanded the issue with no particles in blank measures. Now the function throws a warning and internally sets *noBlank = TRUE*. Thus no errors should occur anymore.
+  - new feature: following a wish (Anja), you can now set *particleNumbers = TRUE*, if you wish to get an extra *.xls-file providing the total particle numbers and plastic-particle numbers for each file.
+  
 # evalPurency 1.2.5.9016
 
   - fixed an issue, which caused problems in processing files without any measured plastic particles. Additionally, a warning is thrown in such a case, if this was not intended (e.g., mistakenly empty column).

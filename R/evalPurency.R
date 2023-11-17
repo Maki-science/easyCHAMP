@@ -57,6 +57,8 @@
 #' @param startrow Only required rarely. If you use a Purency version that saves the csv files slightly
 #' differently, you might check at which line the data starts (including header). This number of line should
 #' be set here (default 40).
+#' @param particleNumbers set TRUE if you would like to get an extra file with just plastic and non-plastic 
+#' particle numbers for each file loaded.
 #' 
 #' @return If dataReturn = TRUE, the function returns a list object including all 
 #'  processed data of each processing step and the summary values.
@@ -94,6 +96,7 @@ evalPurency <- function(path,
                         setDivFactor = FALSE,
                         dataReturn = FALSE,
                         eocsum = TRUE,
+                        particleNumbers = FALSE,
                         labpreset = FALSE,
                         blankKey = "Blank",
                         noBlank = FALSE,
@@ -138,6 +141,7 @@ evalPurency <- function(path,
   
   #### load data #####
   temp <- ep.load.helper(path = path, 
+                         particleNumbers = particleNumbers,
                          sep = config$sep, 
                          dec = config$dec, 
                          colL = config$colL,
@@ -339,6 +343,13 @@ evalPurency <- function(path,
   # now we need the blanks, calculate a mean over all blanks for each sample and 
   # substract this mean number from each sample after adding up all measurements of each sample
   dataBlanks <- dataBlankCorr[grepl(config$blankKey, dataBlankCorr$sample, fixed = TRUE) == TRUE,]
+  if(nrow(dataBlanks) == 0){ # it may happen that there are no particles in the blank. Then also no lines are available for later processing, triggering an error
+    cat("Warning: There are no plastic particles detected in all your blanks. Consider to use 'noBlank = TRUE' and remove the respective files from your folder, in case further errors occur.")
+    # add an empty line to prevent further errors (theoretically)
+    dataBlanks <- rbind(dataBlanks, c("noBlankparticle", "noBlankparticle", "none", "none", rep(NA,length(sizeclasses)+1)))
+    colnames(dataBlanks) <- colnames(dataBlankCorr)
+    noBlank <- TRUE # set TRUE. So in the next steps blanks will be ignored, and no corrections (must) take place
+  }
   dataMeasurements <- dataBlankCorr[grepl(config$blankKey, dataBlankCorr$sample, fixed = TRUE) != TRUE,]
   
   # the summing of the sample values should be done before the blank correction
