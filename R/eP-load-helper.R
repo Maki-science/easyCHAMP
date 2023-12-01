@@ -41,6 +41,8 @@
 #' @param sphere How spheres are called in colShape (Form). In the TOEKI lab it is 'Kugel'.
 #' @param fragment How fragments are called in colShape (Form). In the TOEKI lab it is 'Fragment'.
 #' @param pixel How pixels are called in colShape (Form). In the TOEKI lab it is 'Pixel'.
+#' @param particleNumbers set TRUE if you would like to get an extra file with just plastic and non-plastic 
+#' particle numbers for each file loaded.
 #' 
 #' @return Returns a data frame containing a list of all particles and their properties.
 

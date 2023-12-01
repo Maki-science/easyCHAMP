@@ -1,6 +1,6 @@
 Package: evalPurency
 Title: Automated Evaluation of Purency Data
-Version: 1.2.5.9017
+Version: 1.3.5.9017
 Authors@R: 
     c(person("Marvin", "Kiene", , "info@maki-science.org", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-9981-5661")),
@@ -31,16 +31,19 @@ Description: Evaluate a bulk of *.csv files in one directory, produced by Purenc
     parameter can be changed to your desire.
 License: GPL (>= 3)
 BugReports: https://github.com/Maki-science/evalPurency/issues
-URL: https://github.com/Maki-science/evalPurency
+URL: https://github.com/Maki-science/evalPurency, https://maki-science.github.io/evalPurency/
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Imports: 
     writexl
 Depends: 
     R (>= 2.10)
 Suggests: 
     covr,
+    knitr,
+    rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 LazyData: true
+VignetteBuilder: knitr

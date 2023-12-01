@@ -29,6 +29,9 @@ ep.load.helper(
 \arguments{
 \item{path}{The path set by the user in main function.}
 
+\item{particleNumbers}{set TRUE if you would like to get an extra file with just plastic and non-plastic
+particle numbers for each file loaded.}
+
 \item{sep}{Column separator within the *.csv files. Defaults to ';' in main function.}
 
 \item{dec}{Decimal sign within the *.csv files. Defaults to ',' in main function.}

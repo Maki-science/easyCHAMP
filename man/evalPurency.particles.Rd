@@ -13,6 +13,7 @@ evalPurency.particles(
   divFactor = 1,
   colourSep = FALSE,
   dataReturn = FALSE,
+  particleNumbers = FALSE,
   labpreset = FALSE,
   noBlank = FALSE,
   test = FALSE,
@@ -43,9 +44,12 @@ resulting files in this directory.}
 polymers.}
 
 \item{sizeclasses}{A vector containing desired sizeclasses to be evaluated. Default is c(10, 20, 50, 100, 150,
-200, 250, 300, 350, 400, 450, 500) The function starts at 0 and then uses the set steps.
+200, 250, 300, 350, 400, 450, 500). The function starts at 0 and then uses the set steps.
 It always uses values up to the provided higher number but excluding the former number (e.g., for
-the default values, the function uses 0 to <= 10, >10 to <= 20, >20 to <= 50, ..., all >500).}
+the default values, the function uses 0 to <= 10, >10 to <= 20, >20 to <= 50, ..., all >500).
+However, since this function does not use just the length, but the length and width (or area), compared to evalPurency,
+The size classes are set in area, considering the provided size class as a square (e.g. 500 x 500 µm = 250000 µm^2).
+This is done, to simplify the setup. It is much easier to imagine a particle with the length of one edge, than a surface.}
 
 \item{divFactor}{Set a division factor, that is used to divide the results by this factor. All samples/filters
 and blanks must have the same factor (otherwise apply manually after running the function). Defaults to 1.}
@@ -57,6 +61,9 @@ How the colour is named in Purency can be set here (e.g., "black" or "schwarz").
 
 \item{dataReturn}{If set TRUE, a data frame will be returned containing the data of all measurement with
 the necessary information.}
+
+\item{particleNumbers}{set TRUE if you would like to get an extra file with just plastic and non-plastic
+particle numbers for each file loaded.}
 
 \item{labpreset}{A preset for most of the parameters (except: path, polymers, dataReturn, eocsum).
 Can be requested by other labs, to be implemented, that they don't have to be set manually all the time.}
@@ -114,16 +121,16 @@ be set here (default 40).}
 }
 \value{
 If dataReturn = TRUE, the function returns a list object including all
-processed data of each processing step and the summary values.
+raw and processed data of each processing step and the summary values.
 }
 \description{
 Instead of a summarized version of *.csv files from Purency like from evalPurency(), this function
-provides a list of all particles. Blank correction is done with a most parsimony particle comparison.
+provides a list of all particles. Blank correction is done with a most-similar-particle comparison.
 }
 \examples{
 # For this example the path doesn't matter. 
 # If you want to analyse your own data, set test = FALSE (or simply delete this parameter).
-mydata <- evalPurency.particles(path="//HERE/COMES/YOUR/PATH/", dataReturn = TRUE, test = TRUE)
+#mydata <- evalPurency.particles(path="//HERE/COMES/YOUR/PATH/", dataReturn = TRUE, test = TRUE)
 
 
 }

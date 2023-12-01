@@ -94,6 +94,33 @@ It will usually need just very few seconds to process e.g. 100 files. An excel f
 
 For compatibility the Excel files are of an old version. Therefore, there might occur a message about potential broken file that you have to confirm. However, the warning can be ignored. Note that the excel file will be coded with '.' as decimal sign!
 
+### Perform particle wise processing
+In some cases it might be necessary to perform the processing and blank correction with a particle list. The aim here is, to keep each particle as such in the list, but still allow a correction for blank particles. Therefore, we created *evalPurency.particles()*. It mainly uses the area of each particle as size reference. In case of several blanks per sample, most similar particles across blank replicates will be averaged, while the blank correction is performed by searching the most similar particles within a certain range and then substract that particle from the list. This preserves each particle and its traits, e.g., for simulation purposes, while still allowing a rather conservative blank correction. Details are described below.
+
+#### How to use evalPurency.particles()
+As before, simply load the library command after the package have been installed:
+``` r
+library(evalPurency)
+```
+
+Make sure that the files are named according to your requirements for blank processing. The same rules apply as for *evalPurency* (see above).
+
+If no further requirements have to be fulfilled, the function can be run with just the path of the files to be processed:
+``` r
+evalPurency.particles(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/") # or similar
+```
+
+For further functionality, most of the parameters below can also be applied for this function.
+However, in case of *sizeclasses*, the function uses the squared value of each size class for categorization. This is because it seemed more intuitive to use simple edge lengths for the categorization, since a size class for an area of 22,500 (edge length of 150 µm) is rather abstract.
+
+Further, the area of fibres is recalculated according to the manually measured actual length of fibres. Purencys' Microplastic Finder does not calculate the length of fibres correctly, since it just takes the distance from edge to edge. Changing angles are not considered, why the proper length is measured manually. As probably most suitable approximation of the real area of a fibre, the function multiplies the width by the actual (manually measured) length. This recalculated area can be found in the output file.
+
+#### Output of evalPurency.particles()
+This function creates one *.xls file, 'processing_data'. Here, you can find several sheets with the processed sample particles, processed blanks, removed sample and blank particles, and the raw sample and blank data. These data reflect each step of the processing. The sheets on removed particles include a column where it is stated, how the particle was processed (each particle gets an index to track each action of the function).
+
+
+
+
 ## Additional parameters
 The function is made fully dynamic and customisable. You can choose the options further below and combine them to your desire.
 
@@ -171,6 +198,13 @@ mydata <- evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/",
                       eocsum = FALSE)
 ```
 
+### Total particle numbers 
+If you would like to get plastic and non-plastic particle numbers, add *particleNumbers = TRUE* to the function call to get an extra *.xls file with these numbers.
+``` r
+mydata <- evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
+                      particleNumbers = TRUE)
+```
+
 ## Use this package in another lab
 The output of Purency can be customized to a certain extend and different labs may have different requirements and conventions on how to name things (also in the language this is done). Therefore, the default settings of this function apply for the animal ecology group of the University of Bayreuth. Unfortunately, there is no smart way to workaround. Thus, this function requires several parameters to preset the working environment of the lab.
 
@@ -215,7 +249,7 @@ If there are any issues or wishes for changes, you can send me a mail to info@ma
 ## Citation
 To cite evalPurency in publications use:
 
-Marvin Kiene, Eva Vizsolyi Cseperke, Martin Löder and Christian Laforsch (2023). evalPurency: Automated Evaluation of Data of the Purency's Microplastic Finder. R package version 1.2.5.9017.
+Marvin Kiene, Eva Vizsolyi Cseperke, Martin Löder and Christian Laforsch (2023). evalPurency: Automated Evaluation of Data of the Purency's Microplastic Finder. R package version 1.3.5.9017.
 https://github.com/Maki-science/evalPurency
 
 
@@ -224,7 +258,7 @@ A BibTeX-entry for LaTeX-user is
   @Misc{,
     title = {evalPurency: Automated Evaluation of Purency Data},
     author = {Marvin Kiene and Eva {Cseperke Vizsolyi} and Martin Löder and Christian Laforsch},
-    note = {R package version 1.2.5.9017},
+    note = {R package version 1.3.5.9017},
     year = {2023},
     url = {https://github.com/Maki-science/evalPurency},
   }
