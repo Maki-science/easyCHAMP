@@ -1,0 +1,67 @@
+---
+title: "Customize file specifications"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{file-custom}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+options(rmarkdown.html_vignette.check_title = FALSE)
+```
+
+
+Depending on the country and/or lab you are working in, it might be different, how the files of the Microplastic Finder are saved. Or you don't want to use the recommended file naming, but rather customize to suit your case more properly. Read ahead, and find out how to do this.
+
+
+## Changing separator and decimal sign in .csv-files
+Depending on the habits of the country and/or system configuration, the csv files might be different. In default, the function uses ';' as separator, indicating a new column in the csv file, and ',' as a decimal sign. Change it to your liking by adding ```sep = ";"``` and ```dec = ","``` and change the sign within the quotes.
+```{r, eval = FALSE}
+evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/",
+            sep = ";",
+            dec = ",")
+```
+
+
+## Don't use the recommended file naming
+If you choose not to call your blank files as recommended (MYSAMPLENAMEBlank - with a capital *B*) you should change it accordingly. We chose to use case sensitivity here to prevent accidental choice of the wrong files as blanks. Here an example with a noncapital *b* (i.e., MYSAMPLENAMEblank):
+```{r, eval = FALSE}
+evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/",
+            blankKey = "blank")
+```
+
+*NOTE: Feel free to adapt the naming to your liking as long as the division with the ```_``` (underline), and the positioning of the blank in the sample name is provided. Otherwise you may get unforeseeable results!*
+
+Here are again some examples how to apply the naming for different blank application:
+
+For each sample one or more own blank filters. You can still have several filters for each sample and/or blank, which are summed together before processing:
+
+  - Samples: SAMPLENAME1_Filter1, SAMPLENAME2_Filter1
+  - Blanks: SAMPLENAME1Blank_Filter1, SAMPLENAME2Blank_filter1
+  
+Samples should use the same blank(s):
+
+  - Samples: SAMPLENAME1_Filter1, SAMPLENAME2_Filter1
+  - Blank: SAMPLENAMEBlank_Filter1 (notice the missing number)
+  
+You have several blanks, but they should be averaged as combined blank for your samples (still, each blank can constitute several filters that are summed before averaging over the blanks):
+
+  - Samples: SAMPLENAME1_Filter1, SAMPLENAME2_Filter1
+  - Blanks: SAMPLENAME1Blank1_Filter1, SAMPLENAME1Blank2_filter1, SAMPLENAME2Blank1_Filter1, SAMPLENAME2Blank2_filter1 (note the number (or any other sign) behind 'Blank' but before '_')
+  
+You want to use one (or several averaged) blanks for all samples:
+
+  - Samples: PREFIXSAMPLENAME1_Filter1, PREFIXSAMPLENAME2_Filter1 (set a prefix)
+  - Blanks: PREFIXBlank_Filter1, PREFIXBLank_filter1 (use the same prefix but directly state 'Blank_')
+  
+You can also use a mix of all those versions, if necessary, though, we think this might be a bad sampling design.
+  
+If you don't have any blanks to process, you can skip the blank processing with setting ```noBlank = TRUE```.
+
+*WARNING: The naming of the files is an important prerequisite for a proper processing. Thus you need to cautiously set your file names!*
+

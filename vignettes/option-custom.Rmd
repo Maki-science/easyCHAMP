@@ -1,0 +1,61 @@
+---
+title: "Customize function options"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{option-custom}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+options(rmarkdown.html_vignette.check_title = FALSE)
+```
+
+
+You can change the considered polymers as well as size classess to your desire.
+
+## Change evaluated polymers
+At the current state, the function evaluates up to 22 polymers (see example).
+If you would like to add polymers, or just evaluate some of them, you can overwrite the default setting by simply change the content of the ```c(...)``` accordingly (make sure, that the content is not ending with a , like ```(... ,)```. 
+Just delete or add the (un)desired polymers. 
+
+*WARNING: If you have named the polymers differently in your Purency software, you should set these accordingly here.*
+
+```{r, eval = FALSE}
+evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
+            polymers = c("PU", "EVAc", "PA", "PAN", "PBT", "PET", "PE", "PMMA", "PP", 
+                         "POM", "PS", "PVC", "PC", "ABS", "PPSU", "CA", "PEEK", "EVOH", 
+                         "PSU", "SILICONE", "PLA", "PLAPBAT"))
+```
+
+
+## Change evaluated size classes
+The size classes that should be evaluated by the function can be set manually. The function will dynamically switch to the desired size classes. It will sum the numbers from 0 to the first number (e.g., <=10. Then it will always exclude the lower number and include the upper number (e.g., >10 to <= 20, >20 to <= 50, ...). Finally, the highest number to infinite (e.g., >500).
+```{r, eval = FALSE}
+evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
+            sizeclasses = c(10, 20, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500))
+```
+
+
+
+# You analysed only parts of a sample - integrate division factors?
+In many cases it can happen, that only a part of a sample is measured, if there are too many particles. This might be different between sample and blanks (e.g., it might be that a filter breaks appart). Therefore, you can provide a division factor for each sample and blank separately, or even for each filter separately.
+
+However, to keep it simple and prevent mistakes, you only set ```setDivFactor``` when calling the function. There are three options available: ```setDivFactor = FALSE``` will ignore this parameter (default). If ```setDivFactor = "samplewise"```, this will cause the function to request the required values during the processing for each sample (i.e., all filters of one sample have the same factor). If set to ```setDivFactor = "filterwise"```, a division factor will be requested for each filter separately. 
+
+Just watch your R console and follow the instructions. 
+```{r, eval = FALSE}
+evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
+            setDivFactor = "samplewise")
+```
+If you only use a quarter of your sample the factor you should provide here is 0.25. If you did not divide a sample it is 1.
+
+We implemented these two ways, to reduce the effort and possibility of mistakes in typing in the factors, if they are similar for all filters of a sample, but still provide the opportunity to choose the factors for each filter, in case there have been issues during the sample preparation, causing different factors for each filter.
+
+*WARNING: Make sure to exactly follow the instructions. Keep the order similar to the provided order of the samples/blanks.*
+
+*WARNING: If you use several blanks summed for all samples (like example 3 in the beginning) you can only chose a common division factor.*
