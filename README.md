@@ -7,6 +7,10 @@
 [![Codecov test coverage](https://codecov.io/gh/Maki-science/evalPurency/branch/main/graph/badge.svg)](https://app.codecov.io/gh/Maki-science/evalPurency?branch=main)
 <!-- badges: end -->
 
+## Go to [pkgdown website](https://maki-science.github.io/evalPurency/) for how to use this package
+If you already know the package, but need more information, check out the package vignettes or go tp the [pkgdown website](https://maki-science.github.io/evalPurency/) (or the upper toolbar, in case you are already there). Click on *Get started*, or view the website articles to study all options. We've tried to gather all information there in a (hopefully) simple and userfriendly way. Checkout the article *Troubleshooting*, for potential issues that may occur, if you do not setup the functions properly.
+
+
 ## Microplastic Finder from Purency
 Microplastics can be found in any part of an environmental or nutritional sample. Today, FPA-based FTIR imaging allows a whole sample to be measured quickly. However, to analyse the measurement data, a powerful tool is needed to reliably identify the polymer particles contained in the sample. The analysis must provide objective, complete and robust results, which are presented in detail and transparently. The Microplastics Finder by Purency uses machine learning algorithms that identify more than 20 polymer types within minutes. In combination with FTIR imaging, it offers the fastest method to examine an entire sample for microplastics. Thanks to automation, which does not require time-consuming manual post-processing, the analysis results are optimally comparable and reproducible. Microplastics analysis becomes scalable and new types of questions about the presence and origin of microplastics can be answered. 
 *Source: https://www.purency.ai/product1/microplastics-finder)*
@@ -29,7 +33,7 @@ install.packages("evalPurency")
 ```
 
 
-You can also install the development version of evalPurency from [GitHub](https://github.com/). If not already installed, you need to have Rtools installed on your system to be able to compile the development version *(https://cran.r-project.org/bin/windows/Rtools/)*.
+You can also install the development version of evalPurency from [GitHub](https://github.com/). If not already installed, you need to have [Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed on your system to be able to compile the development version.
 (devtools only has to be installed once)
 
 ```
@@ -44,7 +48,7 @@ If you want to update to the newest version, just run the second line again.
 There are two main functions to be applied: ```evalPurency()``` for a blank corrected summary after your liking; and ```evalPurency.particles()``` for a particle-wise blank correction, with retention of single particles and their properties. 
 Additionally, there are plenty of options for customization and settings of the *.csv files. 
 
-Check out the package vignettes or the articles on the pkgdown website on Github (https://maki-science.github.io/evalPurency/ - or the upper toolbar when you are already there). We've tried to gather all information there in a (hopefully) simple and userfriendly way.
+Check out the package vignettes or go tp the [pkgdown website](https://maki-science.github.io/evalPurency/) (or the upper toolbar, in case you are already there). Click on *Get started*, or view the website articles to study all options. We've tried to gather all information there in a (hopefully) simple and userfriendly way.
 
 
 ## Citation

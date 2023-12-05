@@ -17,14 +17,14 @@ options(rmarkdown.html_vignette.check_title = FALSE)
 
 # Troubleshooting:
 
-The function was written until December 2023. I've used the current column numbers to address the required information. If these will be changed by any chance, this should be adopted to the function as well (see 'Use this package in another lab' above to read how).
-If not, the results are not reliable any more! 
+The function was written until December 2023. I've used the current column numbers set in Purencys' software to address the required information. If these will be changed by any chance by Purency or yourself (or lab members), this should be adopted to the function as well (see the article *Change settings to other labs' preferences* above to read how).
+If not, the results are, of course, not reliable any more! 
 
-The source code can be accessed via github.
-I've commented it quite sophisticated, and changes should be quite easy when you're a bit into programming. Otherwise open an issue or send me a request, and I will do my best to implement your desired features.
+The source code can be accessed via [Github](https://github.com/Maki-science/evalPurency).
+I've commented it quite sophisticated, and changes should be quite easy when you're a bit into programming. Otherwise [open an issue](https://github.com/Maki-science/evalPurency/issues) or send me a request, and I will do my best to implement your desired features.
 
-If there are any issues or wishes for changes, you can send me a mail to info@maki-science.org or open an issue here on github (https://github.com/Maki-science/evalPurency/issues).
+Here are issues that may arise, or we already faced (but is out of our hands), when applying the functions:
 
-  - If an error occurs or you get different results, each time the function runs, make sure that you have only the files in the respective folder that should be processed. If you re-run the function, you will have the previously created files there, so you need to delete them first, and then run the function again. 
-  - Make sure you considered all points before, where a *WARNING* was provided.
-  - If the error "Error in read.table(file = file, header = header, sep = sep, quote = quote,  : more columns than column names" occurs, it is likely caused by an excess line in the header of your *.csv file. For unkown reason, Purency once in a while creates a file that contains an additional line in its meta-data header (the first 40 or 41 lines, respektively). Usually, the real data set starts at line 41 (with the column header). However, in this case, the data start at line 42. The solution is simple: just delete one of the first 41 lines in the respective file (watch out to respect the correct decimal sign) and run the function again. Now it should run through, as long as there is no further file with that issue.
+  - If an error occurs or you get different results, each time the function runs, make sure that you have only the files in the respective folder that should be processed. If you re-run the function, you will have the previously created files there, so you need to delete them first, and then run the function again. If it's just the files, created from a previous run, there will be no error. However, the results are probably wrong! *So, always check that you have just the files of interest in the respective folder!*
+  - Make sure you considered all points mentioned in the articles (see tool bar at the top), where a *WARNING* or *NOTE* was provided.
+  - If the error ```Error in read.table(file = file, header = header, sep = sep, quote = quote,  : more columns than column names``` occurs, it is likely caused by an excess line in the header of your *.csv file. For unkown reason, Purency once in a while creates a file that contains an additional line in its meta-data header (the first 40 or 41 lines, respektively). Usually, the real data set starts at line 41 (with the column header). However, in this case, the data start at line 42. The solution is simple: just delete one of the first 41 lines in the respective file (watch out to respect the correct decimal sign) and run the function again. Now it should run smooth, as long as there is no further file with that issue. If all files contain more or less lines, whatsoever, you can also set ```startrow = x```, while ```x``` is the number of lines, that should be ignored (i.e., the next line the data header should start). Then the function will read in the data correctly, if all files have the same structure!

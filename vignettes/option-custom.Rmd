@@ -59,3 +59,5 @@ We implemented these two ways, to reduce the effort and possibility of mistakes 
 *WARNING: Make sure to exactly follow the instructions. Keep the order similar to the provided order of the samples/blanks.*
 
 *WARNING: If you use several blanks summed for all samples (like example 3 in the beginning) you can only chose a common division factor.*
+
+*WARNING: this option is not available for ```evalPurency.particles()```, since it is not reasonable to multiply particles with similar properties in a particle-wise processing.*
