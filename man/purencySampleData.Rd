@@ -5,7 +5,7 @@
 \alias{purencySampleData}
 \title{sample data set as a result of Purency's Microplastic Particle Finder}
 \format{
-A data frame with 2313 rows and 7 variables:
+A data frame with 2313 rows and 9 variables:
 \describe{
 \item{sample}{The name of the sample. A sample comprises one to several single measurements, that are summed up during the processing of evalPurency.}
 \item{measurement}{The name of the single measurement.}
@@ -14,6 +14,8 @@ A data frame with 2313 rows and 7 variables:
 \item{form}{Which form(shape) the particle has (sphere, fragment, pixel, fibre).}
 \item{color}{Color of the particle (not used, yet).}
 \item{lengthFibre}{If particle is a fibre, the lenght has to be measured manually. In that case, the length is stated here.}
+\item{area}{The area of the particle measured by Purency.}
+\item{width}{The width of the particle measured by Purency.}
 }
 }
 \source{

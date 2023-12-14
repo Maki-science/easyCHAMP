@@ -81,7 +81,7 @@
 #' mydata <- evalPurency(path="//HERE/COMES/YOUR/PATH/", 
 #'                       eocsum = FALSE, dataReturn = TRUE, test = TRUE)
 #'
-#' @references https://www.purency.ai/microplastics-finder
+#' @references https://www.purency.ai/microplastics-finder, https://maki-science.github.io/evalPurency/index.html
 #'
 #' @export
 #' @import writexl

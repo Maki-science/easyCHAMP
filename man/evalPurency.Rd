@@ -147,5 +147,5 @@ mydata <- evalPurency(path="//HERE/COMES/YOUR/PATH/",
 
 }
 \references{
-https://www.purency.ai/microplastics-finder
+https://www.purency.ai/microplastics-finder, https://maki-science.github.io/evalPurency/index.html
 }

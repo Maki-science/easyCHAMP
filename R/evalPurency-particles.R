@@ -65,11 +65,14 @@
 #' 
 #' @examples 
 #' # For this example the path doesn't matter. 
-#' # If you want to analyse your own data, set test = FALSE (or simply delete this parameter).
-#' #mydata <- evalPurency.particles(path="//HERE/COMES/YOUR/PATH/", dataReturn = TRUE, test = TRUE)
+#' # If you want to analyse your own data, set the path accordingly and 
+#' # test = FALSE (or simply delete this parameter).
+#' mydata <- evalPurency.particles(path="//HERE/COMES/YOUR/PATH/", dataReturn = TRUE, test = TRUE)
+#' # Get the data frames of interest from the list
+#' mydata.processedParticles <- mydata$processedSamples
 #' 
 #'
-#' @references https://www.purency.ai/microplastics-finder
+#' @references https://www.purency.ai/microplastics-finder, https://maki-science.github.io/evalPurency/index.html
 #'
 #' @export
 #' @import writexl
@@ -242,7 +245,8 @@ evalPurency.particles <- function(path,
     colnames(removedBlankParticles) <- c(colnames(dataBlanks), "reason")# field to add reason (averaged with index,index,..., to index)
     
     # iterate over the amount of blank samples
-    for(i in 1:length(levels(factor(unlist(sapply(strsplit(as.character(dataBlanks$sample), config$blankKey, fixed = TRUE), getElement, 1)))))){ 
+    while(1 <= length(levels(factor(unlist(sapply(strsplit(as.character(dataBlanks$sample), config$blankKey, fixed = TRUE), getElement, 1)))))){ 
+      i <- 1 # with a for loop I would jump over several samples, since I delete the processed samples from dataBlanks...
       
       # check how many blanks are available for averaging
       levelsBlankFiles <- levels(factor(dataBlanks[which(unlist(sapply(strsplit(as.character(dataBlanks$sample), config$blankKey, fixed = TRUE), getElement, 1)) == levels(factor(unlist(sapply(strsplit(as.character(dataBlanks$sample), config$blankKey, fixed = TRUE), getElement, 1))))[i]),]$sample))
@@ -352,7 +356,7 @@ evalPurency.particles <- function(path,
             } # end if nrow(tempk) > 0
             else{ # if no similar particles exist
               # add the particle as is to the processedBlank
-              similarParticles <- rbind(similarParticles, c(rep(NA, 13)))
+              similarParticles <- rbind(similarParticles, c(rep(NA, 12)))
             }
           
           } # end k
@@ -413,6 +417,7 @@ evalPurency.particles <- function(path,
       else{
         # if just one blank file for this sample exists, just copy the content to processedBlankS
         processedBlankS <- rbind(processedBlankS, mainBlankFile)
+        dataBlanks <- dataBlanks[which(dataBlanks$sample != mainBlankFile$sample[1]),]
       }
 
     } # end i
@@ -433,33 +438,37 @@ evalPurency.particles <- function(path,
     removedSampleParticles <- data.frame(matrix(ncol = 13, nrow = 0))
     colnames(removedSampleParticles) <- c(colnames(dataMeasurements), "reason")# field to add reason (averaged with index,index,..., to index)
     
-    # iterate over the samples
-    for(i in 1:length(levels(factor(dataMeasurements$sample)))){
+    
+    blankSamples <- levels(factor(unlist(sapply(strsplit(as.character(processedBlankS$sample), config$blankKey, fixed = TRUE), getElement, 1))))
+    # iterate over blanks and search for according samples to correct
+    for(i in 1:length(blankSamples)){
+      # select blank particles from the current blank
+      tempBlanks <- processedBlankS[grepl(blankSamples[i], factor(processedBlankS$sample)),]
       
-      # select blank particles of this sample
-      tempBlanks <- processedBlankS[grepl(levels(factor(dataMeasurements$sample))[i], processedBlankS$sample),]
-      
-      # now, for each blank particle of this sample, find the most similar particle (within a decent range) and
+      # now, for each blank particle of this blank, find the most similar sample particle (within a decent range) and
       # remove it (and add to removedSampleParticles)
       for(j in 1:nrow(tempBlanks)){
         
         # find all particles that are similar to this one
         if(colourSep != FALSE && (tempBlanks$color[j] == colourSep && !is.na(tempBlanks$color[j]))){
-          tempPart <- dataMeasurements[which(dataMeasurements$sample == levels(factor(dataMeasurements$sample))[i] &
+          tempPart <- dataMeasurements[which(#dataMeasurements$sample == levels(factor(dataMeasurements$sample))[i] & #CHANGE: gepl(blank)
+                                               grepl(blankSamples[i], dataMeasurements$sample) &
                                                dataMeasurements$sizeClass == tempBlanks$sizeClass[j] &
                                                dataMeasurements$form == tempBlanks$form[j] &
                                                dataMeasurements$className == tempBlanks$className[j] &
                                                dataMeasurements$color == colourSep),]
         }
         else if(colourSep != FALSE && (tempBlanks$color[j] != colourSep || is.na(tempBlanks$color[j]))){
-          tempPart <- dataMeasurements[which(dataMeasurements$sample == levels(factor(dataMeasurements$sample))[i] &
+          tempPart <- dataMeasurements[which(#dataMeasurements$sample == levels(factor(dataMeasurements$sample))[i] &
+                                               grepl(blankSamples[i], dataMeasurements$sample) &
                                                dataMeasurements$sizeClass == tempBlanks$sizeClass[j] &
                                                dataMeasurements$form == tempBlanks$form[j] &
                                                dataMeasurements$className == tempBlanks$className[j] &
                                                dataMeasurements$color != colourSep),]
         }
         else{
-          tempPart <- dataMeasurements[which(dataMeasurements$sample == levels(factor(dataMeasurements$sample))[i] &
+          tempPart <- dataMeasurements[which(#dataMeasurements$sample == levels(factor(dataMeasurements$sample))[i] &
+                                               grepl(blankSamples[i], dataMeasurements$sample) &
                                                dataMeasurements$sizeClass == tempBlanks$sizeClass[j] &
                                                dataMeasurements$form == tempBlanks$form[j] &
                                                dataMeasurements$className == tempBlanks$className[j]),]
@@ -480,7 +489,8 @@ evalPurency.particles <- function(path,
           
           # now do selection again, but with area instead of sizeClass
           if(colourSep != FALSE && (tempBlanks$color[j] == colourSep && !is.na(tempBlanks$color[j]))){
-            tempPart <- dataMeasurements[which(dataMeasurements$sample == levels(factor(dataMeasurements$sample))[i] &
+            tempPart <- dataMeasurements[which(#dataMeasurements$sample == levels(factor(dataMeasurements$sample))[i] &
+                                                 grepl(blankSamples[i], dataMeasurements$sample) &
                                                  dataMeasurements$area >= newRange[1] &
                                                  dataMeasurements$area <= newRange[2] &
                                                  dataMeasurements$form == tempBlanks$form[j] &
@@ -488,7 +498,8 @@ evalPurency.particles <- function(path,
                                                  dataMeasurements$color == colourSep),]
           }
           else if(colourSep != FALSE && (tempBlanks$color[j] != colourSep || is.na(tempBlanks$color[j]))){
-            tempPart <- dataMeasurements[which(dataMeasurements$sample == levels(factor(dataMeasurements$sample))[i] &
+            tempPart <- dataMeasurements[which(#dataMeasurements$sample == levels(factor(dataMeasurements$sample))[i] &
+                                                 grepl(blankSamples[i], dataMeasurements$sample) &
                                                  dataMeasurements$area >= newRange[1] &
                                                  dataMeasurements$area <= newRange[2] &
                                                  dataMeasurements$form == tempBlanks$form[j] &
@@ -496,7 +507,8 @@ evalPurency.particles <- function(path,
                                                  dataMeasurements$color != colourSep),]
           }
           else{
-            tempPart <- dataMeasurements[which(dataMeasurements$sample == levels(factor(dataMeasurements$sample))[i] &
+            tempPart <- dataMeasurements[which(#dataMeasurements$sample == levels(factor(dataMeasurements$sample))[i] &
+                                                 grepl(blankSamples[i], dataMeasurements$sample) &
                                                  dataMeasurements$area >= newRange[1] &
                                                  dataMeasurements$area <= newRange[2] &
                                                  dataMeasurements$form == tempBlanks$form[j] &

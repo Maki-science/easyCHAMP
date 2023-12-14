@@ -42,7 +42,7 @@ evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/",
 
 
 
-# You analysed only parts of a sample - integrate division factors?
+## You analysed only parts of a sample - integrate division factors?
 In many cases it can happen, that only a part of a sample is measured, if there are too many particles. This might be different between sample and blanks (e.g., it might be that a filter breaks appart). Therefore, you can provide a division factor for each sample and blank separately, or even for each filter separately.
 
 However, to keep it simple and prevent mistakes, you only set ```setDivFactor``` when calling the function. There are three options available: ```setDivFactor = FALSE``` will ignore this parameter (default). If ```setDivFactor = "samplewise"```, this will cause the function to request the required values during the processing for each sample (i.e., all filters of one sample have the same factor). If set to ```setDivFactor = "filterwise"```, a division factor will be requested for each filter separately. 
@@ -60,4 +60,4 @@ We implemented these two ways, to reduce the effort and possibility of mistakes 
 
 *WARNING: If you use several blanks summed for all samples (like example 3 in the beginning) you can only chose a common division factor.*
 
-*WARNING: this option is not available for ```evalPurency.particles()```, since it is not reasonable to multiply particles with similar properties in a particle-wise processing.*
+*NOTE: this option is not available for ```evalPurency.particles()```, since it is not reasonable to multiply particles with similar properties in a particle-wise processing.*

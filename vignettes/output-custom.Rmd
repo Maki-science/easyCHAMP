@@ -32,7 +32,7 @@ The function adds a bottom line to the summary data, if desired. There, each col
 mydata <- evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
                       eocsum = FALSE)
 ```
-
+*NOTE: This option is not available for ```evalPurency.particles()```.*
 
 # Get total particle numbers 
 If you would like to get plastic and non-plastic particle numbers, add ```particleNumbers = TRUE``` to the function call to get an extra *.xls file with these numbers.

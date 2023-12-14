@@ -129,11 +129,14 @@ provides a list of all particles. Blank correction is done with a most-similar-p
 }
 \examples{
 # For this example the path doesn't matter. 
-# If you want to analyse your own data, set test = FALSE (or simply delete this parameter).
-#mydata <- evalPurency.particles(path="//HERE/COMES/YOUR/PATH/", dataReturn = TRUE, test = TRUE)
+# If you want to analyse your own data, set the path accordingly and 
+# test = FALSE (or simply delete this parameter).
+mydata <- evalPurency.particles(path="//HERE/COMES/YOUR/PATH/", dataReturn = TRUE, test = TRUE)
+# Get the data frames of interest from the list
+mydata.processedParticles <- mydata$processedSamples
 
 
 }
 \references{
-https://www.purency.ai/microplastics-finder
+https://www.purency.ai/microplastics-finder, https://maki-science.github.io/evalPurency/index.html
 }

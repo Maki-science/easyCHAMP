@@ -1,3 +1,6 @@
+# evalPurency 1.3.5.9018
+  - Bugfix: fixed an issue with *evalPurency.particles()* for more than one sample-blank pair at once. Previously it jumped over every second sample.
+  
 # evalPurency 1.3.5.9017
   - new feature: a new function *evalPurency.particles()* is now ready for use. Testing and description is still not properly done. Thus consider it as *Beta* so far. With this function, it is possible to have a particle wise processing, to keep each particle with its traits strackable, while still allowing a conservative blank correction. These particle lists are valuable, e.g., for simulations of particle physical properties or environmental distributions.
   
