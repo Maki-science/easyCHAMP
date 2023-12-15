@@ -28,6 +28,7 @@ test_that("Skipping eocsum works", {
 })
 
 # check whether this is similar with eP-config-helper.R
-# usethis::use_data(evalPurencyPresets, testdata.default, testdata.size, testdata.noeocsum,
+# usethis::use_data(evalPurencyPresets, testdata.default, testdata.size, testdata.noeocsum, testdata.load, test.config, 
+#                   testdata.particles.default, testdata.particles.colourSep, testdata.particles.noBlank,
 #                   overwrite = TRUE, internal = TRUE)
 

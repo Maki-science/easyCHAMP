@@ -1,3 +1,6 @@
+# evalPurency 1.3.6.9018
+  - minor addon: There is now a test suite available for *evalPurency.particles()* to improve maintenance and quality control.
+  
 # evalPurency 1.3.5.9018
   - Bugfix: fixed an issue with *evalPurency.particles()* for more than one sample-blank pair at once. Previously it jumped over every second sample.
   

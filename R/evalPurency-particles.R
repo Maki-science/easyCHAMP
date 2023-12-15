@@ -111,6 +111,10 @@ evalPurency.particles <- function(path,
                                   startrow = 40
                                   ){
   
+  if(divFactor != 1){
+    stop("ERROR: You set a division factor. However, for this function it is not intended, since a multiplication of single particles is not meaningful. Please, consider usign evalPurency() instead and/or check the vignettes (https://maki-science.github.io/evalPurency/).")
+  }
+  
   # set/correct the configuration (if labpreset was chosen)
   config <- eP.config.helper(labpreset = labpreset,
                              blankKey = blankKey,
