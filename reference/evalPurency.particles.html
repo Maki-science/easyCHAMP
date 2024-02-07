@@ -12,7 +12,7 @@ provides a list of all particles. Blank correction is done with a most-similar-p
     
     <a class="navbar-brand me-2" href="../index.html">evalPurency</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.6.9018</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.7.9018</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,6 +77,8 @@ provides a list of all particles. Blank correction is done with a most-similar-p
 <span>  colourSep <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  dataReturn <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  particleNumbers <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  formFillDefault <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  colourFillDefault <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  labpreset <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  noBlank <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  test <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -142,6 +144,15 @@ the necessary information.</p></dd>
 <dt>particleNumbers</dt>
 <dd><p>set TRUE if you would like to get an extra file with just plastic and non-plastic
 particle numbers for each file loaded.</p></dd>
+
+
+<dt>formFillDefault</dt>
+<dd><p>If desired you can provide a default form that will be filled in, if no form is provided in the data (NA). Should be
+one of the values of the parameters 'fibre', 'sphere', 'fragment' or 'pixel' (see below).</p></dd>
+
+
+<dt>colourFillDefault</dt>
+<dd><p>If desired you can provide a default colour that will be filled in, if no colour is provided in the data (NA).</p></dd>
 
 
 <dt>labpreset</dt>

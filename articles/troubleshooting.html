@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">evalPurency</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.6.9018</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.7.9018</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -116,7 +116,7 @@ interest in the respective folder!</em>
 </li>
 <li>Make sure you considered all points mentioned in the articles (see
 tool bar at the top), where a <em>WARNING</em> or <em>NOTE</em> was
-provided.</li>
+provided. For your convenience, we also gathered them below.</li>
 <li>If the error
 <code>Error in read.table(file = file, header = header, sep = sep, quote = quote,  : more columns than column names</code>
 occurs, it is likely caused by an excess line in the header of your
@@ -132,6 +132,44 @@ whatsoever, you can also set <code>startrow = x</code>, while
 <code>x</code> is the number of lines, that should be ignored (i.e., the
 next line the data header should start). Then the function will read in
 the data correctly, if all files have the same structure!</li>
+</ul>
+<p>If something does not work, you may further missed one of the
+Warnings stated at the respective option. We gathered all points here
+again:</p>
+<ul>
+<li>Feel free to adapt the naming of the files to your liking as long as
+the division with the <code>_</code> (underline), and the positioning of
+the blank in the sample name is provided. Otherwise you may get
+unforeseeable results!</li>
+<li>The naming of the files is an important prerequisite for a proper
+processing. Thus you need to cautiously set your file names!</li>
+<li>If you have named the polymers differently in your Purency software,
+you should set these accordingly with the parameter
+<code>polymers</code>.</li>
+<li>When using <code>setDivFactor</code>, make sure to exactly follow
+the instructions in the console. Keep the order similar to the provided
+order of the samples/blanks.</li>
+<li>If you use several blanks that should be summed for all samples you
+can only chose a common division factor. Otherwise estimations will be
+unevenly distributed over the filters, which is not recommended.</li>
+<li>
+<code>setDivFactor</code> is not available for
+<code><a href="../reference/evalPurency.particles.html">evalPurency.particles()</a></code>, since it is not reasonable to
+multiply particles with similar properties in a particle-wise
+processing.</li>
+<li>
+<code>colourSep</code>is not available for
+<code><a href="../reference/evalPurency.html">evalPurency()</a></code>, since colours are not considered in the
+summary function (it doesn’t make sense to create even more groups as
+there are anyway)!</li>
+<li>
+<code>eocsum</code> is not available for
+<code><a href="../reference/evalPurency.particles.html">evalPurency.particles()</a></code>.</li>
+<li>
+<code>labpreset</code> is only available after implementation of
+your desired setup. Please contact us via the <em>Report a bug</em>
+button on the right side of this page. The implementation can be done
+fast to get you started soon.</li>
 </ul>
 </div>
   </main>

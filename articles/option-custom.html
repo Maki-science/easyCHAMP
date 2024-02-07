@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">evalPurency</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.6.9018</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.7.9018</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -120,8 +120,8 @@ the highest number to infinite (e.g., &gt;500).</p>
 <span>            sizeclasses <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">50</span>, <span class="fl">100</span>, <span class="fl">150</span>, <span class="fl">200</span>, <span class="fl">250</span>, <span class="fl">300</span>, <span class="fl">350</span>, <span class="fl">400</span>, <span class="fl">450</span>, <span class="fl">500</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="you-analysed-only-parts-of-a-sample---integrate-division-factors">You analysed only parts of a sample - integrate division
-factors?<a class="anchor" aria-label="anchor" href="#you-analysed-only-parts-of-a-sample---integrate-division-factors"></a>
+<h2 id="you-analysed-only-parts-of-a-sample---integrate-division-factors">You analysed only parts of a sample? - integrate division
+factors<a class="anchor" aria-label="anchor" href="#you-analysed-only-parts-of-a-sample---integrate-division-factors"></a>
 </h2>
 <p>In many cases it can happen, that only a part of a sample is
 measured, if there are too many particles. This might be different
@@ -156,6 +156,50 @@ factor.</em></p>
 <code><a href="../reference/evalPurency.particles.html">evalPurency.particles()</a></code>, since it is not reasonable to
 multiply particles with similar properties in a particle-wise
 processing.</em></p>
+</div>
+<div class="section level2">
+<h2 id="one-colour-of-your-particles-should-be-separated-from-the-rest-evalpurency-particles-only">One colour of your particles should be separated from the rest?
+(<code>evalPurency.particles()</code> only)<a class="anchor" aria-label="anchor" href="#one-colour-of-your-particles-should-be-separated-from-the-rest-evalpurency-particles-only"></a>
+</h2>
+<p>In our labwork it can happen, that one likes to separate a certain
+colour of particles from the others in the evaluation. A usecase could
+be in the investigation of plastic particles on agricultural fields.
+There, black mulching films are used to cover the ground. However, if
+you’re only interested in plastic that does not originate from the
+mulching film, or you want to be able to distinguish between those, you
+have to consider the colour of the particles. However, in our practice,
+this was only of interest for a particle-wise evaluation. Therefore, we
+implemented another parameter <code>colourSep</code> for the function
+<code><a href="../reference/evalPurency.particles.html">evalPurency.particles()</a></code>. You can provide a colour as stated
+in your data, which will be then separately evaluated:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/evalPurency.particles.html">evalPurency.particles</a></span><span class="op">(</span>path<span class="op">=</span><span class="st">"C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/"</span>, </span>
+<span>                      colourSep <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span></span></code></pre></div>
+<p>You will receive all blank-corrected particles for the chosen colour
+and all other colours separately.</p>
+<p><em>NOTE: this option is not available for <code>evalPurency</code>,
+since colours are not considered in the summary function (it doesn’t
+make sense to create even more groups as there are anyway)!</em></p>
+</div>
+<div class="section level2">
+<h2 id="automatically-fill-missing-values-with-provided-default">Automatically fill missing values with provided default<a class="anchor" aria-label="anchor" href="#automatically-fill-missing-values-with-provided-default"></a>
+</h2>
+<p>With filters of hundreds of particles it can be exhausting to set
+every shape and colour in the Purency software manually, especially if
+it is all the same. Therefore, you can provide default values to the
+parameters <code>formFillDefault</code> and
+<code>colourFillDefault</code> . If there is a plastic particle in the
+list with <code>NA</code> in the respective field, it will be set with
+the default, that you provided. This could be done in excel, of course,
+but with this, you can do it just on-the-flow for all files you
+have.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/evalPurency.particles.html">evalPurency.particles</a></span><span class="op">(</span>path<span class="op">=</span><span class="st">"C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/"</span>, </span>
+<span>                      formFillDefault <span class="op">=</span> <span class="st">"fragment"</span>,</span>
+<span>                      colourFillDefault <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span></span></code></pre></div>
+<p>The function will thow a <code>Note</code> to the console to inform
+you about the automatic change, in case you want to trace back the
+reason.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
