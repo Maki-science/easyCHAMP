@@ -42,7 +42,7 @@ evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/",
 
 
 
-## You analysed only parts of a sample - integrate division factors?
+## You analysed only parts of a sample? - integrate division factors
 In many cases it can happen, that only a part of a sample is measured, if there are too many particles. This might be different between sample and blanks (e.g., it might be that a filter breaks appart). Therefore, you can provide a division factor for each sample and blank separately, or even for each filter separately.
 
 However, to keep it simple and prevent mistakes, you only set ```setDivFactor``` when calling the function. There are three options available: ```setDivFactor = FALSE``` will ignore this parameter (default). If ```setDivFactor = "samplewise"```, this will cause the function to request the required values during the processing for each sample (i.e., all filters of one sample have the same factor). If set to ```setDivFactor = "filterwise"```, a division factor will be requested for each filter separately. 
@@ -61,3 +61,33 @@ We implemented these two ways, to reduce the effort and possibility of mistakes 
 *WARNING: If you use several blanks summed for all samples (like example 3 in the beginning) you can only chose a common division factor.*
 
 *NOTE: this option is not available for ```evalPurency.particles()```, since it is not reasonable to multiply particles with similar properties in a particle-wise processing.*
+
+
+## One colour of your particles should be separated from the rest? (```evalPurency.particles()``` only)
+In our labwork it can happen, that one likes to separate a certain colour of particles from the others in the evaluation. A usecase could be in the investigation of plastic particles on agricultural fields. There, black mulching films are used to cover the ground. However, if you're only interested in plastic that does not originate from the mulching film, or you want to be able to distinguish between those, you have to consider the colour of the particles. However, in our practice, this was only of interest for a particle-wise evaluation.
+Therefore, we implemented another parameter ```colourSep``` for the function ```evalPurency.particles()```. You can provide a colour as stated in your data, which will be then separately evaluated: 
+
+```{r, eval = FALSE}
+evalPurency.particles(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
+                      colourSep = "black")
+```
+You will receive all blank-corrected particles for the chosen colour and all other colours separately.
+
+*NOTE: this option is not available for ```evalPurency```, since colours are not considered in the summary function (it doesn't make sense to create even more groups as there are anyway)!*
+
+
+## Automatically fill missing values with provided default
+With filters of hundreds of particles it can be exhausting to set every shape and colour in the Purency software manually, especially if it is all the same. Therefore, you can provide default values to the parameters  ```formFillDefault``` and ```colourFillDefault``` . If there is a plastic particle in the list with  ```NA``` in the respective field, it will be set with the default, that you provided. This could be done in excel, of course, but with this, you can do it just on-the-flow for all files you have.
+
+```{r, eval = FALSE}
+evalPurency.particles(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
+                      formFillDefault = "fragment",
+                      colourFillDefault = "black")
+```
+The function will thow a ```Note``` to the console to inform you about the automatic change, in case you want to trace back the reason.
+
+
+
+
+
+

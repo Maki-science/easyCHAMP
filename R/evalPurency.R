@@ -23,6 +23,10 @@
 #' @param dataReturn If set TRUE, a data frame will be returned containing the data of all measurement with 
 #' the necessary information.
 #' @param eocsum If TRUE (default) it adds a column sum at the end of each column of the summary panel.
+#' @param formFillDefault If desired you can provide a default form that will be filled in, if no form is provided (NA). Should be
+#' one of the values of the parameters 'fibre', 'sphere', 'fragment' or 'pixel' (see below).
+#' @param colourFillDefault If desired you can provide a default colour that will be filled in, if no colour is provided in the data (NA).
+#' However, in this function colour has no further meansing.
 #' @param labpreset A preset for most of the parameters (except: path, polymers, dataReturn, eocsum). 
 #' Can be requested by other labs, to be implemented, that they don't have to be set manually all the time. 
 #' @param blankKey The key word to distinguish blanks from other measurements/samples. It is case sensitive to prevent
@@ -97,6 +101,8 @@ evalPurency <- function(path,
                         dataReturn = FALSE,
                         eocsum = TRUE,
                         particleNumbers = FALSE,
+                        formFillDefault = FALSE,
+                        colourFillDefault = FALSE,
                         labpreset = FALSE,
                         blankKey = "Blank",
                         noBlank = FALSE,
@@ -144,6 +150,8 @@ evalPurency <- function(path,
                          particleNumbers = particleNumbers,
                          sep = config$sep, 
                          dec = config$dec, 
+                         formFillDefault = formFillDefault,
+                         colourFillDefault = colourFillDefault,
                          colL = config$colL,
                          colPol = config$colPol,
                          startrow = config$startrow, 

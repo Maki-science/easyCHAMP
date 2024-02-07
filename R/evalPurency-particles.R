@@ -23,6 +23,9 @@
 #' How the colour is named in Purency can be set here (e.g., "black" or "schwarz"). Defaults to FALSE, i.e., no separation.
 #' @param dataReturn If set TRUE, a data frame will be returned containing the data of all measurement with 
 #' the necessary information.
+#' @param formFillDefault If desired you can provide a default form that will be filled in, if no form is provided in the data (NA). Should be
+#' one of the values of the parameters 'fibre', 'sphere', 'fragment' or 'pixel' (see below).
+#' @param colourFillDefault If desired you can provide a default colour that will be filled in, if no colour is provided in the data (NA).
 #' @param labpreset A preset for most of the parameters (except: path, polymers, dataReturn, eocsum). 
 #' Can be requested by other labs, to be implemented, that they don't have to be set manually all the time. 
 #' @param blankKey The key word to distinguish blanks from other measurements/samples. It is case sensitive to prevent
@@ -89,6 +92,8 @@ evalPurency.particles <- function(path,
                                   colourSep = FALSE,
                                   dataReturn = FALSE,
                                   particleNumbers = FALSE,
+                                  formFillDefault = FALSE,
+                                  colourFillDefault = FALSE,
                                   labpreset = FALSE,
                                   noBlank = FALSE,
                                   test = FALSE,
@@ -140,6 +145,8 @@ evalPurency.particles <- function(path,
                          particleNumbers = particleNumbers,
                          sep = config$sep, 
                          dec = config$dec, 
+                         formFillDefault = formFillDefault,
+                         colourFillDefault,
                          colL = config$colL,
                          colPol = config$colPol,
                          startrow = config$startrow, 

@@ -14,6 +14,8 @@ evalPurency(
   dataReturn = FALSE,
   eocsum = TRUE,
   particleNumbers = FALSE,
+  formFillDefault = FALSE,
+  colourFillDefault = FALSE,
   labpreset = FALSE,
   blankKey = "Blank",
   noBlank = FALSE,
@@ -63,6 +65,12 @@ the necessary information.}
 
 \item{particleNumbers}{set TRUE if you would like to get an extra file with just plastic and non-plastic
 particle numbers for each file loaded.}
+
+\item{formFillDefault}{If desired you can provide a default form that will be filled in, if no form is provided (NA). Should be
+one of the values of the parameters 'fibre', 'sphere', 'fragment' or 'pixel' (see below).}
+
+\item{colourFillDefault}{If desired you can provide a default colour that will be filled in, if no colour is provided in the data (NA).
+However, in this function colour has no further meansing.}
 
 \item{labpreset}{A preset for most of the parameters (except: path, polymers, dataReturn, eocsum).
 Can be requested by other labs, to be implemented, that they don't have to be set manually all the time.}

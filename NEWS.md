@@ -1,3 +1,6 @@
+# evalPurency 1.3.7.9018
+  - minor addon: Now, you can set default values for form and colour if it is not set in the data. This could be done in excel, of course, but now you can do it just on-the-flow for all files you have.
+  
 # evalPurency 1.3.6.9018
   - minor addon: There is now a test suite available for *evalPurency.particles()* to improve maintenance and quality control.
   

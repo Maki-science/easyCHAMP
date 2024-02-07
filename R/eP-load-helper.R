@@ -1,5 +1,6 @@
 ######## eP.load.helper() ###########
-#' Manages data loading of evalPurency
+#' Manages data loading and pre-processing of the evalPurency package. In the end, also a quality control is 
+#' performed that throws warnings if there are empty files or fields, including the name and column.
 #' @description
 #' Shared by both main function of the evalPurency package. Loads data from all *.csv files from the 
 #' provided folter.
@@ -7,6 +8,10 @@
 #' @param path The path set by the user in main function.
 #' @param sep Column separator within the *.csv files. Defaults to ';' in main function.
 #' @param dec Decimal sign within the *.csv files. Defaults to ',' in main function.
+#' @param formFillDefault If desired you can provide a default form that will be filled in, if no form is provided (NA). Should be
+#' one of the values of the parameters 'fibre', 'sphere', 'fragment' or 'pixel' (see below).
+#' @param colourFillDefault If desired you can provide a default colour that will be filled in, if no colour is provided in the data (NA).
+#' However, in this function colour has no further meansing.
 #' @param colL Column number for the particle length. In the TOEKI lab this is column 17 (Length 5µ). 
 #' Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
 #' Set in main function.
@@ -51,6 +56,8 @@ ep.load.helper <- function(path,
                            particleNumbers,
                            sep, 
                            dec, 
+                           formFillDefault,
+                           colourFillDefault,
                            colL,
                            colPol,
                            startrow, 
@@ -155,7 +162,14 @@ ep.load.helper <- function(path,
         if(is.na(temp$form[i]) == TRUE || (temp$form[i] == fibre || temp$form[i] == fragment || temp$form[i] == pixel || temp$form[i] == sphere) == FALSE){
           check <- TRUE
           if(is.na(temp$form[i]) == TRUE){
-            cat(warning(paste("Warning: There is a value missing in column ", colnames(Hilfsobjekt[colShape]), " in ", temp$measurement[i], "\n")))
+            if(formFillDefault != FALSE){
+              temp$form[i] <- formFillDefault
+              check <- FALSE # line will not be deleted
+              cat(warning(paste("Note: Filled in a missing value '", formFillDefault, "' in column ", colnames(Hilfsobjekt[colShape]), " in ", temp$measurement[i], "\n")))
+            }
+            else{
+              cat(warning(paste("Warning: There is a missing value in column ", colnames(Hilfsobjekt[colShape]), " in ", temp$measurement[i], "\n")))
+            }
           }
           else{
             cat(warning(paste("Warning: There is an unknown value in column ", colnames(Hilfsobjekt[colShape]), " in ", temp$measurement[i], "\n")))
@@ -165,11 +179,17 @@ ep.load.helper <- function(path,
       #suppressWarnings(
         if(is.na(as.numeric(temp$length[i])) == TRUE){
           check <- TRUE
-          cat(warning(paste("Warning: There is a value missing in column ", colnames(Hilfsobjekt[colL]), " in ", temp$measurement[i], "\n")))
+          cat(warning(paste("Warning: There is a missing value in column ", colnames(Hilfsobjekt[colL]), " in ", temp$measurement[i], "\n")))
         }
       #) # end supressWarnings
     }# end else form == none
     ) # end supressWarnings
+    
+    if(is.na(temp$color[i]) == TRUE){
+      temp$form[i] <- colourFillDefault
+      cat(warning(paste("Note: Filled in a missing value '", colourFillDefault, "' in column ", colnames(Hilfsobjekt[colCol]), " in ", temp$measurement[i], "\n")))
+    }
+    
     # lines with NAs will be deleted, since they cannot be evaluated
     if(check == TRUE){
       rowstodelete <- c(rowstodelete, i)

@@ -2,13 +2,16 @@
 % Please edit documentation in R/eP-load-helper.R
 \name{ep.load.helper}
 \alias{ep.load.helper}
-\title{Manages data loading of evalPurency}
+\title{Manages data loading and pre-processing of the evalPurency package. In the end, also a quality control is
+performed that throws warnings if there are empty files or fields, including the name and column.}
 \usage{
 ep.load.helper(
   path,
   particleNumbers,
   sep,
   dec,
+  formFillDefault,
+  colourFillDefault,
   colL,
   colPol,
   startrow,
@@ -35,6 +38,12 @@ particle numbers for each file loaded.}
 \item{sep}{Column separator within the *.csv files. Defaults to ';' in main function.}
 
 \item{dec}{Decimal sign within the *.csv files. Defaults to ',' in main function.}
+
+\item{formFillDefault}{If desired you can provide a default form that will be filled in, if no form is provided (NA). Should be
+one of the values of the parameters 'fibre', 'sphere', 'fragment' or 'pixel' (see below).}
+
+\item{colourFillDefault}{If desired you can provide a default colour that will be filled in, if no colour is provided in the data (NA).
+However, in this function colour has no further meansing.}
 
 \item{colL}{Column number for the particle length. In the TOEKI lab this is column 17 (Length 5µ).
 Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
