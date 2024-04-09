@@ -149,6 +149,7 @@ ep.load.helper <- function(path,
   
   # quality control
   rowstodelete <- c()
+  colWarning <- 0
   for(i in 1:nrow(temp)){
     check <- FALSE # if set TRUE, this line will be deleted below
     suppressWarnings( # I supress the warnings to have a simpler message that can be interpreted fast.
@@ -187,7 +188,9 @@ ep.load.helper <- function(path,
     
     if(is.na(temp$color[i]) == TRUE){
       temp$color[i] <- colourFillDefault
-      cat(warning(paste("Note: Filled in a missing value '", colourFillDefault, "' in column ", colnames(Hilfsobjekt[colCol]), " in ", temp$measurement[i], "\n")))
+      if(colWarning == 0){
+        cat(warning(paste("Note: Filled in a missing value '", colourFillDefault, "' in column ", colnames(Hilfsobjekt[colCol]), " in your files. Please check whether it is intended to use colours or not.\n")))
+      }
     }
     
     # lines with NAs will be deleted, since they cannot be evaluated
