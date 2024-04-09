@@ -186,7 +186,7 @@ ep.load.helper <- function(path,
     ) # end supressWarnings
     
     if(is.na(temp$color[i]) == TRUE){
-      temp$form[i] <- colourFillDefault
+      temp$color[i] <- colourFillDefault
       cat(warning(paste("Note: Filled in a missing value '", colourFillDefault, "' in column ", colnames(Hilfsobjekt[colCol]), " in ", temp$measurement[i], "\n")))
     }
     
