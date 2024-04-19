@@ -190,6 +190,7 @@ ep.load.helper <- function(path,
       temp$color[i] <- colourFillDefault
       if(colWarning == 0){
         cat(warning(paste("Note: Filled in a missing value '", colourFillDefault, "' in column ", colnames(Hilfsobjekt[colCol]), " in your files. Please check whether it is intended to use colours or not.\n")))
+        colWarning <- 1
       }
     }
     

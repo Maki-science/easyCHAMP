@@ -365,7 +365,12 @@ evalPurency <- function(path,
   
   #### sort data form-size wise ####
   # aggregate the data set to get the sums of particle numbers for each size class (form-polymerwise)
-  if(setDivFactor == "filterwise"){
+  # TODO: apparently, the processing of the values is slightly different, when using filterwise or samplewise. It has to do with this aggregation,
+  # I think. Since I already sum the values in case of "samplewise" and then apply the division factor, and vice versa in case of filterwise
+  # I should take always the filterwise step at this point
+  # -> Now commented out and also followed the filterwise approach further below. Just for the user input and the handling of the division factors
+  # the "samplewise"/"filterwise" distinguishment is performed.
+  # if(setDivFactor == "filterwise"){
     # samples
     data.agg.formwise <- aggregate(dataMeasurements[5:(length(sizeclasses)+5)], by=list(factor(dataMeasurements$sample), factor(dataMeasurements$measurement), factor(dataMeasurements$polymer), factor(dataMeasurements$form)), sum, na.rm = TRUE)
     colnames(data.agg.formwise) <- c("sample", "measurement", "polymer", "form", colnames(data.agg.formwise)[5:length(colnames(data.agg.formwise))])
@@ -375,18 +380,18 @@ evalPurency <- function(path,
       dataBlanks <- aggregate(dataBlanks[5:(length(sizeclasses)+5)], by=list(factor(dataBlanks$sample), factor(dataBlanks$measurement), factor(dataBlanks$polymer), factor(dataBlanks$form)), sum, na.rm = TRUE)
       colnames(dataBlanks) <- c("sample", "measurement", "polymer", "form", colnames(dataBlanks)[5:length(colnames(dataBlanks))])
     }
-  }
-  else{
-    # samples
-    data.agg.formwise <- aggregate(dataMeasurements[5:(length(sizeclasses)+5)], by=list(factor(dataMeasurements$sample), factor(dataMeasurements$polymer), factor(dataMeasurements$form)), sum, na.rm = TRUE)
-    colnames(data.agg.formwise) <- c("sample", "polymer", "form", colnames(data.agg.formwise)[4:length(colnames(data.agg.formwise))])
-    
-    if(noBlank == FALSE){
-      # blanks
-      dataBlanks <- aggregate(dataBlanks[5:(length(sizeclasses)+5)], by=list(factor(dataBlanks$sample), factor(dataBlanks$polymer), factor(dataBlanks$form)), sum, na.rm = TRUE)
-      colnames(dataBlanks) <- c("sample", "polymer", "form", colnames(dataBlanks)[4:length(colnames(dataBlanks))])
-    }
-  }
+  # }
+  # else{
+  #   # samples
+  #   data.agg.formwise <- aggregate(dataMeasurements[5:(length(sizeclasses)+5)], by=list(factor(dataMeasurements$sample), factor(dataMeasurements$polymer), factor(dataMeasurements$form)), sum, na.rm = TRUE)
+  #   colnames(data.agg.formwise) <- c("sample", "polymer", "form", colnames(data.agg.formwise)[4:length(colnames(data.agg.formwise))])
+  #   
+  #   if(noBlank == FALSE){
+  #     # blanks
+  #     dataBlanks <- aggregate(dataBlanks[5:(length(sizeclasses)+5)], by=list(factor(dataBlanks$sample), factor(dataBlanks$polymer), factor(dataBlanks$form)), sum, na.rm = TRUE)
+  #     colnames(dataBlanks) <- c("sample", "polymer", "form", colnames(dataBlanks)[4:length(colnames(dataBlanks))])
+  #   }
+  # }
   
   # add uncorrected data and blanks to obj
   obj$sampleDataUncorrected <- data.agg.formwise
@@ -419,6 +424,11 @@ evalPurency <- function(path,
   # It further might be, that the blank has a different division factor than the sample, since it might be good
   # to use the full blank particle numbers and/or if a filter breaks appart, the factor might change for a single
   # sample Therefore each sample (and blank) need its own factor.
+  
+  # Martin want to keep the division factors trackable. Therefore, I will leave this column in the data.
+  # Here I set the default. If no division factors are set
+  obj$divisionFactors <- data.frame(divFactor = "No division factors have been chosen. Therefore, the factor defaults to 1 (no division).")
+  
   
   if(interactive() && setDivFactor != FALSE){
     # add a new column with the division factor (default = 1, meaning no division)
@@ -533,6 +543,10 @@ evalPurency <- function(path,
         }
       } # end setDivFactor == "filterwise"
       
+      # Martin want to keep the division factors trackable. Therefore, I will leave this column in the data.
+      obj$divisionFactors <- data.frame(sampleOrfilter = c(blankFilters, sampleFilters),
+                                        divFactor = c(blankDivFactors, sampleDivFactors))
+      
       # divide all numbers by the division factor
       if(noBlank == FALSE){
         for(j in 1:nrow(dataBlanks)){
@@ -573,21 +587,21 @@ evalPurency <- function(path,
       }
     }# end else if setDivFactor = samplewise or filterwise
     
-    # create sample summary if the div factor was set filterwise (sum again on sample level, not measurement level)
-    if(setDivFactor == "filterwise"){
-      # samples
-      data.agg.formwise <- aggregate(data.agg.formwise[c(5:length(colnames(data.agg.formwise)))], by=list(data.agg.formwise$sample, data.agg.formwise$polymer, data.agg.formwise$form), sum, na.rm = TRUE)
-      colnames(data.agg.formwise) <- c("sample", "polymer", "form", colnames(data.agg.formwise)[4:length(colnames(data.agg.formwise))])
-      
-      # blanks
-      dataBlanks <- aggregate(dataBlanks[c(5:length(colnames(dataBlanks)))], by=list(dataBlanks$sample, dataBlanks$polymer, dataBlanks$form), sum, na.rm = TRUE)
-      colnames(dataBlanks) <- c("sample", "polymer", "form", colnames(dataBlanks)[4:length(colnames(dataBlanks))])
-    }
-    
     #cat("Division correction done.\n")
   } # end if setdivisionfactor = TRUE
   #else{}
 
+  # create sample summary if the div factor was set filterwise (sum again on sample level, not measurement level)
+  # if(setDivFactor == "filterwise"){ # is now commented out, since I should always use the filterwise approach (see above, when splitting the data)
+  # samples
+  data.agg.formwise <- aggregate(data.agg.formwise[c(5:length(colnames(data.agg.formwise)))], by=list(data.agg.formwise$sample, data.agg.formwise$polymer, data.agg.formwise$form), sum, na.rm = TRUE)
+  colnames(data.agg.formwise) <- c("sample", "polymer", "form", colnames(data.agg.formwise)[4:length(colnames(data.agg.formwise))])
+  
+  # blanks
+  dataBlanks <- aggregate(dataBlanks[c(5:length(colnames(dataBlanks)))], by=list(dataBlanks$sample, dataBlanks$polymer, dataBlanks$form), sum, na.rm = TRUE)
+  colnames(dataBlanks) <- c("sample", "polymer", "form", colnames(dataBlanks)[4:length(colnames(dataBlanks))])
+  # }
+  
   
   #cat("Data sorted \n")
   
@@ -599,7 +613,12 @@ evalPurency <- function(path,
     if(!is.na(strsplit(blanklevels[i], config$blankKey)[[1]][2]) == TRUE){ 
       # when there is a number behind Blank, take the average of all with a similar level
       dataBlanks <- aggregate(dataBlanks[c(4:length(colnames(dataBlanks)))], by=list(unlist(sapply(strsplit(as.character(dataBlanks$sample), config$blankKey, fixed = TRUE), getElement, 1)), dataBlanks$polymer, dataBlanks$form), FUN = sum, na.rm = TRUE)
-      dataBlanks[, 4:length(colnames(dataBlanks))] <- dataBlanks[, 4:length(colnames(dataBlanks))] / length(blanklevels)
+      # iterate over the blanks and divide the numbers of each lines by the number of blanks for this respective blank group
+      for(j in 1:length(unique(unlist(sapply(strsplit(blanklevels, config$blankKey, fixed = TRUE), getElement, 1))))){
+        # get the count of those blank files
+        blanklevelsnumber <- unlist(sapply(strsplit(blanklevels, config$blankKey, fixed = TRUE), getElement, 1))[unlist(sapply(strsplit(blanklevels, config$blankKey, fixed = TRUE), getElement, 1)) == unique(unlist(sapply(strsplit(blanklevels, config$blankKey, fixed = TRUE), getElement, 1)))[j]]
+        dataBlanks[, 4:length(colnames(dataBlanks))] <- ceiling(dataBlanks[, 4:length(colnames(dataBlanks))] / length(blanklevelsnumber))
+      }
       colnames(dataBlanks) <- c("sample", "polymer", "form", colnames(dataBlanks)[4:length(colnames(dataBlanks))])
       # reset the sample column (that the word "Blank" is included again)
       dataBlanks$sample <- paste(unlist(strsplit(as.character(dataBlanks$sample), config$blankKey)), config$blankKey, sep = "")
@@ -780,7 +799,8 @@ evalPurency <- function(path,
                              single_measurements_corrected = obj$correctedData,
                              unprocessed_blanks = obj$blanks,
                              unprocessed_data = obj$sampleDataUncorrected,
-                             raw_data = obj$rawData),
+                             raw_data = obj$rawData,
+                             division_factors = obj$divisionFactors),
                         paste(path, "processing data.xls", sep=""))
   }
   

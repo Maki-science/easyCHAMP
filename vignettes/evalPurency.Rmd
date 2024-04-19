@@ -65,6 +65,8 @@ You can also use a mix of all those versions, if necessary, though, we think thi
   
 If you don't have any blanks to process, you can skip the blank processing with setting ```noBlank = TRUE```.
 
+*Warning: The names should always be uniquely identifyable. For instance, having a blank called 'TESTBlank_filterx', and samples called 'TEST_filtery' and 'somethingelseTEST_filterz' would have a match for 'TEST' in both samples, even though they are thought be separately blank-corrected. Therefore, the 'test' is not clearly identifyable and the second sample should not include test, or the blank must be renamed more precisely.*
+
 *WARNING: The naming of the files is an important prerequisite for a proper processing. Thus you need to cautiously set your file names!*
 
 Put all files you want to process including their blank files into one folder. We recommend to put all files of a certain project/study or similar into one folder and process them at once.

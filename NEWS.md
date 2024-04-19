@@ -1,3 +1,10 @@
+# evalPurency 1.3.7.9019
+  - Changes in the function feedback: Since *evalPurency.particles()* also takes use of colour, we have included a note, if colour is not set. However, since this is done by a helper function, shared with *evalPurency()*, this note is also thrown for *evalPurency()* for each file having no colour defined. We changed the code now, so that this note is just thrown once for consideration.
+  - Minor addon (requested by Martin): the *processing_data.csv* now contains an additional sheet, reporting the provided division factors.
+  - Bugfix: We found a bug in the rounding behaviour of the algorithm. Therefore, in the blank correction, the final result was not rounded, but the digits were cut of. We fixed this flaw and it should always be rounded to the upper integer number (to provide conservative values).
+  - Issue found: The names should always be uniquely identifyable. For instance, having a blank called 'TESTBlank_filterx', and samples called 'TEST_filtery' and 'somethingelseTEST_filterz' would have a match for 'TEST' in both samples, even though they are thought be separately blank-corrected. Therefore, the 'test' is not clearly identifyable and the second sample should not include test, or the blank must be renamed more precisely. In such a case this leads otherwise to blank-correction for both of these samples. We have adjusted the vignettes and description on the naming procedure and added a *Warning* to this section informing about this issue.
+    - Testsuite: Since we changed the output with an additional sheet in the *processing_data.csv*, we updated the testsuite accordingly.
+
 # evalPurency 1.3.7.9018
   - minor addon (requested by Sarmite): Now, you can set default values for form and colour if it is not set in the data. This could be done in excel, of course, but now you can do it just on-the-flow for all files you have.
   
