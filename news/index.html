@@ -6,7 +6,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">evalPurency</a>
 
@@ -57,6 +57,15 @@
       <small>Source: <a href="https://github.com/Maki-science/evalPurency/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.3.7.9019" id="evalpurency-1379019">evalPurency 1.3.7.9019<a class="anchor" aria-label="anchor" href="#evalpurency-1379019"></a></h2>
+<ul><li>Changes in the function feedback: Since <em>evalPurency.particles()</em> also takes use of colour, we have included a note, if colour is not set. However, since this is done by a helper function, shared with <em>evalPurency()</em>, this note is also thrown for <em>evalPurency()</em> for each file having no colour defined. We changed the code now, so that this note is just thrown once for consideration.</li>
+<li>Minor addon (requested by Martin): the <em>processing_data.csv</em> now contains an additional sheet, reporting the provided division factors.</li>
+<li>Bugfix: We found a bug in the rounding behaviour of the algorithm. Therefore, in the blank correction, the final result was not rounded, but the digits were cut of. We fixed this flaw and it should always be rounded to the upper integer number (to provide conservative values).</li>
+<li>Issue found: The names should always be uniquely identifyable. For instance, having a blank called ‘TESTBlank_filterx’, and samples called ‘TEST_filtery’ and ‘somethingelseTEST_filterz’ would have a match for ‘TEST’ in both samples, even though they are thought be separately blank-corrected. Therefore, the ‘test’ is not clearly identifyable and the second sample should not include test, or the blank must be renamed more precisely. In such a case this leads otherwise to blank-correction for both of these samples. We have adjusted the vignettes and description on the naming procedure and added a <em>Warning</em> to this section informing about this issue.
+<ul><li>Testsuite: Since we changed the output with an additional sheet in the <em>processing_data.csv</em>, we updated the testsuite accordingly.</li>
+</ul></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.3.7.9018" id="evalpurency-1379018">evalPurency 1.3.7.9018<a class="anchor" aria-label="anchor" href="#evalpurency-1379018"></a></h2>
 <ul><li>minor addon (requested by Sarmite): Now, you can set default values for form and colour if it is not set in the data. This could be done in excel, of course, but now you can do it just on-the-flow for all files you have.</li>
@@ -171,7 +180,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
 </div>
 
     </footer></div>
