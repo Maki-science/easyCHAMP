@@ -20,8 +20,9 @@
 #' The polymer names (or abbreviations) can be set manually in 'polymers' in case the default does not apply.
 #' Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
 #' Set in main function.
-#' @param startrow Number of rows that can be omitted from the *.csv files. There Purency 
-#' provides a bunch of meta data, that are not of interest here. Defaults to 40 in main function.
+#' @param startrow Number of rows that can be omitted from the *.csv files. Usually preprocessing software 
+#' provides a bunch of meta data, that are not of interest here. Usually 40 rows can be skipped (more or less - 0 in case of siMPle).
+#' This is automated now. However, automation can be disabled if a value is defined (e.g., for troubleshooting).
 #' @param colReqPol Column number for the particle check, whether the particle is a polymer or not. 
 #' In the TOEKI lab this is column 24 (Plastik? or Plastik ja/nein). Could also be provided as column name, but only 
 #' in ASCII encoding (e.g., special character as . and ä = d). Set in main function.
@@ -103,6 +104,19 @@ ep.load.helper <- function(path,
     suppressWarnings(
       for(i in 1:length(Dateien)){
         #print(paste(i, Dateien[i], sep="\n"))
+        
+        # first we check where the actual data frame starts (this automates the startrow)
+        # automation can be disabled by setting a definite value in the function call
+        if(startrow == "auto"){
+          # read in the first entries of the data and check the row number of the keyword
+          startrow.check <- scan(paste0(path,Dateien[i]), what = "character", nmax = 100, sep = "\n")
+          startrow <- which(test == "Particle Properties:")+3 # +3 because there are 3 empty lines that are ignored by scan()
+          # in case of siMPle this keyword does not exist, but it starts straight with the data frame
+          if(length(startrow) == 0){
+            startrow <- 0
+          }
+        } # now the startrow is automatically set
+        
         # need to read data as ASCII. Otherwise it sometimes makes problems with the column names with special character
         assign("Hilfsobjekt",read.csv(paste0(path,Dateien[i]),sep=sep, dec=dec, skip=startrow, fileEncoding = "latin1")) # read data and skip the first 40 lines
         

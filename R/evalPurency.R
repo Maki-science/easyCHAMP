@@ -59,9 +59,9 @@
 #' @param fragment How fragments are called in colShape (Form). In the TOEKI lab it is 'Fragment'.
 #' @param pixel How pixels are called in colShape (Form). In the TOEKI lab it is 'Pixel'.
 #' @param test Can be set TRUE when the function should be run in testing mode.
-#' @param startrow Only required rarely. If you use a Purency version that saves the csv files slightly
-#' differently, you might check at which line the data starts (including header). This number of line should
-#' be set here (default 40).
+#' @param startrow Number of rows that can be omitted from the *.csv files. Usually preprocessing software 
+#' provides a bunch of meta data, that are not of interest here. Usually 40 rows can be skipped (more or less - 0 in case of siMPle).
+#' This is automated now. However, automation can be disabled if a value is defined (e.g., for troubleshooting).
 #' @param particleNumbers set TRUE if you would like to get an extra file with just plastic and non-plastic 
 #' particle numbers for each file loaded.
 #' 
@@ -124,7 +124,7 @@ evalPurency <- function(path,
                         fragment = "Fragment",
                         pixel = "Pixel",
                         test = FALSE,
-                        startrow = 40
+                        startrow = "auto"
 ){
   
   # set/correct the configuration (if labpreset was chosen)

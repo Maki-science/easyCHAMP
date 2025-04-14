@@ -55,8 +55,9 @@ The polymer names (or abbreviations) can be set manually in 'polymers' in case t
 Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
 Set in main function.}
 
-\item{startrow}{Number of rows that can be omitted from the *.csv files. There Purency
-provides a bunch of meta data, that are not of interest here. Defaults to 40 in main function.}
+\item{startrow}{Number of rows that can be omitted from the *.csv files. Usually preprocessing software
+provides a bunch of meta data, that are not of interest here. Usually 40 rows can be skipped (more or less - 0 in case of siMPle).
+This is automated now. However, automation can be disabled if a value is defined (e.g., for troubleshooting).}
 
 \item{colReqPol}{Column number for the particle check, whether the particle is a polymer or not.
 In the TOEKI lab this is column 24 (Plastik? or Plastik ja/nein). Could also be provided as column name, but only

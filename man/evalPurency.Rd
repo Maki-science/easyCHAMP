@@ -36,7 +36,7 @@ evalPurency(
   fragment = "Fragment",
   pixel = "Pixel",
   test = FALSE,
-  startrow = 40
+  startrow = "auto"
 )
 }
 \arguments{
@@ -125,9 +125,9 @@ In the TOEKI lab this is column 18 (Width µm). Could also be provided as column
 
 \item{test}{Can be set TRUE when the function should be run in testing mode.}
 
-\item{startrow}{Only required rarely. If you use a Purency version that saves the csv files slightly
-differently, you might check at which line the data starts (including header). This number of line should
-be set here (default 40).}
+\item{startrow}{Number of rows that can be omitted from the *.csv files. Usually preprocessing software
+provides a bunch of meta data, that are not of interest here. Usually 40 rows can be skipped (more or less - 0 in case of siMPle).
+This is automated now. However, automation can be disabled if a value is defined (e.g., for troubleshooting).}
 }
 \value{
 If dataReturn = TRUE, the function returns a list object including all

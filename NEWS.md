@@ -1,3 +1,6 @@
+# evalPurency 1.3.7.9021
+  - The startrow (how to read in the files) is now automatically extracted for each file separately. Therefore, errors regarding the reading of the files should be gone now, even if one file has a different number of rows until the real data starts. Even though this increases the processing time by a few seconds (not all data is read), the user does not have to worry about this point anymore. However, automation can be disabled if a value is defined (e.g., for troubleshooting).
+
 # evalPurency 1.3.7.9020
   - Adjusted the handling of colours to skip the colour check if colours are not to be separated (this prevents a warning popping up all the time for cases with no colour separation - which is most of the time)
 

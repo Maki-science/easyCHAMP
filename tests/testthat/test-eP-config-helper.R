@@ -58,7 +58,7 @@ test_that("Set labpreset works", {
                                 sphere = "Kugel",
                                 fragment = "Fragment",
                                 pixel = "Pixel",
-                                startrow = 40), 
+                                startrow = "auto"), 
                data.frame(
                  labname = "Laforsch",
                  blankKey = "Blank",
@@ -77,6 +77,6 @@ test_that("Set labpreset works", {
                  sphere = "Kugel",
                  fragment = "Fragment",
                  pixel = "Pixel",
-                 startrow = 40
+                 startrow = "auto"
                ))
 })

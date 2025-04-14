@@ -72,7 +72,9 @@ In the TOEKI lab this is column 18 (Width µm). Could also be provided as column
 
 \item{pixel}{How pixels are called in colShape (Form). In the TOEKI lab it is 'Pixel'.}
 
-\item{startrow}{The row where the data begin within the .csv file of purency (usually at 40).}
+\item{startrow}{Number of rows that can be omitted from the *.csv files. Usually preprocessing software
+provides a bunch of meta data, that are not of interest here. Usually 40 rows can be skipped (more or less - 0 in case of siMPle).
+This is automated now. However, automation can be disabled if a value is defined (e.g., for troubleshooting).}
 }
 \description{
 Most settings of evalPurency can be overwritten by a labpreset. If a labpreset is

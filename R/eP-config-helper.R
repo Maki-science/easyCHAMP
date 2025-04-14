@@ -37,7 +37,9 @@
 #' @param sphere How spheres are called in colShape (Form). In the TOEKI lab it is 'Kugel'.
 #' @param fragment How fragments are called in colShape (Form). In the TOEKI lab it is 'Fragment'.
 #' @param pixel How pixels are called in colShape (Form). In the TOEKI lab it is 'Pixel'.
-#' @param startrow The row where the data begin within the .csv file of purency (usually at 40).
+#' @param startrow Number of rows that can be omitted from the *.csv files. Usually preprocessing software 
+#' provides a bunch of meta data, that are not of interest here. Usually 40 rows can be skipped (more or less - 0 in case of siMPle).
+#' This is automated now. However, automation can be disabled if a value is defined (e.g., for troubleshooting).
 #' 
 eP.config.helper <- function(labpreset,
                              blankKey,
