@@ -12,6 +12,7 @@
 #' one of the values of the parameters 'fibre', 'sphere', 'fragment' or 'pixel' (see below).
 #' @param colourFillDefault If desired you can provide a default colour that will be filled in, if no colour is provided in the data (NA).
 #' However, in this function colour has no further meansing.
+#' @param colourSep whether colour separation is desired for the analysis. Only usable in evalPurency.particles()!
 #' @param colL Column number for the particle length. In the TOEKI lab this is column 17 (Length 5µ). 
 #' Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
 #' Set in main function.
@@ -62,6 +63,7 @@ ep.load.helper <- function(path,
                            colPol,
                            startrow, 
                            colReqPol, 
+                           colourSep,
                            ReqPolKey, 
                            colShape, 
                            colCol, 
@@ -186,7 +188,7 @@ ep.load.helper <- function(path,
     }# end else form == none
     ) # end supressWarnings
     
-    if(is.na(temp$color[i]) == TRUE){
+    if(is.na(temp$color[i]) == TRUE && colourSep == TRUE){
       temp$color[i] <- colourFillDefault
       if(colWarning == 0){
         cat(warning(paste("Note: Filled in a missing value '", colourFillDefault, "' in column ", colnames(Hilfsobjekt[colCol]), " in your files. Please check whether it is intended to use colours or not.\n")))
