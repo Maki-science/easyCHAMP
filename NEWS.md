@@ -1,3 +1,6 @@
+# evalPurency 1.3.7.9020
+  - Adjusted the handling of colours to skip the colour check if colours are not to be separated (this prevents a warning popping up all the time for cases with no colour separation - which is most of the time)
+
 # evalPurency 1.3.7.9019
   - Changes in the function feedback: Since *evalPurency.particles()* also takes use of colour, we have included a note, if colour is not set. However, since this is done by a helper function, shared with *evalPurency()*, this note is also thrown for *evalPurency()* for each file having no colour defined. We changed the code now, so that this note is just thrown once for consideration.
   - Minor addon (requested by Martin): the *processing_data.csv* now contains an additional sheet, reporting the provided division factors.
