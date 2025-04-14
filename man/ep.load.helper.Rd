@@ -16,6 +16,7 @@ ep.load.helper(
   colPol,
   startrow,
   colReqPol,
+  colourSep,
   ReqPolKey,
   colShape,
   colCol,
@@ -60,6 +61,8 @@ provides a bunch of meta data, that are not of interest here. Defaults to 40 in 
 \item{colReqPol}{Column number for the particle check, whether the particle is a polymer or not.
 In the TOEKI lab this is column 24 (Plastik? or Plastik ja/nein). Could also be provided as column name, but only
 in ASCII encoding (e.g., special character as . and ä = d). Set in main function.}
+
+\item{colourSep}{whether colour separation is desired for the analysis. Only usable in evalPurency.particles()!}
 
 \item{ReqPolKey}{key word or sentence of 'colReqPol' that indicates that it is a plastic particle.
 Default is 'ja'. Set in main function.}

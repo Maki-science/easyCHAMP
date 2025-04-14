@@ -16,6 +16,7 @@ evalPurency(
   particleNumbers = FALSE,
   formFillDefault = FALSE,
   colourFillDefault = FALSE,
+  colourSep = FALSE,
   labpreset = FALSE,
   blankKey = "Blank",
   noBlank = FALSE,
@@ -71,6 +72,8 @@ one of the values of the parameters 'fibre', 'sphere', 'fragment' or 'pixel' (se
 
 \item{colourFillDefault}{If desired you can provide a default colour that will be filled in, if no colour is provided in the data (NA).
 However, in this function colour has no further meansing.}
+
+\item{colourSep}{whether to separate colours in the analysis or not. Only usable in evalPurency.particles()!}
 
 \item{labpreset}{A preset for most of the parameters (except: path, polymers, dataReturn, eocsum).
 Can be requested by other labs, to be implemented, that they don't have to be set manually all the time.}
