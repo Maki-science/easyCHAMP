@@ -9,7 +9,7 @@ provides a list of all particles. Blank correction is done with a most-similar-p
 
     <a class="navbar-brand me-2" href="../index.html">evalPurency</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.7.9020</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.7.9021</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,7 +82,7 @@ provides a list of all particles. Blank correction is done with a most-similar-p
 <span>  sphere <span class="op">=</span> <span class="st">"Kugel"</span>,</span>
 <span>  fragment <span class="op">=</span> <span class="st">"Fragment"</span>,</span>
 <span>  pixel <span class="op">=</span> <span class="st">"Pixel"</span>,</span>
-<span>  startrow <span class="op">=</span> <span class="fl">40</span></span>
+<span>  startrow <span class="op">=</span> <span class="st">"auto"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -230,9 +230,9 @@ In the TOEKI lab this is column 18 (Width µm). Could also be provided as column
 
 
 <dt id="arg-startrow">startrow<a class="anchor" aria-label="anchor" href="#arg-startrow"></a></dt>
-<dd><p>Only required rarely. If you use a Purency version that saves the csv files slightly
-differently, you might check at which line the data starts (including header). This number of line should
-be set here (default 40).</p></dd>
+<dd><p>Number of rows that can be omitted from the *.csv files. Usually preprocessing software
+provides a bunch of meta data, that are not of interest here. Usually 40 rows can be skipped (more or less - 0 in case of siMPle).
+This is automated now. However, automation can be disabled if a value is defined (e.g., for troubleshooting).</p></dd>
 
 </dl></div>
     <div class="section level2">
