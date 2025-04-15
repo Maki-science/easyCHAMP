@@ -109,8 +109,8 @@ ep.load.helper <- function(path,
         # automation can be disabled by setting a definite value in the function call
         if(startrow == "auto"){
           # read in the first entries of the data and check the row number of the keyword
-          startrow.check <- scan(paste0(path,Dateien[i]), what = "character", nmax = 100, sep = "\n")
-          startrow <- which(test == "Particle Properties:")+3 # +3 because there are 3 empty lines that are ignored by scan()
+          startrow.check <- scan(paste0(path,Dateien[i]), what = "character", nmax = 100, sep = "\n", quiet = TRUE)
+          startrow <- which(startrow.check == "Particle Properties:")+3 # +3 because there are 3 empty lines that are ignored by scan()
           # in case of siMPle this keyword does not exist, but it starts straight with the data frame
           if(length(startrow) == 0){
             startrow <- 0
