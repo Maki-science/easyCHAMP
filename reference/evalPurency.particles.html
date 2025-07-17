@@ -9,7 +9,7 @@ provides a list of all particles. Blank correction is done with a most-similar-p
 
     <a class="navbar-brand me-2" href="../index.html">evalPurency</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.7.9021</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.8.9021</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -190,7 +190,9 @@ in ASCII encoding (e.g., special character as . and ä = d).</p></dd>
 
 <dt id="arg-colshape">colShape<a class="anchor" aria-label="anchor" href="#arg-colshape"></a></dt>
 <dd><p>Column number for the particle shape. In the TOEKI lab this is column 25 (Form).
-Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).</p></dd>
+Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
+Can also be set to 'none' if no column for shape exists in the files. This will cause the function to create one and set as
+'fragment' as shape. However, this can be ignored afterwards.</p></dd>
 
 
 <dt id="arg-colcol">colCol<a class="anchor" aria-label="anchor" href="#arg-colcol"></a></dt>
@@ -266,7 +268,7 @@ raw and processed data of each processing step and the summary values.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

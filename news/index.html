@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">evalPurency</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.7.9021</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.8.9021</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,6 +41,10 @@
       <small>Source: <a href="https://github.com/Maki-science/evalPurency/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.3.8.9021" id="evalpurency-1389021">evalPurency 1.3.8.9021<a class="anchor" aria-label="anchor" href="#evalpurency-1389021"></a></h2>
+<ul><li>since some researches might not be interested in shape of particles, we included a possibility to ignore that feature. The parameter ‘colShape’ can now be set to ‘none’. This will cause the functions to create an extra column ‘shape’ and the shape is set according to the parameter ‘fragment’. This was a quick-and-dirty (but properly working) implementation of this feature, since the actual ignorance of shape is not as easy as this was originially thought as central feature of this package. Therefore, it is strongly embedded in the current code structure and cannot be easily jumped over.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.3.7.9021" id="evalpurency-1379021">evalPurency 1.3.7.9021<a class="anchor" aria-label="anchor" href="#evalpurency-1379021"></a></h2>
 <ul><li>The startrow (how to read in the files) is now automatically extracted for each file separately. Therefore, errors regarding the reading of the files should be gone now, even if one file has a different number of rows until the real data starts. Even though this increases the processing time by a few seconds (not all data is read), the user does not have to worry about this point anymore. However, automation can be disabled if a value is defined (e.g., for troubleshooting).</li>
@@ -172,7 +176,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

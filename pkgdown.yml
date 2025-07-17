@@ -1,5 +1,5 @@
 pandoc: 3.1.11
-pkgdown: 2.1.1
+pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   evalPurency: evalPurency.html
@@ -8,7 +8,7 @@ articles:
   other-lab: other-lab.html
   output-custom: output-custom.html
   troubleshooting: troubleshooting.html
-last_built: 2025-04-15T06:34Z
+last_built: 2025-07-17T12:09Z
 urls:
   reference: https://maki-science.github.io/evalPurency/reference
   article: https://maki-science.github.io/evalPurency/articles
