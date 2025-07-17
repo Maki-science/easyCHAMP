@@ -70,7 +70,9 @@ Default is 'ja'. Set in main function.}
 
 \item{colShape}{Column number for the particle shape. In the TOEKI lab this is column 25 (Form).
 Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
-Set in main function.}
+Set in main function.
+Can also be set to 'none' if no column for shape exists in the files. This will cause the function to create one and set as
+'fragment' as shape. However, this can be ignored afterwards.}
 
 \item{colCol}{Column number for the particle color In the TOEKI lab this is column 26 (Farbe).
 Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
