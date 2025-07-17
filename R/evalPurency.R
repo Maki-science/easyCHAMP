@@ -46,6 +46,8 @@
 #' @param ReqPolKey key word or sentence of 'colReqPol' that indicates that it is a plastic particle. Default is 'ja'.
 #' @param colShape Column number for the particle shape. In the TOEKI lab this is column 25 (Form).
 #' Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
+#' Can also be set to 'none' if no column for shape exists in the files. This will cause the function to create one and set as
+#' 'fragment' as shape. However, this can be ignored afterwards.
 #' @param colCol Column number for the particle color In the TOEKI lab this is column 26 (Farbe).
 #' Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
 #' @param colLFib Column number for the particle length in case of a fibre with corrected length (because of curvy shape)
@@ -171,6 +173,14 @@ evalPurency <- function(path,
                          fragment = config$fragment,
                          pixel = config$pixel
                          )
+  
+  # check whether column for shape is set or set to 'none'
+  if(colShape == "none"){
+    colShape <- "shape" 
+  }
+  # if there is no column for shape, create one and use the term set in fragment
+  # This allows quick-and-dirty (but proper) use of data where the shape does not matter
+  # actual creation of the column is done in load-helper.
   
   #### start processing ####
   obj <- list() # object to be returned holding the rawdata, as well as the corrected and summarized data
