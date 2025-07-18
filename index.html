@@ -5,22 +5,22 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Automated Evaluation of Purency Data • evalPurency</title>
-<script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>An automated Comparable and Harmonized Analyses of Micro-Particles • easyCHAMP</title>
+<script src="lightswitch.js"></script><script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Automated Evaluation of Purency Data">
-<meta name="description" content="Evaluate a bulk of *.csv files in one directory, produced by Purency. It will count occurrences of of fibres, fragments, spheres and pixels, as well as (customisable size fractions for each polymer. Each file (i.e., each measurement) is evaluated separately, as well as summarized for all files (i.e., one sample). Also the blank correction is done during the processing. For each sample a new excel file will be generated in the folder where the files are placed. The function is highly customisable and each parameter can be changed to your desire.">
-<meta property="og:description" content="Evaluate a bulk of *.csv files in one directory, produced by Purency. It will count occurrences of of fibres, fragments, spheres and pixels, as well as (customisable size fractions for each polymer. Each file (i.e., each measurement) is evaluated separately, as well as summarized for all files (i.e., one sample). Also the blank correction is done during the processing. For each sample a new excel file will be generated in the folder where the files are placed. The function is highly customisable and each parameter can be changed to your desire.">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="An automated Comparable and Harmonized Analyses of Micro-Particles">
+<meta name="description" content="Evaluate a bulk of *.csv files in one directory, produced by particle analyses software (such as MicroplasticFinder, siMPle or MicroparticleAI). It will count occurrences of of fibres, fragments, spheres and pixels, as well as (customisable size fractions for each polymer. Each file (i.e., each measurement) is evaluated separately, as well as summarized for all files (i.e., one sample). Also the blank correction is done during the processing. For each sample a new excel file will be generated in the folder where the files are placed. The function is highly customisable and each parameter can be changed to your desire.">
+<meta property="og:description" content="Evaluate a bulk of *.csv files in one directory, produced by particle analyses software (such as MicroplasticFinder, siMPle or MicroparticleAI). It will count occurrences of of fibres, fragments, spheres and pixels, as well as (customisable size fractions for each polymer. Each file (i.e., each measurement) is evaluated separately, as well as summarized for all files (i.e., one sample). Also the blank correction is done during the processing. For each sample a new excel file will be generated in the folder where the files are placed. The function is highly customisable and each parameter can be changed to your desire.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
 
-    <a class="navbar-brand me-2" href="index.html">evalPurency</a>
+    <a class="navbar-brand me-2" href="index.html">easyCHAMP</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.8.9021</small>
 
@@ -31,8 +31,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="articles/evalPurency.html">Get started</a></li>
-<li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="nav-link" href="articles/easyCHAMP.html">Get started</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
@@ -44,12 +43,21 @@
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
+<li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Maki-science/evalPurency/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Maki-science/easyCHAMP/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch">
+<li><button class="dropdown-item" data-bs-theme-value="light"><span class="fa fa-sun"></span> Light</button></li>
+    <li><button class="dropdown-item" data-bs-theme-value="dark"><span class="fa fa-moon"></span> Dark</button></li>
+    <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
+  </ul>
+</li>
       </ul>
 </div>
 
@@ -58,58 +66,58 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="evalpurency">evalPurency<a class="anchor" aria-label="anchor" href="#evalpurency"></a>
+<div class="page-header"><h1 id="easychamp">easyCHAMP<a class="anchor" aria-label="anchor" href="#easychamp"></a>
 </h1></div>
 <!-- badges: start -->
 
 <div class="section level2">
-<h2 id="go-to-pkgdown-website-for-how-to-use-this-package">Go to <a href="https://maki-science.github.io/evalPurency/">pkgdown website</a> for how to use this package<a class="anchor" aria-label="anchor" href="#go-to-pkgdown-website-for-how-to-use-this-package"></a>
+<h2 id="go-to-pkgdown-website-for-how-to-use-this-package">Go to <a href="https://maki-science.github.io/easyCHAMP/">pkgdown website</a> for how to use this package<a class="anchor" aria-label="anchor" href="#go-to-pkgdown-website-for-how-to-use-this-package"></a>
 </h2>
-<p>If you already know the package, but need more information, check out the package vignettes or go tp the <a href="https://maki-science.github.io/evalPurency/">pkgdown website</a> (or the upper toolbar, in case you are already there). Click on <em>Get started</em>, or view the website articles to study all options. We’ve tried to gather all information there in a (hopefully) simple and userfriendly way. Checkout the article <em>Troubleshooting</em>, for potential issues that may occur, if you do not setup the functions properly.</p>
+<p>If you already know the package, but need more information, check out the package vignettes or go tp the <a href="https://maki-science.github.io/easyCHAMP/">pkgdown website</a> (or the upper toolbar, in case you are already there). Click on <em>Get started</em>, or view the website articles to study all options. We’ve tried to gather all information there in a (hopefully) simple and userfriendly way. Checkout the article <em>Troubleshooting</em>, for potential issues that may occur, if you do not setup the functions properly.</p>
 </div>
 <div class="section level2">
-<h2 id="microplastic-finder-from-purency">Microplastic Finder from Purency<a class="anchor" aria-label="anchor" href="#microplastic-finder-from-purency"></a>
+<h2 id="software-before-application-of-this-package">Software before application of this package<a class="anchor" aria-label="anchor" href="#software-before-application-of-this-package"></a>
 </h2>
-<p>Microplastics can be found in any part of an environmental or nutritional sample. Today, FPA-based FTIR imaging allows a whole sample to be measured quickly. However, to analyse the measurement data, a powerful tool is needed to reliably identify the polymer particles contained in the sample. The analysis must provide objective, complete and robust results, which are presented in detail and transparently. The Microplastics Finder by Purency uses machine learning algorithms that identify more than 20 polymer types within minutes. In combination with FTIR imaging, it offers the fastest method to examine an entire sample for microplastics. Thanks to automation, which does not require time-consuming manual post-processing, the analysis results are optimally comparable and reproducible. Microplastics analysis becomes scalable and new types of questions about the presence and origin of microplastics can be answered. <em>Source: <a href="https://www.purency.ai/product1/microplastics-finder" class="external-link uri">https://www.purency.ai/product1/microplastics-finder</a>)</em></p>
+<p>Microplastics (or microparticles) can be found in any part of an environmental or nutritional sample. Today, FPA-based FTIR imaging allows a whole sample to be measured quickly. However, to analyse the measurement data, a powerful tool is needed to reliably identify the polymer particles contained in the sample. The analysis must provide objective, complete and robust results, which are presented in detail and transparently. Various software (like the MicroplasticsFinder, MicroparticlesAI, or siMPle) use machine learning algorithms that identify more than 20 polymer types within minutes. In combination with FTIR imaging, it offers the fastest method to examine an entire sample for microplastics. Thanks to automation, which does not require time-consuming manual post-processing, the analysis results are optimally comparable and reproducible. Microplastics analysis becomes scalable and new types of questions about the presence and origin of microplastics can be answered. <em>Source: <a href="https://www.purency.ai/product1/microplastics-finder" class="external-link uri">https://www.purency.ai/product1/microplastics-finder</a>)</em></p>
 </div>
 <div class="section level2">
 <h2 id="purpose-of-this-package">Purpose of this package<a class="anchor" aria-label="anchor" href="#purpose-of-this-package"></a>
 </h2>
-<p>Commonly in microplastic research, a sample is splitted and filtered on several filters. These are scanned via µ-FTIR and the resulting data is analysed with the Microplastic Finder of Purency (<a href="https://www.purency.ai/" class="external-link uri">https://www.purency.ai/</a>). This software produces *.csv files for each sample containg all particles and their annotation, which is usually cured and refined by a human. Then, the files for each sample have to be corrected by blank results and summarized. And here is were we jump in:</p>
-<p>This package and its functions can be used to automate the blank processing, single file handling and gathering the relevant data for each sample into one file. The processing requires only a few seconds instead of hours (of copying and pasting) in manual work. Furthermore, the chance of mistakes is reduced by generic computation.</p>
-<p>It will count occurrences of fibres, fragments, spheres and pixels, as well as different (customisable) size fractions for each polymer. Each file (i.e., each measurement) is evaluated separately, as well as summarized for all files (i.e., one sample). Also the blank correction and correction for filter division is done by this function. For each sample a new excel file will be generated in the folder where the files are placed in. One file for each sample and one additional file, containing the data of different processing steps (also raw data) to allow a full track of the processing, if required. If desired, the function returns a list object to the R environment with all produced data sets, which can be used for further processing in R.</p>
-<p>The default parameter settings are based on the requirements of the animal ecology I group (AG Prof. Laforsch) of the University of Bayreuth. However, the function is highly customisable, and you can change all parameters to your desire. Read further below for detailed instruction what and how you can/should change.</p>
+<p>Commonly in microplastic research, a sample is splitted and filtered on several filters. These are scanned via µ-FTIR and the resulting data is analysed with various software (like the MicroplasticsFinder, MicroparticlesAI, or siMPle). These software produce *.csv files for each sample contaning all particles and their annotation, which is usually cured and refined by a human. Then, the files for each sample have to be corrected by blank results and summarized. And here is were we jump in:</p>
+<p>This package and its functions can be used to automate the blank processing, single file handling and gathering the relevant data for each sample into one file. The processing requires only a few seconds instead of hours (of copying and pasting) in manual work. Furthermore, the chance of mistakes is reduced by generic computation. By employing robust and conservative algorithms it is ensured, that the results are transparently and comparably produced and the amount of microplastic contamination is not overestimated.</p>
+<p>(If desired) It will count occurrences of fibres, fragments, spheres and pixels, as well as different (customisable) size fractions for each polymer. Each file (i.e., each measurement) is evaluated separately, as well as summarized for all files (i.e., one sample). Also the blank correction and correction for filter division can be automated by this function. For each sample a new excel file will be generated in the folder where the files are placed in. One file for each sample and one additional file, containing the data of different processing steps (also raw data) to allow a full track of the processing, if required. If desired, the function returns a list object to the R environment with all produced data sets, which can be used for further processing (e.g., creating plots) in R.</p>
+<p>The default parameter settings are based on the requirements of the animal ecology I group (AG Prof. Laforsch) of the University of Bayreuth. However, the function is highly customisable, and you can change all parameters to your desire. Read further below for detailed instruction what and how you can/should change. If desired, also presets can be incorporated in the package that a common workflow for a lab or collaboration can be ensured.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>After the corresponding paper is published, you should be able to download this package from CRAN (watch the badge on the top of this page). Just go to the upper tool bar of your RStudio and click <em>tools</em> &gt; <em>Install Packages…</em> &gt; tipe in <em>evalPurency</em> &gt; click <em>install</em>, or run:</p>
-<pre><code><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"evalPurency"</span><span class="op">)</span></span></code></pre>
-<p>You can also install the development version of evalPurency from <a href="https://github.com/" class="external-link">GitHub</a>. If not already installed, you need to have <a href="https://cran.r-project.org/bin/windows/Rtools/" class="external-link">Rtools</a> installed on your system to be able to compile the development version. (devtools only has to be installed once)</p>
+<p>After the corresponding paper is published, you should be able to download this package from CRAN (watch the badge on the top of this page). Just go to the upper tool bar of your RStudio and click <em>tools</em> &gt; <em>Install Packages…</em> &gt; tipe in <em>easyCHAMP</em> &gt; click <em>install</em>, or run:</p>
+<pre><code><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"easyCHAMP"</span><span class="op">)</span></span></code></pre>
+<p>You can also install the development version of easyCHAMP from <a href="https://github.com/" class="external-link">GitHub</a>. If not already installed, you need to have <a href="https://cran.r-project.org/bin/windows/Rtools/" class="external-link">Rtools</a> installed on your system to be able to compile the development version. (devtools only has to be installed once)</p>
 <pre><code><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span> <span class="co"># just necessary if not already installed</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"Maki-science/evalPurency"</span><span class="op">)</span></span></code></pre>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"Maki-science/easyCHAMP"</span><span class="op">)</span></span></code></pre>
 <p>Once installed, you don’t need to repeat this step each time! If you want to update to the newest version, just run the second line again.</p>
 </div>
 <div class="section level2">
 <h2 id="how-it-works">How it works<a class="anchor" aria-label="anchor" href="#how-it-works"></a>
 </h2>
-<p>There are two main functions to be applied: <code><a href="reference/evalPurency.html">evalPurency()</a></code> for a blank corrected summary after your liking; and <code><a href="reference/evalPurency.particles.html">evalPurency.particles()</a></code> for a particle-wise blank correction, with retention of single particles and their properties. Additionally, there are plenty of options for customization and settings of the *.csv files.</p>
-<p>Check out the package vignettes or go tp the <a href="https://maki-science.github.io/evalPurency/">pkgdown website</a> (or the upper toolbar, in case you are already there). Click on <em>Get started</em>, or view the website articles to study all options. We’ve tried to gather all information there in a (hopefully) simple and userfriendly way.</p>
+<p>There are two main functions to be applied: <code><a href="reference/easyCHAMP.html">easyCHAMP()</a></code> for a blank corrected summary after your liking; and <code><a href="reference/easyCHAMP.particles.html">easyCHAMP.particles()</a></code> for a particle-wise blank correction, with retention of single particles and their properties. Additionally, there are plenty of options for customization and settings of the *.csv files.</p>
+<p>Check out the package vignettes or go tp the <a href="https://maki-science.github.io/easyCHAMP/">pkgdown website</a> (or the upper toolbar, in case you are already there). Click on <em>Get started</em>, or view the website articles to study all options. We’ve tried to gather all information there in a (hopefully) simple and userfriendly way.</p>
 </div>
 <div class="section level2">
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
-<p>To cite evalPurency in publications use:</p>
-<p>Marvin Kiene, Eva Vizsolyi Cseperke, Martin Löder and Christian Laforsch (2024). evalPurency: Automated Evaluation of Data of the Purency’s Microplastic Finder. R package version 1.3.8.9021. <a href="https://github.com/Maki-science/evalPurency" class="external-link uri">https://github.com/Maki-science/evalPurency</a></p>
+<p>To cite easyCHAMP in publications use:</p>
+<p>Marvin Kiene, Eva Vizsolyi Cseperke, Benedikt Hufnagl, Martin Löder and Christian Laforsch (2024). easyCHAMP: An automated Comparable and Harmonized Analyses of Micro-Particles. R package version 1.3.8.9021. <a href="https://github.com/Maki-science/easyCHAMP" class="external-link uri">https://github.com/Maki-science/easyCHAMP</a></p>
 <p>A BibTeX-entry for LaTeX-user is</p>
-<p>@Misc{, title = {evalPurency: Automated Evaluation of Purency Data}, author = {Marvin Kiene and Eva {Cseperke Vizsolyi} and Martin Löder and Christian Laforsch}, note = {R package version 1.3.8.9021}, year = {2024}, url = {<a href="https://github.com/Maki-science/evalPurency" class="external-link uri">https://github.com/Maki-science/evalPurency</a>}, }</p>
+<p>@Misc{, title = {easyCHAMP: An automated Comparable and Harmonized Analyses of Micro-Particles}, author = {Marvin Kiene and Eva {Cseperke Vizsolyi} and Benedikt Hufnagl and Martin Löder and Christian Laforsch}, note = {R package version 1.3.8.9021}, year = {2024}, url = {<a href="https://github.com/Maki-science/easyCHAMP" class="external-link uri">https://github.com/Maki-science/easyCHAMP</a>}, }</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/Maki-science/evalPurency/" class="external-link">Browse source code</a></li>
-<li><a href="https://github.com/Maki-science/evalPurency/issues" class="external-link">Report a bug</a></li>
+<li><a href="https://github.com/Maki-science/easyCHAMP/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/Maki-science/easyCHAMP/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
@@ -125,7 +133,7 @@
 <div class="citation">
 <h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li><a href="authors.html#citation">Citing evalPurency</a></li>
+<li><a href="authors.html#citation">Citing easyCHAMP</a></li>
 </ul>
 </div>
 
@@ -134,6 +142,7 @@
 <ul class="list-unstyled">
 <li>Marvin Kiene <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-9981-5661" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
 <li>Eva Cseperke Vizsolyi <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-9786-1071" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
+<li>Benedikt Hufnagl <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-1470-5787" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
 <li>Martin Löder <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-3034-9305" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
 <li>Christian Laforsch <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-9981-5661" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
 </ul>
@@ -142,9 +151,9 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://CRAN.R-project.org/package=evalPurency" class="external-link"><img src="https://www.r-pkg.org/badges/version/evalPurency" alt="CRAN status"></a></li>
-<li><a href="https://github.com/Maki-science/evalPurency/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/Maki-science/evalPurency/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://app.codecov.io/gh/Maki-science/evalPurency?branch=main" class="external-link"><img src="https://codecov.io/gh/Maki-science/evalPurency/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://CRAN.R-project.org/package=easyCHAMP" class="external-link"><img src="https://www.r-pkg.org/badges/version/easyCHAMP" alt="CRAN status"></a></li>
+<li><a href="https://github.com/Maki-science/easyCHAMP/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/Maki-science/easyCHAMP/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://app.codecov.io/gh/Maki-science/easyCHAMP?branch=main" class="external-link"><img src="https://codecov.io/gh/Maki-science/easyCHAMP/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
 </ul>
 </div>
 
@@ -153,7 +162,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Marvin Kiene, Eva Cseperke Vizsolyi, Martin Löder, Christian Laforsch.</p>
+  <p>Developed by Marvin Kiene, Eva Cseperke Vizsolyi, Benedikt Hufnagl, Martin Löder, Christian Laforsch.</p>
 </div>
 
 <div class="pkgdown-footer-right">

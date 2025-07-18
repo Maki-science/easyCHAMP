@@ -5,8 +5,8 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Customize the output • evalPurency</title>
-<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Customize the output • easyCHAMP</title>
+<script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -16,9 +16,9 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
 
-    <a class="navbar-brand me-2" href="../index.html">evalPurency</a>
+    <a class="navbar-brand me-2" href="../index.html">easyCHAMP</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.8.9021</small>
 
@@ -29,8 +29,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../articles/evalPurency.html">Get started</a></li>
-<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/easyCHAMP.html">Get started</a></li>
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
@@ -42,12 +41,21 @@
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Maki-science/evalPurency/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Maki-science/easyCHAMP/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch">
+<li><button class="dropdown-item" data-bs-theme-value="light"><span class="fa fa-sun"></span> Light</button></li>
+    <li><button class="dropdown-item" data-bs-theme-value="dark"><span class="fa fa-moon"></span> Dark</button></li>
+    <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
+  </ul>
+</li>
       </ul>
 </div>
 
@@ -64,7 +72,7 @@
       <h1>Customize the output</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/Maki-science/evalPurency/blob/main/vignettes/output-custom.Rmd" class="external-link"><code>vignettes/output-custom.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Maki-science/easyCHAMP/blob/main/vignettes/output-custom.Rmd" class="external-link"><code>vignettes/output-custom.Rmd</code></a></small>
       <div class="d-none name"><code>output-custom.Rmd</code></div>
     </div>
 
@@ -78,7 +86,7 @@ set <code>dataReturn = TRUE</code>. The function will then return a data
 frame consisting of all measurements of all samples of the selected
 folder as well as the blanks and raw data.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalPurency.html">evalPurency</a></span><span class="op">(</span>path<span class="op">=</span><span class="st">"C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/"</span>, </span>
+<code class="sourceCode R"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/easyCHAMP.html">easyCHAMP</a></span><span class="op">(</span>path<span class="op">=</span><span class="st">"C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/"</span>, </span>
 <span>                      dataReturn <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co"># only use the fully processed data of all samples:</span></span>
 <span><span class="va">allSamples</span> <span class="op">&lt;-</span> <span class="va">results</span><span class="op">$</span><span class="va">sampleSummary</span> </span></code></pre></div>
@@ -95,10 +103,10 @@ line to be in your data set, e.g., because you want to process the data
 further, you can skipt the calculation by adding
 <code>eocsum = FALSE</code> to the function call.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalPurency.html">evalPurency</a></span><span class="op">(</span>path<span class="op">=</span><span class="st">"C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/"</span>, </span>
+<code class="sourceCode R"><span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/easyCHAMP.html">easyCHAMP</a></span><span class="op">(</span>path<span class="op">=</span><span class="st">"C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/"</span>, </span>
 <span>                      eocsum <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p><em>NOTE: This option is not available for
-<code><a href="../reference/evalPurency.particles.html">evalPurency.particles()</a></code>.</em></p>
+<code><a href="../reference/easyCHAMP.particles.html">easyCHAMP.particles()</a></code>.</em></p>
 </div>
 <div class="section level2">
 <h2 id="get-total-particle-numbers">Get total particle numbers<a class="anchor" aria-label="anchor" href="#get-total-particle-numbers"></a>
@@ -107,7 +115,7 @@ further, you can skipt the calculation by adding
 add <code>particleNumbers = TRUE</code> to the function call to get an
 extra *.xls file with these numbers.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalPurency.html">evalPurency</a></span><span class="op">(</span>path<span class="op">=</span><span class="st">"C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/"</span>, </span>
+<code class="sourceCode R"><span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/easyCHAMP.html">easyCHAMP</a></span><span class="op">(</span>path<span class="op">=</span><span class="st">"C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/"</span>, </span>
 <span>                      particleNumbers <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -117,7 +125,7 @@ extra *.xls file with these numbers.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Marvin Kiene, Eva Cseperke Vizsolyi, Martin Löder, Christian Laforsch.</p>
+  <p>Developed by Marvin Kiene, Eva Cseperke Vizsolyi, Benedikt Hufnagl, Martin Löder, Christian Laforsch.</p>
 </div>
 
 <div class="pkgdown-footer-right">
