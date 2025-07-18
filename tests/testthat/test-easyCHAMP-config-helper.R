@@ -1,5 +1,5 @@
 test_that("No labpreset works", {
-  expect_equal(eP.config.helper(labpreset = FALSE,
+  expect_equal(easyCHAMP.config.helper(labpreset = FALSE,
                                 blankKey = "Blank",
                                 sep = ";",
                                 dec = ",",
@@ -41,7 +41,7 @@ test_that("No labpreset works", {
 
 
 test_that("Set labpreset works", {
-  expect_equal(eP.config.helper(labpreset = "Laforsch",
+  expect_equal(easyCHAMP.config.helper(labpreset = "Laforsch",
                                 blankKey = "Blank",
                                 sep = ";",
                                 dec = ",",

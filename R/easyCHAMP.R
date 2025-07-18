@@ -1,11 +1,12 @@
-######## evalPurency() ###########
-#' Automated evaluation of Purency data. 
+######## easyCHAMP() ###########
+#' An automated Comparable and Harmonized Analyses of Micro-Particles 
 #' @description
-#' Evaluate *.csv files, produced by Purency. It will count occurences of of fibres, fragments, spheres and pixels,
+#' Evaluate *.csv files, produced by microparticle analysis software (like MicroplasticFinder, MicroparticleAI or siMPle). 
+#' It will count occurences of of fibres, fragments, spheres and pixels,
 #' as well as size fractions (customisable) for each polymer. Each file (i.e., each measurement)
-#' is evaluated separately, as well as summarized for all files (i.e., one sample). 
+#' is evaluated separately, as well as summarized for all files (i.e., one sample). For details, check out the package website. 
 #' 
-#' @param path The path where the files can be found. All csv files in this folder will be evaluated. Also saves the
+#' @param path The path where the files can be found. All *.csv files in this folder will be evaluated. Also saves the
 #' resulting files in this directory.
 #' @param polymers A vector containing the abbreviations of polymers to be considered. Default vector contains 22 
 #' polymers.
@@ -27,7 +28,7 @@
 #' one of the values of the parameters 'fibre', 'sphere', 'fragment' or 'pixel' (see below).
 #' @param colourFillDefault If desired you can provide a default colour that will be filled in, if no colour is provided in the data (NA).
 #' However, in this function colour has no further meansing.
-#' @param colourSep whether to separate colours in the analysis or not. Only usable in evalPurency.particles()!
+#' @param colourSep whether to separate colours in the analysis or not. Only usable in easyCHAMP.particles()!
 #' @param labpreset A preset for most of the parameters (except: path, polymers, dataReturn, eocsum). 
 #' Can be requested by other labs, to be implemented, that they don't have to be set manually all the time. 
 #' @param blankKey The key word to distinguish blanks from other measurements/samples. It is case sensitive to prevent
@@ -73,29 +74,29 @@
 #' @examples 
 #' # For this example the path doesn't matter. 
 #' # If you want to analyse your own data, set test = FALSE (or simply delete this parameter).
-#' mydata <- evalPurency(path="//HERE/COMES/YOUR/PATH/", dataReturn = TRUE, test = TRUE)
+#' mydata <- easyCHAMP(path="//HERE/COMES/YOUR/PATH/", dataReturn = TRUE, test = TRUE)
 #' 
 #' # Change evaluated size classes (evaluate <10, 10-100, 100-500 and >500 µm).
-#' mydata <- evalPurency(path="//HERE/COMES/YOUR/PATH/", 
+#' mydata <- easyCHAMP(path="//HERE/COMES/YOUR/PATH/", 
 #'                       sizeclasses = c(10,100,500), dataReturn = TRUE, test = TRUE)
 #'
 #' # Include a division factor for the samples and blanks (in case filters have been divided).
 #' # Only works in interactive Session.
-#' mydata <- evalPurency(path="//HERE/COMES/YOUR/PATH/", 
+#' mydata <- easyCHAMP(path="//HERE/COMES/YOUR/PATH/", 
 #'                      setDivFactor = "samplewise", dataReturn = TRUE, test = TRUE)
 #'
 #' # Skip the summary row at bottom of each column in the sample summary.
-#' mydata <- evalPurency(path="//HERE/COMES/YOUR/PATH/", 
+#' mydata <- easyCHAMP(path="//HERE/COMES/YOUR/PATH/", 
 #'                       eocsum = FALSE, dataReturn = TRUE, test = TRUE)
 #'
-#' @references https://www.purency.ai/microplastics-finder, https://maki-science.github.io/evalPurency/index.html
+#' @references https://www.purency.ai/microplastics-finder, https://maki-science.github.io/easyCHAMP/index.html, https://simple-plastics.eu/
 #'
 #' @export
 #' @import writexl
 #' @importFrom utils read.csv
 #' @importFrom stats aggregate
 #'
-evalPurency <- function(path, 
+easyCHAMP <- function(path, 
                         polymers = c("PU", "EVAc", "PA", "PAN", "PBT", "PET", "PE", "PMMA", "PP", 
                                      "POM", "PS", "PVC", "PC", "ABS", "PPSU", "CA", "PEEK", "EVOH", 
                                      "PSU", "SILICONE", "PLA", "PLAPBAT"),
@@ -130,7 +131,7 @@ evalPurency <- function(path,
 ){
   
   # set/correct the configuration (if labpreset was chosen)
-  config <- eP.config.helper(labpreset = labpreset,
+  config <- easyCHAMP.config.helper(labpreset = labpreset,
                              blankKey = blankKey,
                              sep = sep,
                              dec = dec,
@@ -150,7 +151,7 @@ evalPurency <- function(path,
                              startrow = startrow)
   
   #### load data #####
-  temp <- ep.load.helper(path = path, 
+  temp <- easyCHAMP.load.helper(path = path, 
                          particleNumbers = particleNumbers,
                          sep = config$sep, 
                          dec = config$dec, 

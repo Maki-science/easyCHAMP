@@ -1,5 +1,10 @@
-url: https://maki-science.github.io/evalPurency/
+url: https://maki-science.github.io/easyCHAMP/
 template:
   bootstrap: 5
-  bootswatch: spacelab
-
+  light-switch: true
+  bslib:
+    bootswatch: spacelab
+navbar:
+  structure:
+    left:  [intro, articles, news, reference]
+    right: [search, github, lightswitch]

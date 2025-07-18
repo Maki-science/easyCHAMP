@@ -1,8 +1,8 @@
-######## eP.load.helper() ###########
-#' Manages data loading and pre-processing of the evalPurency package. In the end, also a quality control is 
+######## easyCHAMP.load.helper() ###########
+#' Manages data loading and pre-processing of the easyCHAMP package. In the end, also a quality control is 
 #' performed that throws warnings if there are empty files or fields, including the name and column.
 #' @description
-#' Shared by both main function of the evalPurency package. Loads data from all *.csv files from the 
+#' Shared by both main function of the easyCHAMP package. Loads data from all *.csv files from the 
 #' provided folter.
 #' 
 #' @param path The path set by the user in main function.
@@ -56,7 +56,7 @@
 #' @return Returns a data frame containing a list of all particles and their properties.
 
 
-ep.load.helper <- function(path,
+easyCHAMP.load.helper <- function(path,
                            particleNumbers,
                            sep, 
                            dec, 
@@ -162,7 +162,7 @@ ep.load.helper <- function(path,
   } # end if test == FALSE
   else{ # if test == TRUE
     # load data from package sample data
-    temp <- evalPurency::purencySampleData
+    temp <- easyCHAMP::purencySampleData
   }  
   
   # quality control

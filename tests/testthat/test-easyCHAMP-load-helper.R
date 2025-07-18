@@ -1,5 +1,5 @@
 test_that("Test data loading and pre-processing works", {
-  expect_equal(ep.load.helper(path = "//HERE/COMES/YOUR/PATH/",
+  expect_equal(easyCHAMP.load.helper(path = "//HERE/COMES/YOUR/PATH/",
                               particleNumbers = FALSE,
                               sep = test.config$sep, 
                               dec = test.config$dec, 

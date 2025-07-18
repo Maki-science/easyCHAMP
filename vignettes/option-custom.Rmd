@@ -26,7 +26,7 @@ Just delete or add the (un)desired polymers.
 *WARNING: If you have named the polymers differently in your Purency software, you should set these accordingly here.*
 
 ```{r, eval = FALSE}
-evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
+easyCHAMP(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
             polymers = c("PU", "EVAc", "PA", "PAN", "PBT", "PET", "PE", "PMMA", "PP", 
                          "POM", "PS", "PVC", "PC", "ABS", "PPSU", "CA", "PEEK", "EVOH", 
                          "PSU", "SILICONE", "PLA", "PLAPBAT"))
@@ -36,7 +36,7 @@ evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/",
 ## Change evaluated size classes
 The size classes that should be evaluated by the function can be set manually. The function will dynamically switch to the desired size classes. It will sum the numbers from 0 to the first number (e.g., <=10. Then it will always exclude the lower number and include the upper number (e.g., >10 to <= 20, >20 to <= 50, ...). Finally, the highest number to infinite (e.g., >500).
 ```{r, eval = FALSE}
-evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
+easyCHAMP(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
             sizeclasses = c(10, 20, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500))
 ```
 
@@ -49,7 +49,7 @@ However, to keep it simple and prevent mistakes, you only set ```setDivFactor```
 
 Just watch your R console and follow the instructions. 
 ```{r, eval = FALSE}
-evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
+easyCHAMP(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
             setDivFactor = "samplewise")
 ```
 If you only use a quarter of your sample the factor you should provide here is 0.25. If you did not divide a sample it is 1.
@@ -60,27 +60,27 @@ We implemented these two ways, to reduce the effort and possibility of mistakes 
 
 *WARNING: If you use several blanks summed for all samples (like example 3 in the beginning) you can only chose a common division factor.*
 
-*NOTE: this option is not available for ```evalPurency.particles()```, since it is not reasonable to multiply particles with similar properties in a particle-wise processing.*
+*NOTE: this option is not available for ```easyCHAMP.particles()```, since it is not reasonable to multiply particles with similar properties in a particle-wise processing.*
 
 
-## One colour of your particles should be separated from the rest? (```evalPurency.particles()``` only)
+## One colour of your particles should be separated from the rest? (```easyCHAMP.particles()``` only)
 In our labwork it can happen, that one likes to separate a certain colour of particles from the others in the evaluation. A usecase could be in the investigation of plastic particles on agricultural fields. There, black mulching films are used to cover the ground. However, if you're only interested in plastic that does not originate from the mulching film, or you want to be able to distinguish between those, you have to consider the colour of the particles. However, in our practice, this was only of interest for a particle-wise evaluation.
-Therefore, we implemented another parameter ```colourSep``` for the function ```evalPurency.particles()```. You can provide a colour as stated in your data, which will be then separately evaluated: 
+Therefore, we implemented another parameter ```colourSep``` for the function ```easyCHAMP.particles()```. You can provide a colour as stated in your data, which will be then separately evaluated: 
 
 ```{r, eval = FALSE}
-evalPurency.particles(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
+easyCHAMP.particles(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
                       colourSep = "black")
 ```
 You will receive all blank-corrected particles for the chosen colour and all other colours separately.
 
-*NOTE: this option is not available for ```evalPurency```, since colours are not considered in the summary function (it doesn't make sense to create even more groups as there are anyway)!*
+*NOTE: this option is not available for ```easyCHAMP```, since colours are not considered in the summary function (it doesn't make sense to create even more groups as there are anyway)!*
 
 
 ## Automatically fill missing values with provided default
 With filters of hundreds of particles it can be exhausting to set every shape and colour in the Purency software manually, especially if it is all the same. Therefore, you can provide default values to the parameters  ```formFillDefault``` and ```colourFillDefault``` . If there is a plastic particle in the list with  ```NA``` in the respective field, it will be set with the default, that you provided. This could be done in excel, of course, but with this, you can do it just on-the-flow for all files you have.
 
 ```{r, eval = FALSE}
-evalPurency.particles(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
+easyCHAMP.particles(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
                       formFillDefault = "fragment",
                       colourFillDefault = "black")
 ```

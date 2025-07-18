@@ -1,8 +1,8 @@
 ---
-title: "evalPurency"
+title: "easyCHAMP"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{evalPurency}
+  %\VignetteIndexEntry{easyCHAMP}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -17,18 +17,18 @@ options(rmarkdown.html_vignette.check_title = FALSE)
 
 
 # Installation
-After the corresponding paper is published, you should be able to download this package from CRAN (watch the badge on the top of this page). Just go to the upper tool bar of your RStudio and click *tools* > *Install Packages...* > tipe in *evalPurency* > click *install*, or run:
+After the corresponding paper is published, you should be able to download this package from CRAN (watch the badge on the top of this page). Just go to the upper tool bar of your RStudio and click *tools* > *Install Packages...* > tipe in *easyCHAMP* > click *install*, or run:
 ```{r, eval = FALSE}
-install.packages("evalPurency")
+install.packages("easyCHAMP")
 ```
 
 
-You can also install the development version of evalPurency from [GitHub](https://github.com/). If not already installed, you need to have Rtools installed on your system to be able to compile the development version *(https://cran.r-project.org/bin/windows/Rtools/)*.
+You can also install the development version of easyCHAMP from [GitHub](https://github.com/). If not already installed, you need to have Rtools installed on your system to be able to compile the development version *(https://cran.r-project.org/bin/windows/Rtools/)*.
 (devtools only has to be installed once)
 
 ```{r, eval = FALSE}
 install.packages("devtools") # just necessary if not already installed
-devtools::install_github("Maki-science/evalPurency")
+devtools::install_github("Maki-science/easyCHAMP")
 ```
 Once installed, you don't need to repeat this step each time! 
 If you want to update to the newest version, just run the second line again.
@@ -74,7 +74,7 @@ Put all files you want to process including their blank files into one folder. W
 # Processing possibilities
 To use the package function, just load the package as usual:
 ```{r, eval = FALSE}
-library(evalPurency)
+library(easyCHAMP)
 ```
 
 
@@ -82,7 +82,7 @@ library(evalPurency)
 Now simply run the follwing line, but change the path accordingly to the location where you stored your files to be processed. Make sure to use (or change) ```/``` and not ```\```, since only windows uses backslashes. 
 
 ```{r , eval = FALSE}
-evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/") # or similar
+easyCHAMP(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/") # or similar
 ```
 *Note: The ```/``` in the end is required!*
 Copy and paste this line into the console and press 'enter'.
@@ -94,7 +94,7 @@ Copy and paste this line into the console and press 'enter'.
 The function will warn you if there are missing values at some files. The respective files and columns are reported.
 Once it finished the processing it will message that it is done.
 
-### Output of evalPurency()
+### Output of easyCHAMP()
 It will usually need just very few seconds to process e.g. 100 files, of course depending on the particle number. An excel file for each sample is created in the selected folder where the sample results are summarized. For all files there is one additional file with the processing data. There you can find data sets of each processing step on separate sheets (also raw data), so you can trace back the calculation and/or load parts of the data into R if required without running the whole function again.
 
 For compatibility the Excel files are of an old version. Therefore, there might occur a message about potential broken file that you have to confirm. However, the warning can be ignored. 
@@ -104,19 +104,19 @@ For compatibility the Excel files are of an old version. Therefore, there might 
 
 ## Perform particle wise processing
 In some cases it might be necessary to perform the processing and blank correction with a particle list, retaining the information about each single particle (compared to the size-class summary above). The aim here is, to keep each particle as such in the list, but still allow a correction for blank particles. 
-Therefore, we created the second function ```evalPurency.particles()```. It mainly uses the area of each particle as size reference. In case of several blanks per sample, most similar particles across blank replicates will be averaged, while the blank correction is performed by searching the most similar particles within a certain range and then substract that particle from the list. This preserves each particle and its traits, e.g., for simulation purposes, while still allowing a rather conservative blank correction. Details are described below.
+Therefore, we created the second function ```easyCHAMP.particles()```. It mainly uses the area of each particle as size reference. In case of several blanks per sample, most similar particles across blank replicates will be averaged, while the blank correction is performed by searching the most similar particles within a certain range and then substract that particle from the list. This preserves each particle and its traits, e.g., for simulation purposes, while still allowing a rather conservative blank correction. Details are described below.
 
-### How to use evalPurency.particles()
+### How to use easyCHAMP.particles()
 As before, simply load the library command after the package have been installed:
 ```{r}
-library(evalPurency)
+library(easyCHAMP)
 ```
 
-Make sure that the files are named according to your requirements for blank processing. The same rules apply as for ```evalPurency()``` (see above).
+Make sure that the files are named according to your requirements for blank processing. The same rules apply as for ```easyCHAMP()``` (see above).
 
 If no further requirements have to be fulfilled, the function can be run with just the path of the files to be processed as with the other function:
 ```{r, eval = FALSE}
-evalPurency.particles(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/") # or similar
+easyCHAMP.particles(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/") # or similar
 ```
 
 For further functionality, most of the parameters below can also be applied for this function.
@@ -124,7 +124,7 @@ However, in case of ```sizeclasses```, the function uses the squared value of ea
 
 Further, the area of fibres is recalculated according to the manually measured actual length of fibres. Purencys' Microplastic Finder does not calculate the length of fibres correctly, since it just takes the distance from edge to edge. Changing angles are not considered, why the proper length is measured manually. As probably most suitable approximation of the real area of a fibre, this function multiplies the width by the actual (manually measured) length. This recalculated area can be found in the output file.
 
-### Output of evalPurency.particles()
+### Output of easyCHAMP.particles()
 This function creates one .xls file, *processing_data.csv*. Here, you can find several sheets with the processed sample particles, processed blanks, removed sample and blank particles, and the raw sample and blank data. These data reflect each step of the processing. The sheets on removed particles include a column where it is stated, how the particle was processed (each particle gets an index to track each action of the function).
 *Note that the excel file will be coded with '.' as decimal sign, as before!*
 

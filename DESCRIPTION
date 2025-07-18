@@ -1,5 +1,5 @@
-Package: evalPurency
-Title: Automated Evaluation of Purency Data
+Package: easyCHAMP
+Title: An automated Comparable and Harmonized Analyses of Micro-Particles
 Version: 1.3.8.9021
 Authors@R: 
     c(person("Marvin", "Kiene", , "info@maki-science.org", role = c("aut", "cre"),
@@ -8,6 +8,11 @@ Authors@R:
           "Eva", "Cseperke Vizsolyi",
           role = c("aut"),
           comment = c(ORCID = "0000-0002-9786-1071")
+          ),
+       person(
+          "Benedikt", "Hufnagl",
+          role = c("aut"),
+          comment = c(ORCID = "0000-0002-1470-5787")
           ),
       person(
           "Martin", "Löder",
@@ -21,7 +26,8 @@ Authors@R:
           )
       )
 Maintainer: Marvin Kiene <info@maki-science.org>
-Description: Evaluate a bulk of *.csv files in one directory, produced by Purency. 
+Description: Evaluate a bulk of *.csv files in one directory, produced by particle analyses software (such as MicroplasticFinder, 
+    siMPle or MicroparticleAI). 
     It will count occurrences of of fibres, fragments, spheres and pixels, as well as (customisable 
     size fractions for each polymer. Each 
     file (i.e., each measurement) is evaluated separately, as well as summarized 
@@ -30,8 +36,8 @@ Description: Evaluate a bulk of *.csv files in one directory, produced by Purenc
     in the folder where the files are placed. The function is highly customisable and each 
     parameter can be changed to your desire.
 License: GPL (>= 3)
-BugReports: https://github.com/Maki-science/evalPurency/issues
-URL: https://github.com/Maki-science/evalPurency, https://maki-science.github.io/evalPurency/
+BugReports: https://github.com/Maki-science/easyCHAMP/issues
+URL: https://github.com/Maki-science/easyCHAMP, https://maki-science.github.io/easyCHAMP/, https://maki-science.github.io/evalPurency/
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2

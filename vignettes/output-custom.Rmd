@@ -18,7 +18,7 @@ options(rmarkdown.html_vignette.check_title = FALSE)
 # Keep the data in R as data frame
 If you further want to proceed and analyse the data with R, you can set ```dataReturn = TRUE```. The function will then return a data frame consisting of all measurements of all samples of the selected folder as well as the blanks and raw data.
 ```{r, eval = FALSE}
-results <- evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
+results <- easyCHAMP(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
                       dataReturn = TRUE)
 # only use the fully processed data of all samples:
 allSamples <- results$sampleSummary 
@@ -29,15 +29,15 @@ You can now proceed with this data and do your analyses or plotting as usual.
 # Summary of each column at the bottom
 The function adds a bottom line to the summary data, if desired. There, each column is summed for custom purpose (e.g., quality control of the function and preliminary steps). However, if you don't like this line to be in your data set, e.g., because you want to process the data further, you can skipt the calculation by adding ```eocsum = FALSE``` to the function call.
 ```{r, eval = FALSE}
-mydata <- evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
+mydata <- easyCHAMP(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
                       eocsum = FALSE)
 ```
-*NOTE: This option is not available for ```evalPurency.particles()```.*
+*NOTE: This option is not available for ```easyCHAMP.particles()```.*
 
 # Get total particle numbers 
 If you would like to get plastic and non-plastic particle numbers, add ```particleNumbers = TRUE``` to the function call to get an extra *.xls file with these numbers.
 ```{r, eval = FALSE}
-mydata <- evalPurency(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
+mydata <- easyCHAMP(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
                       particleNumbers = TRUE)
 ```
 

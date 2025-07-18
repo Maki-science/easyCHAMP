@@ -1,8 +1,8 @@
-######## evalPurency.particles() ###########
-#' Automated evaluation of Purency data.
+######## easyCHAMP.particles() ###########
+#' An automated Comparable and Harmonized Analyses of Micro-Particles
 #' @description
-#' Instead of a summarized version of *.csv files from Purency like from evalPurency(), this function
-#' provides a list of all particles. Blank correction is done with a most-similar-particle comparison.
+#' Instead of a summarized version of *.csv files from microparticle analysis software (like MicroplasticsFinder, MicroparticleAI, or siMPle). 
+#' Like easyCHAMP(), this function provides a list of all particles. Blank correction is done with a most-similar-particle comparison.
 #' 
 #' @param path The path where the files can be found. All csv files in this folder will be evaluated. Also saves the
 #' resulting files in this directory.
@@ -12,7 +12,7 @@
 #' 200, 250, 300, 350, 400, 450, 500). The function starts at 0 and then uses the set steps. 
 #' It always uses values up to the provided higher number but excluding the former number (e.g., for
 #' the default values, the function uses 0 to <= 10, >10 to <= 20, >20 to <= 50, ..., all >500).
-#' However, since this function does not use just the length, but the length and width (or area), compared to evalPurency,
+#' However, since this function does not use just the length, but the length and width (or area), compared to easyCHAMP,
 #' The size classes are set in area, considering the provided size class as a square (e.g. 500 x 500 µm = 250000 µm^2).
 #' This is done, to simplify the setup. It is much easier to imagine a particle with the length of one edge, than a surface.
 #' @param divFactor Set a division factor, that is used to divide the results by this factor. All samples/filters
@@ -72,12 +72,12 @@
 #' # For this example the path doesn't matter. 
 #' # If you want to analyse your own data, set the path accordingly and 
 #' # test = FALSE (or simply delete this parameter).
-#' mydata <- evalPurency.particles(path="//HERE/COMES/YOUR/PATH/", dataReturn = TRUE, test = TRUE)
+#' mydata <- easyCHAMP.particles(path="//HERE/COMES/YOUR/PATH/", dataReturn = TRUE, test = TRUE)
 #' # Get the data frames of interest from the list
 #' mydata.processedParticles <- mydata$processedSamples
 #' 
 #'
-#' @references https://www.purency.ai/microplastics-finder, https://maki-science.github.io/evalPurency/index.html
+#' @references https://www.purency.ai/microplastics-finder, https://maki-science.github.io/easyCHAMP/index.html, https://simple-plastics.eu/
 #'
 #' @export
 #' @import writexl
@@ -85,7 +85,7 @@
 #' @importFrom stats aggregate
 
 
-evalPurency.particles <- function(path, 
+easyCHAMP.particles <- function(path, 
                                   polymers = c("PU", "EVAc", "PA", "PAN", "PBT", "PET", "PE", "PMMA", "PP", 
                                                "POM", "PS", "PVC", "PC", "ABS", "PPSU", "CA", "PEEK", "EVOH", 
                                                "PSU", "SILICONE", "PLA", "PLAPBAT"),
@@ -119,11 +119,11 @@ evalPurency.particles <- function(path,
                                   ){
   
   if(divFactor != 1){
-    stop("ERROR: You set a division factor. However, for this function it is not intended, since a multiplication of single particles is not meaningful. Please, consider usign evalPurency() instead and/or check the vignettes (https://maki-science.github.io/evalPurency/).")
+    stop("ERROR: You set a division factor. However, for this function it is not intended, since a multiplication of single particles is not meaningful. Please, consider usign easyCHAMP() instead and/or check the vignettes (https://maki-science.github.io/easyCHAMP/).")
   }
   
   # set/correct the configuration (if labpreset was chosen)
-  config <- eP.config.helper(labpreset = labpreset,
+  config <- easyCHAMP.config.helper(labpreset = labpreset,
                              blankKey = blankKey,
                              sep = sep,
                              dec = dec,
@@ -143,7 +143,7 @@ evalPurency.particles <- function(path,
                              startrow = startrow)
   
   #### load data #####
-  temp <- ep.load.helper(path = path,
+  temp <- easyCHAMP.load.helper(path = path,
                          particleNumbers = particleNumbers,
                          sep = config$sep, 
                          dec = config$dec, 
@@ -199,7 +199,7 @@ evalPurency.particles <- function(path,
     }
   }
   
-  # in contrast to evalPurency, this function uses the area of the particles. The size classes are set as
+  # in contrast to easyCHAMP, this function uses the area of the particles. The size classes are set as
   # the provided size class (length of the longest edge) squared. This way, it is easier to imagine the particle
   # size and the setup by the user.
   for(i in 1:nrow(vdata)){

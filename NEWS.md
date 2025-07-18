@@ -1,3 +1,7 @@
+# easyCHAMP 1.3.8.9021
+  - The company Purency does not exist anymore. Furthermore, in the meanwhile, this package can also handle data from various particle analyses software. Thus, we decided to rename this package into easyCHAMP (Comparable and Harmonized Analyses of Micro-Particles).
+  - With the renaming we bundled some restrukturing and expanding of the readme and pkgdown website to the users convenience.
+  
 # evalPurency 1.3.8.9021
   - since some researches might not be interested in shape of particles, we included a possibility to ignore that feature. The parameter 'colShape' can now be set to 'none'. This will cause the functions to create an extra column 'shape' and the shape is set according to the parameter 'fragment'. This was a quick-and-dirty (but properly working) implementation of this feature, since the actual ignorance of shape is not as easy as this was originially thought as central feature of this package. Therefore, it is strongly embedded in the current code structure and cannot be easily jumped over.
 

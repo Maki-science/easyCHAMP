@@ -20,8 +20,8 @@ options(rmarkdown.html_vignette.check_title = FALSE)
 The function was written until December 2023. I've used the current column numbers set in Purencys' software to address the required information. If these will be changed by any chance by Purency or yourself (or lab members), this should be adopted to the function as well (see the article *Change settings to other labs' preferences* above to read how).
 If not, the results are, of course, not reliable any more! 
 
-The source code can be accessed via [Github](https://github.com/Maki-science/evalPurency).
-I've commented it quite sophisticated, and changes should be quite easy when you're a bit into programming. Otherwise [open an issue](https://github.com/Maki-science/evalPurency/issues) or send me a request, and I will do my best to implement your desired features.
+The source code can be accessed via [Github](https://github.com/Maki-science/easyCHAMP).
+I've commented it quite sophisticated, and changes should be quite easy when you're a bit into programming. Otherwise [open an issue](https://github.com/Maki-science/easyCHAMP/issues) or send me a request, and I will do my best to implement your desired features.
 
 Here are issues that may arise, or we already faced (but is out of our hands), when applying the functions:
 
@@ -38,7 +38,7 @@ If something does not work, you may further missed one of the Warnings stated at
   -   If you have named the polymers differently in your Purency software, you should set these accordingly with the parameter ```polymers```.
   -   When using ```setDivFactor```, make sure to exactly follow the instructions in the console. Keep the order similar to the provided order of the samples/blanks.
   -   If you use several blanks that should be summed for all samples you can only chose a common division factor. Otherwise estimations will be unevenly distributed over the filters, which is not recommended.
-  -   ```setDivFactor``` is not available for ```evalPurency.particles()```, since it is not reasonable to multiply particles with similar properties in a particle-wise processing.
-  -   ```colourSep```is not available for ```evalPurency()```, since colours are not considered in the summary function (it doesn't make sense to create even more groups as there are anyway)!
-  -   ```eocsum``` is not available for ```evalPurency.particles()```.
+  -   ```setDivFactor``` is not available for ```easyCHAMP.particles()```, since it is not reasonable to multiply particles with similar properties in a particle-wise processing.
+  -   ```colourSep```is not available for ```easyCHAMP()```, since colours are not considered in the summary function (it doesn't make sense to create even more groups as there are anyway)!
+  -   ```eocsum``` is not available for ```easyCHAMP.particles()```.
   -   ```labpreset``` is only available after implementation of your desired setup. Please contact us via the *Report a bug* button on the right side of this page. The implementation can be done fast to get you started soon.

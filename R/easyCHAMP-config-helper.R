@@ -1,7 +1,7 @@
-######## eP.config.helper() ###########
-#' Manages configuration of evalPurency with labpresets
+######## easyCHAMP.config.helper() ###########
+#' Manages configuration of easyCHAMP, including labpresets
 #' @description
-#' Most settings of evalPurency can be overwritten by a labpreset. If a labpreset is
+#' Most settings of easyCHAMP can be overwritten by a labpreset. If a labpreset is
 #' selected, it might overwrite or not overwrite the current function settings.
 #' To manage which settings will be chosen and which not (depending on NAs in labpreset),
 #' this function handles the configuration with labpresets correctly and returns a config data frame.
@@ -41,7 +41,7 @@
 #' provides a bunch of meta data, that are not of interest here. Usually 40 rows can be skipped (more or less - 0 in case of siMPle).
 #' This is automated now. However, automation can be disabled if a value is defined (e.g., for troubleshooting).
 #' 
-eP.config.helper <- function(labpreset,
+easyCHAMP.config.helper <- function(labpreset,
                              blankKey,
                              sep,
                              dec,
@@ -84,7 +84,7 @@ eP.config.helper <- function(labpreset,
   #   startrow = 40
   # )
   
-  # check whether this is similar with eP-config-helper.R
+  # check whether this is similar with easyCHAMP-config-helper.R
   # usethis::use_data(evalPurencyPresets, testdata.default, testdata.size, testdata.noeocsum,
   #                   overwrite = TRUE, internal = TRUE)
   
