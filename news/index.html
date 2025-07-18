@@ -17,15 +17,14 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/easyCHAMP.html">Get started</a></li>
 <li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/file-custom.html">Customize file specifications</a></li>
-    <li><a class="dropdown-item" href="../articles/option-custom.html">Customize function options</a></li>
-    <li><a class="dropdown-item" href="../articles/other-lab.html">Change settings to other labs' preferences</a></li>
-    <li><a class="dropdown-item" href="../articles/output-custom.html">Customize the output</a></li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-customizations" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Customizations</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-customizations"><li><a class="dropdown-item" href="../articles/file-custom.html">Emplyoed file specifications</a></li>
+    <li><a class="dropdown-item" href="../articles/option-custom.html">Customise processing options</a></li>
+    <li><a class="dropdown-item" href="../articles/output-custom.html">Customise output options</a></li>
     <li><a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting</a></li>
   </ul></li>
-<li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/Maki-science/easyCHAMP/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -51,8 +50,136 @@
 <h2 class="pkg-version" data-toc-text="1.3.8.9021" id="easychamp-1389021">easyCHAMP 1.3.8.9021<a class="anchor" aria-label="anchor" href="#easychamp-1389021"></a></h2>
 <ul><li>The company Purency does not exist anymore. Furthermore, in the meanwhile, this package can also handle data from various particle analyses software. Thus, we decided to rename this package into easyCHAMP (Comparable and Harmonized Analyses of Micro-Particles).</li>
 <li>With the renaming we bundled some restrukturing and expanding of the readme and pkgdown website to the users convenience.</li>
+<li>Of course, also the functions have been renamed accordingly to <em>easyCHAMP()</em> and <em>easyCHAMP.particles()</em>.</li>
 </ul></div>
-  </main></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.3.8.9021" id="easychamp-1389021-1">easyCHAMP 1.3.8.9021<a class="anchor" aria-label="anchor" href="#easychamp-1389021-1"></a></h2>
+<ul><li>since some researches might not be interested in shape of particles, we included a possibility to ignore that feature. The parameter ‘colShape’ can now be set to ‘none’. This will cause the functions to create an extra column ‘shape’ and the shape is set according to the parameter ‘fragment’. This was a quick-and-dirty (but properly working) implementation of this feature, since the actual ignorance of shape is not as easy as this was originially thought as central feature of this package. Therefore, it is strongly embedded in the current code structure and cannot be easily jumped over.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.3.7.9021" id="easychamp-1379021">easyCHAMP 1.3.7.9021<a class="anchor" aria-label="anchor" href="#easychamp-1379021"></a></h2>
+<ul><li>The startrow (how to read in the files) is now automatically extracted for each file separately. Therefore, errors regarding the reading of the files should be gone now, even if one file has a different number of rows until the real data starts. Even though this increases the processing time by a few seconds (not all data is read), the user does not have to worry about this point anymore. However, automation can be disabled if a value is defined (e.g., for troubleshooting).</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.3.7.9020" id="easychamp-1379020">easyCHAMP 1.3.7.9020<a class="anchor" aria-label="anchor" href="#easychamp-1379020"></a></h2>
+<ul><li>Adjusted the handling of colours to skip the colour check if colours are not to be separated (this prevents a warning popping up all the time for cases with no colour separation - which is most of the time)</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.3.7.9019" id="easychamp-1379019">easyCHAMP 1.3.7.9019<a class="anchor" aria-label="anchor" href="#easychamp-1379019"></a></h2>
+<ul><li>Changes in the function feedback: Since <em>evalPurency.particles()</em> also takes use of colour, we have included a note, if colour is not set. However, since this is done by a helper function, shared with <em>evalPurency()</em>, this note is also thrown for <em>evalPurency()</em> for each file having no colour defined. We changed the code now, so that this note is just thrown once for consideration.</li>
+<li>Minor addon (requested by Martin): the <em>processing_data.csv</em> now contains an additional sheet, reporting the provided division factors.</li>
+<li>Bugfix: We found a bug in the rounding behaviour of the algorithm. Therefore, in the blank correction, the final result was not rounded, but the digits were cut of. We fixed this flaw and it should always be rounded to the upper integer number (to provide conservative values).</li>
+<li>Issue found: The names should always be uniquely identifyable. For instance, having a blank called ‘TESTBlank_filterx’, and samples called ‘TEST_filtery’ and ‘somethingelseTEST_filterz’ would have a match for ‘TEST’ in both samples, even though they are thought be separately blank-corrected. Therefore, the ‘test’ is not clearly identifyable and the second sample should not include test, or the blank must be renamed more precisely. In such a case this leads otherwise to blank-correction for both of these samples. We have adjusted the vignettes and description on the naming procedure and added a <em>Warning</em> to this section informing about this issue.
+<ul><li>Testsuite: Since we changed the output with an additional sheet in the <em>processing_data.csv</em>, we updated the testsuite accordingly.</li>
+</ul></li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.3.7.9018" id="easychamp-1379018">easyCHAMP 1.3.7.9018<a class="anchor" aria-label="anchor" href="#easychamp-1379018"></a></h2>
+<ul><li>minor addon (requested by Sarmite): Now, you can set default values for form and colour if it is not set in the data. This could be done in excel, of course, but now you can do it just on-the-flow for all files you have.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.3.6.9018" id="easychamp-1369018">easyCHAMP 1.3.6.9018<a class="anchor" aria-label="anchor" href="#easychamp-1369018"></a></h2>
+<ul><li>minor addon: There is now a test suite available for <em>evalPurency.particles()</em> to improve maintenance and quality control.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.3.5.9018" id="easychamp-1359018">easyCHAMP 1.3.5.9018<a class="anchor" aria-label="anchor" href="#easychamp-1359018"></a></h2>
+<ul><li>Bugfix: fixed an issue with <em>evalPurency.particles()</em> for more than one sample-blank pair at once. Previously it jumped over every second sample.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.3.5.9017" id="easychamp-1359017">easyCHAMP 1.3.5.9017<a class="anchor" aria-label="anchor" href="#easychamp-1359017"></a></h2>
+<ul><li>new feature: a new function <em>evalPurency.particles()</em> is now ready for use. Testing and description is still not properly done. Thus consider it as <em>Beta</em> so far. With this function, it is possible to have a particle wise processing, to keep each particle with its traits strackable, while still allowing a conservative blank correction. These particle lists are valuable, e.g., for simulations of particle physical properties or environmental distributions.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2.5.9017" id="easychamp-1259017">easyCHAMP 1.2.5.9017<a class="anchor" aria-label="anchor" href="#easychamp-1259017"></a></h2>
+<ul><li>fixed bug: expanded the issue with no particles in blank measures. Now the function throws a warning and internally sets <em>noBlank = TRUE</em>. Thus no errors should occur anymore.</li>
+<li>new feature: following a wish (Anja), you can now set <em>particleNumbers = TRUE</em>, if you wish to get an extra *.xls-file providing the total particle numbers and plastic-particle numbers for each file.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2.5.9016" id="easychamp-1259016">easyCHAMP 1.2.5.9016<a class="anchor" aria-label="anchor" href="#easychamp-1259016"></a></h2>
+<ul><li>fixed an issue, which caused problems in processing files without any measured plastic particles. Additionally, a warning is thrown in such a case, if this was not intended (e.g., mistakenly empty column).</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2.5.9015" id="easychamp-1259015">easyCHAMP 1.2.5.9015<a class="anchor" aria-label="anchor" href="#easychamp-1259015"></a></h2>
+<ul><li>apparently it happens, that Purency produces a file, that has special characters or is differently encoded (I didn’t figure out yet). This causes evalPurency to have issues with reading the files (since it is usually just one out of several files that is somewhat different). Before the function applied ‘ASCII’ encoding. With this update I switched to ‘latin1’.</li>
+<li>Some restructuring of the code was applied in preparation of an additional functionality coming soon.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2.5.9014" id="easychamp-1259014">easyCHAMP 1.2.5.9014<a class="anchor" aria-label="anchor" href="#easychamp-1259014"></a></h2>
+<ul><li>following a request (Eva), the function now retains the information on area and width of the particles and provides it in the processing data on the raw data sheet.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2.5.9013" id="easychamp-1259013">easyCHAMP 1.2.5.9013<a class="anchor" aria-label="anchor" href="#easychamp-1259013"></a></h2>
+<ul><li>fixed a bug that caused an error message under rare circumstances. However, the calculation was not affected by that.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2.5.9012" id="easychamp-1259012">easyCHAMP 1.2.5.9012<a class="anchor" aria-label="anchor" href="#easychamp-1259012"></a></h2>
+<ul><li>fixed a bug that led to the division of blank particles by the number of blank filters (even of one blank), that should be summed together. By that I extended the code (to make it work even better) so one can use several filters of one blank to sum and several blanks for one or more samples to be averaged. Find more about that in the updated readme.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2.5.9011" id="easychamp-1259011">easyCHAMP 1.2.5.9011<a class="anchor" aria-label="anchor" href="#easychamp-1259011"></a></h2>
+<ul><li>we extended the functionality for the division factors to allow also a filterwise setup for the factors. Now you can choose the parameter <em>setDivFactor</em> to be <em>TRUE</em>, which is equal to <em>samplewise</em>, which now requests the factors samplewise (i.e., all filters of one sample have the same factor), or to <em>filterwise</em>, which requests the factors filterwise.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2.5.9010" id="easychamp-1259010">easyCHAMP 1.2.5.9010<a class="anchor" aria-label="anchor" href="#easychamp-1259010"></a></h2>
+<ul><li>the function now checks whether the provided forms are found in the provided data. If there are discrepancies in a field, the respective line will be excluded and a Warning message will appear. Those unknown values caused wierd output tables.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2.5.9009" id="easychamp-1259009">easyCHAMP 1.2.5.9009<a class="anchor" aria-label="anchor" href="#easychamp-1259009"></a></h2>
+<ul><li>added a minor feature: you can now set <em>noBlank = TRUE</em> to skip the blank processing. Thus, you don’t require a blank in your folder.</li>
+<li>added the parameter startrow. This should only be changed if you work with an experimental Purency version that changed the way how the excelfiles are saved.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2.4.9009" id="easychamp-1249009">easyCHAMP 1.2.4.9009<a class="anchor" aria-label="anchor" href="#easychamp-1249009"></a></h2>
+<ul><li>a bug is fixed now that caused an error if missing values occured in the data (which was indicated by a warning message before). Now those rows containing missing data, are excluded from further processing.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2.4.9008" id="easychamp-1249008">easyCHAMP 1.2.4.9008<a class="anchor" aria-label="anchor" href="#easychamp-1249008"></a></h2>
+<ul><li>added sep and dec as additional parameters that can be customized to the users’ csv-file specifications</li>
+<li>The division factors are now requested stepwise for each sample/blank instead of all samples at once</li>
+<li>a bug is fixed now, that sometimes produced a minor discrepancy between the real sum and the shown total particle number.</li>
+<li>Additionally to the total sample summary, the sample files also contain sheets for each particle shape with a shape-wise summary of the numbers.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2.4.9005" id="easychamp-1249005">easyCHAMP 1.2.4.9005<a class="anchor" aria-label="anchor" href="#easychamp-1249005"></a></h2>
+<ul><li>added a new major feature: now the function can also perform the blank correction for the data provided (read the readme or description to find out more)</li>
+<li>added a new minor feature: you can now choose with an additional parameter whether to incorporate a division factor (if you just used parts of your sample) for samples and blanks separately. The function will request these factors during processing to avoid confusion and mistakes during function call</li>
+<li>Silicone particles have been not evaluated so far, since they were implemented as ‘SI’. However, the Purency configuration in our lab was ‘SILICONE’. This has been corrected and should be evaluated now.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.1.3.9004" id="easychamp-1139004">easyCHAMP 1.1.3.9004<a class="anchor" aria-label="anchor" href="#easychamp-1139004"></a></h2>
+<ul><li>changed the way how the column summary is calculated to support the following feature</li>
+<li>added a new parameter. Now <em>eocsum</em> can be set TRUE (detault) or FALSE to get this line or skip this calculation.</li>
+<li>added a new parameter. Now labpreset can be set accordingly for different labs, that not all parameters have to be changed/set manually for other labs. Labpresets can now be requested and implemented fast.</li>
+<li>a new parameter was added. Now the user can set the desired size classes that should be evaluated. Now, virtually every parameters is programmed dynamically and can be customised.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.1.1.9003" id="easychamp-1119003">easyCHAMP 1.1.1.9003<a class="anchor" aria-label="anchor" href="#easychamp-1119003"></a></h2>
+<ul><li>added customizable parameters to adopt the function in other labs with other naming conventions and different preset</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.1.1.9002" id="easychamp-1119002">easyCHAMP 1.1.1.9002<a class="anchor" aria-label="anchor" href="#easychamp-1119002"></a></h2>
+<ul><li>updated readme</li>
+<li>content of measurement in sample summary is now “sample sum” instead of “sum”</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.1.1.9001" id="easychamp-1119001">easyCHAMP 1.1.1.9001<a class="anchor" aria-label="anchor" href="#easychamp-1119001"></a></h2>
+<ul><li>evalPurency() now adds a row in the sample summary with the column sums (requested by Eva)</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.1.0.9001" id="easychamp-1109001">easyCHAMP 1.1.0.9001<a class="anchor" aria-label="anchor" href="#easychamp-1109001"></a></h2>
+<ul><li>now reports when processing done</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.1.0.9000" id="easychamp-1109000">easyCHAMP 1.1.0.9000<a class="anchor" aria-label="anchor" href="#easychamp-1109000"></a></h2>
+<ul><li>reworked as a package for better maintainability and issue handling</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.0.0.9000" id="easychamp-1009000">easyCHAMP 1.0.0.9000<a class="anchor" aria-label="anchor" href="#easychamp-1009000"></a></h2>
+<ul><li>full functional version</li>
+<li>only as a function available</li>
+</ul></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
