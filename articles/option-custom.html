@@ -110,6 +110,16 @@ the highest number to infinite (e.g., &gt;500).</p>
 <span>            sizeclasses <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">50</span>, <span class="fl">100</span>, <span class="fl">150</span>, <span class="fl">200</span>, <span class="fl">250</span>, <span class="fl">300</span>, <span class="fl">350</span>, <span class="fl">400</span>, <span class="fl">450</span>, <span class="fl">500</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
+<h2 id="not-interested-in-shape">Not interested in shape?<a class="anchor" aria-label="anchor" href="#not-interested-in-shape"></a>
+</h2>
+<p>If you are not interested in the shape of your particles and the
+summaries should be performed without considering the particle shapes,
+the parameter <code>colShape</code> can be set to <code>none</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/easyCHAMP.html">easyCHAMP</a></span><span class="op">(</span>path<span class="op">=</span><span class="st">"C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/"</span>, </span>
+<span>            colShape <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
 <h2 id="you-analysed-only-parts-of-a-sample---integrate-division-factors">You analysed only parts of a sample? - integrate division
 factors<a class="anchor" aria-label="anchor" href="#you-analysed-only-parts-of-a-sample---integrate-division-factors"></a>
 </h2>
@@ -127,7 +137,7 @@ processing for each sample (i.e., all filters of one sample have the
 same factor). If set to <code>setDivFactor = "filterwise"</code>, a
 division factor will be requested for each filter separately.</p>
 <p>Just watch your R console and follow the instructions.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/easyCHAMP.html">easyCHAMP</a></span><span class="op">(</span>path<span class="op">=</span><span class="st">"C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/"</span>, </span>
 <span>            setDivFactor <span class="op">=</span> <span class="st">"samplewise"</span><span class="op">)</span></span></code></pre></div>
 <p>If you only use a quarter of your sample the factor you should
@@ -162,7 +172,7 @@ this was only of interest for a particle-wise evaluation. Therefore, we
 implemented another parameter <code>colourSep</code> for the function
 <code><a href="../reference/easyCHAMP.particles.html">easyCHAMP.particles()</a></code>. You can provide a colour as stated
 in your data, which will be then separately evaluated:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/easyCHAMP.particles.html">easyCHAMP.particles</a></span><span class="op">(</span>path<span class="op">=</span><span class="st">"C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/"</span>, </span>
 <span>                      colourSep <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span></span></code></pre></div>
 <p>You will receive all blank-corrected particles for the chosen colour
@@ -183,7 +193,7 @@ list with <code>NA</code> in the respective field, it will be set with
 the default, that you provided. This could be done in excel, of course,
 but with this, you can do it just on-the-flow for all files you
 have.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/easyCHAMP.particles.html">easyCHAMP.particles</a></span><span class="op">(</span>path<span class="op">=</span><span class="st">"C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/"</span>, </span>
 <span>                      formFillDefault <span class="op">=</span> <span class="st">"fragment"</span>,</span>
 <span>                      colourFillDefault <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span></span></code></pre></div>

@@ -69,47 +69,65 @@
 </h1></div>
 <!-- badges: start -->
 
+<p><em>Go to <a href="https://maki-science.github.io/easyCHAMP/articles/easyCHAMP.html">pkgdown website</a> for getting started</em></p>
 <div class="section level2">
-<h2 id="go-to-pkgdown-website-for-how-to-use-this-package">Go to <a href="https://maki-science.github.io/easyCHAMP/">pkgdown website</a> for how to use this package<a class="anchor" aria-label="anchor" href="#go-to-pkgdown-website-for-how-to-use-this-package"></a>
+<h2 id="software-prior-of-using-this-package">Software prior of using this package<a class="anchor" aria-label="anchor" href="#software-prior-of-using-this-package"></a>
 </h2>
-<p>If you already know the package, but need more information, check out the package vignettes or go tp the <a href="https://maki-science.github.io/easyCHAMP/">pkgdown website</a> (or the upper toolbar, in case you are already there). Click on <em>Get started</em>, or view the website articles to study all options. We’ve tried to gather all information there in a (hopefully) simple and userfriendly way. Checkout the article <em>Troubleshooting</em>, for potential issues that may occur, if you do not setup the functions properly.</p>
-</div>
-<div class="section level2">
-<h2 id="software-before-application-of-this-package">Software before application of this package<a class="anchor" aria-label="anchor" href="#software-before-application-of-this-package"></a>
-</h2>
-<p>Microplastics (or microparticles) can be found in any part of an environmental or nutritional sample. Today, FPA-based FTIR imaging allows a whole sample to be measured quickly. However, to analyse the measurement data, a powerful tool is needed to reliably identify the polymer particles contained in the sample. The analysis must provide objective, complete and robust results, which are presented in detail and transparently. Various software (like the MicroplasticsFinder, MicroparticlesAI, or siMPle) use machine learning algorithms that identify more than 20 polymer types within minutes. In combination with FTIR imaging, it offers the fastest method to examine an entire sample for microplastics. Thanks to automation, which does not require time-consuming manual post-processing, the analysis results are optimally comparable and reproducible. Microplastics analysis becomes scalable and new types of questions about the presence and origin of microplastics can be answered. <em>Source: <a href="https://www.purency.ai/product1/microplastics-finder" class="external-link uri">https://www.purency.ai/product1/microplastics-finder</a>)</em></p>
+<p>This package works on data that is produced with third-party software and focuses on microplastic analyses (but can also be used for various particles). Microplastics (or microparticles) can be found in any part of an environmental or nutritional sample. Today, FPA-based FTIR imaging allows a whole sample to be measured quickly. However, to analyse the measurement data, a powerful tool is needed to reliably identify the polymer particles contained in the sample. The analysis must provide objective, complete and robust results, which are presented in detail and transparently. Various software (like the MicroplasticsFinder, MicroparticlesAI, or siMPle) use machine learning algorithms that identify more than 20 polymer types within minutes. In combination with FTIR imaging, it offers the fastest method to examine an entire sample for microplastics. Thanks to automation, which does not require time-consuming manual post-processing, the analysis results are optimally comparable and reproducible. Microplastics analysis becomes scalable and new types of questions about the presence and origin of microplastics can be answered. <em>Source: <a href="https://www.purency.ai/product1/microplastics-finder" class="external-link uri">https://www.purency.ai/product1/microplastics-finder</a>)</em></p>
 </div>
 <div class="section level2">
 <h2 id="purpose-of-this-package">Purpose of this package<a class="anchor" aria-label="anchor" href="#purpose-of-this-package"></a>
 </h2>
-<p>Commonly in microplastic research, a sample is splitted and filtered on several filters. These are scanned via µ-FTIR and the resulting data is analysed with various software (like the MicroplasticsFinder, MicroparticlesAI, or siMPle). These software produce *.csv files for each sample contaning all particles and their annotation, which is usually cured and refined by a human. Then, the files for each sample have to be corrected by blank results and summarized. And here is were we jump in:</p>
-<p>This package and its functions can be used to automate the blank processing, single file handling and gathering the relevant data for each sample into one file. The processing requires only a few seconds instead of hours (of copying and pasting) in manual work. Furthermore, the chance of mistakes is reduced by generic computation. By employing robust and conservative algorithms it is ensured, that the results are transparently and comparably produced and the amount of microplastic contamination is not overestimated.</p>
-<p>(If desired) It will count occurrences of fibres, fragments, spheres and pixels, as well as different (customisable) size fractions for each polymer. Each file (i.e., each measurement) is evaluated separately, as well as summarized for all files (i.e., one sample). Also the blank correction and correction for filter division can be automated by this function. For each sample a new excel file will be generated in the folder where the files are placed in. One file for each sample and one additional file, containing the data of different processing steps (also raw data) to allow a full track of the processing, if required. If desired, the function returns a list object to the R environment with all produced data sets, which can be used for further processing (e.g., creating plots) in R.</p>
-<p>The default parameter settings are based on the requirements of the animal ecology I group (AG Prof. Laforsch) of the University of Bayreuth. However, the function is highly customisable, and you can change all parameters to your desire. Read further below for detailed instruction what and how you can/should change. If desired, also presets can be incorporated in the package that a common workflow for a lab or collaboration can be ensured.</p>
-</div>
-<div class="section level2">
-<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
-</h2>
-<p>After the corresponding paper is published, you should be able to download this package from CRAN (watch the badge on the top of this page). Just go to the upper tool bar of your RStudio and click <em>tools</em> &gt; <em>Install Packages…</em> &gt; tipe in <em>easyCHAMP</em> &gt; click <em>install</em>, or run:</p>
-<pre><code><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"easyCHAMP"</span><span class="op">)</span></span></code></pre>
-<p>You can also install the development version of easyCHAMP from <a href="https://github.com/" class="external-link">GitHub</a>. If not already installed, you need to have <a href="https://cran.r-project.org/bin/windows/Rtools/" class="external-link">Rtools</a> installed on your system to be able to compile the development version. (devtools only has to be installed once)</p>
-<pre><code><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span> <span class="co"># just necessary if not already installed</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"Maki-science/easyCHAMP"</span><span class="op">)</span></span></code></pre>
-<p>Once installed, you don’t need to repeat this step each time! If you want to update to the newest version, just run the second line again.</p>
+<p>Commonly in microplastic research, a sample is splitted and filtered on several filters. These are scanned via µ-FTIR and the resulting data is analysed with various software (like the MicroplasticsFinder, MicroparticlesAI, or siMPle). These software produce *.csv files for each sample contaning all particles and their annotation, which is usually cured and refined by a human. Then, the files for each sample have to be corrected with blanks and summarized, which can be a laborious and detious manual or semi-automated work that is also prone by human mistake. And here is were we jump in:</p>
+<p>This package and its functions can be used to automate sample/blank averaging, the blank processing, single file handling and gathering the relevant data for each sample into one file. The processing requires only a few seconds instead of hours (of copying and pasting) in manual work. Furthermore, the chance of mistakes is reduced by generic computation. <em>By employing robust and conservative algorithms it is ensured, that the results are transparently and comparably produced and the amount of microplastic contamination is not overestimated.</em></p>
+<p>(If desired) It will count occurrences of fibres, fragments, spheres and pixels, as well as different (customisable) size fractions for each polymer. Each file (i.e., each measurement) is evaluated separately, as well as summarized for all files (i.e., one sample). Also the blank correction and correction for filter division can be automated by this function. For each sample a new excel file will be generated in the folder where the files are placed in. One file for each sample and one additional file, containing the data of different processing steps (also raw data) to allow a full track of the processing. If desired, the function returns a list object to the R environment with all produced data sets, which can be used for further processing (e.g., creating plots) in R.</p>
+<p>The default parameter settings are based on the requirements of the animal ecology I group (AG Prof. Laforsch) of the University of Bayreuth. However, the function is highly customisable, and you can change all parameters to your desire. Read further at the <a href="https://maki-science.github.io/easyCHAMP/articles/easyCHAMP.html">pkgdown website</a> for detailed instruction what and how you can/should change. If desired, also presets can be incorporated in the package that a common workflow for a lab or collaboration can be ensured.</p>
 </div>
 <div class="section level2">
 <h2 id="how-it-works">How it works<a class="anchor" aria-label="anchor" href="#how-it-works"></a>
 </h2>
-<p>There are two main functions to be applied: <code><a href="reference/easyCHAMP.html">easyCHAMP()</a></code> for a blank corrected summary after your liking; and <code><a href="reference/easyCHAMP.particles.html">easyCHAMP.particles()</a></code> for a particle-wise blank correction, with retention of single particles and their properties. Additionally, there are plenty of options for customization and settings of the *.csv files.</p>
-<p>Check out the package vignettes or go tp the <a href="https://maki-science.github.io/easyCHAMP/">pkgdown website</a> (or the upper toolbar, in case you are already there). Click on <em>Get started</em>, or view the website articles to study all options. We’ve tried to gather all information there in a (hopefully) simple and userfriendly way.</p>
+<p>There are two main functions to be applied: <code><a href="reference/easyCHAMP.html">easyCHAMP()</a></code> for a blank corrected summary after your liking; and <code><a href="reference/easyCHAMP.particles.html">easyCHAMP.particles()</a></code> for a particle-wise blank correction, with retention of single particles and their properties (e.g., for physical simulations). Very briefly, if everything is set, it is sufficient to call one of these functions and provide a path where the files can be found. However, the naming of the files should follow a <a href="https://maki-science.github.io/easyCHAMP/articles/easyCHAMP.html#naming-workflow">certain structure</a>, to ensure proper processing of the samples and blanks. This way, the way how the files are processed is highly customisable and potentially all scenarios are covered by the alogrithm. Additionally, there are plenty of options for customization and settings of the *.csv files.</p>
+<p>Check out the package vignettes or go to the <a href="https://maki-science.github.io/easyCHAMP/">pkgdown website</a>. Click on <em>Get started</em>, or view the website articles to study all options. We’ve tried to gather all information there in a (hopefully) simple and userfriendly way. The following topics can be found at the <a href="https://maki-science.github.io/easyCHAMP/">pkgdown website</a>:</p>
+<ul>
+<li>Get started:
+<ul>
+<li><a href="https://maki-science.github.io/easyCHAMP/articles/easyCHAMP.html#installation">How to install</a></li>
+<li><a href="https://maki-science.github.io/easyCHAMP/articles/easyCHAMP.html#naming-workflow">How files should be named</a></li>
+<li>
+<a href="https://maki-science.github.io/easyCHAMP/articles/easyCHAMP.html#processing-possibilities">Two main processing ways</a>
+<ul>
+<li><a href="https://maki-science.github.io/easyCHAMP/articles/easyCHAMP.html#processing-a-summary-with-blank-correction">A polymer-shape-size wise summary</a></li>
+<li><a href="https://maki-science.github.io/easyCHAMP/articles/easyCHAMP.html#perform-particle-wise-processing">A particle-wise processing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Customisations:
+<ul>
+<li><a href="https://maki-science.github.io/easyCHAMP/articles/file-custom.html#changing-separator-and-decimal-sign-in--csv-files">Changing file specifications (e.g., decimal sign)</a></li>
+<li>
+<a href="https://maki-science.github.io/easyCHAMP/articles/file-custom.html#dont-use-the-recommended-file-naming">Use different naming styles</a> + <a href="https://maki-science.github.io/easyCHAMP/articles/option-custom.html#change-evaluated-polymers">Change evaluated polymers (or other substances)</a>
+</li>
+<li><a href="https://maki-science.github.io/easyCHAMP/articles/option-custom.html#change-evaluated-size-classes">Change sizeclasses</a></li>
+<li><a href="https://maki-science.github.io/easyCHAMP/articles/option-custom.html#Not-interested-in-shape?">Not interested in particle shape?</a></li>
+<li><a href="https://maki-science.github.io/easyCHAMP/articles/option-custom.html#you-analysed-only-parts-of-a-sample---integrate-division-factors">What if only parts of the samples are analysed?</a></li>
+<li><a href="https://maki-science.github.io/easyCHAMP/articles/option-custom.html#one-colour-of-your-particles-should-be-separated-from-the-rest-easychamp-particles-only"><em>easyCHAMP.particles() only:</em> A certain particle colour should be analysed separately (e.g., using spiked standard particles)!</a></li>
+<li><a href="https://maki-science.github.io/easyCHAMP/articles/option-custom.html#automatically-fill-missing-values-with-provided-default"><em>easyCHAMP.particles() only:</em> All particles are the same, I don’t want to set it manually!</a></li>
+<li><a href="https://maki-science.github.io/easyCHAMP/articles/output-custom.html#keep-the-data-in-r-as-data-frame">Get results into R environment for further use (e.g., creating graphs)</a></li>
+<li><a href="https://maki-science.github.io/easyCHAMP/articles/output-custom.html#summary-of-each-column-at-the-bottom">How to get column sums in each file</a></li>
+<li><a href="https://maki-science.github.io/easyCHAMP/articles/output-custom.html#get-total-particle-numbers">How to get an extra file about the total particle numbers in each sample</a></li>
+</ul>
+</li>
+<li><a href="https://maki-science.github.io/easyCHAMP/articles/troubleshooting.html#troubleshooting">Troubleshooting: a list of common issues and mistakes</a></li>
+</ul>
 </div>
 <div class="section level2">
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
 <p>To cite easyCHAMP in publications use:</p>
-<p>Marvin Kiene, Eva Vizsolyi Cseperke, Benedikt Hufnagl, Martin Löder and Christian Laforsch (2024). easyCHAMP: An automated Comparable and Harmonized Analyses of Micro-Particles. R package version 1.3.8.9021. <a href="https://github.com/Maki-science/easyCHAMP" class="external-link uri">https://github.com/Maki-science/easyCHAMP</a></p>
+<p>Marvin Kiene, Eva Vizsolyi Cseperke, Benedikt Hufnagl, Martin Löder and Christian Laforsch (2025). easyCHAMP: An automated Comparable and Harmonized Analyses of Micro-Particles. R package version 1.3.8.9021. <a href="https://github.com/Maki-science/easyCHAMP" class="external-link uri">https://github.com/Maki-science/easyCHAMP</a></p>
 <p>A BibTeX-entry for LaTeX-user is</p>
-<p>@Misc{, title = {easyCHAMP: An automated Comparable and Harmonized Analyses of Micro-Particles}, author = {Marvin Kiene and Eva {Cseperke Vizsolyi} and Benedikt Hufnagl and Martin Löder and Christian Laforsch}, note = {R package version 1.3.8.9021}, year = {2024}, url = {<a href="https://github.com/Maki-science/easyCHAMP" class="external-link uri">https://github.com/Maki-science/easyCHAMP</a>}, }</p>
+<p>@Misc{, title = {easyCHAMP: An automated Comparable and Harmonized Analyses of Micro-Particles}, author = {Marvin Kiene and Eva {Cseperke Vizsolyi} and Benedikt Hufnagl and Martin Löder and Christian Laforsch}, note = {R package version 1.3.8.9021}, year = {2025}, url = {<a href="https://github.com/Maki-science/easyCHAMP" class="external-link uri">https://github.com/Maki-science/easyCHAMP</a>}, }</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
