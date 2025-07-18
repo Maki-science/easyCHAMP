@@ -41,6 +41,13 @@ easyCHAMP(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/",
 ```
 
 
+## Not interested in shape?
+If you are not interested in the shape of your particles and the summaries should be performed without considering the particle shapes, the parameter ```colShape``` can be set to ```none```:
+```{r, eval = FALSE}
+easyCHAMP(path="C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/", 
+            colShape = "none")
+```
+
 
 ## You analysed only parts of a sample? - integrate division factors
 In many cases it can happen, that only a part of a sample is measured, if there are too many particles. This might be different between sample and blanks (e.g., it might be that a filter breaks appart). Therefore, you can provide a division factor for each sample and blank separately, or even for each filter separately.
