@@ -25,7 +25,9 @@
 #' This is automated now. However, automation can be disabled if a value is defined (e.g., for troubleshooting).
 #' @param colReqPol Column number for the particle check, whether the particle is a polymer or not. 
 #' In the TOEKI lab this is column 24 (Plastik? or Plastik ja/nein). Could also be provided as column name, but only 
-#' in ASCII encoding (e.g., special character as . and ä = d). Set in main function.
+#' in ASCII encoding (e.g., special character as . and ä = d). If no curing took place, this parameter could be set to 'none' which 
+#' will cause the function to simply use all particles in the file. Warning: this might cause further warnings or errors to occur, if 
+#' a polymer is not an unknown substance (e.g., it is no polymer).
 #' @param ReqPolKey key word or sentence of 'colReqPol' that indicates that it is a plastic particle. 
 #' Default is 'ja'. Set in main function.
 #' @param colShape Column number for the particle shape. In the TOEKI lab this is column 25 (Form).
@@ -247,6 +249,13 @@ easyCHAMP.load.helper <- function(path,
   }
   # if there is no column for shape, create one and use the term set in fragment
   # This allows quick-and-dirty (but proper) use of data where the shape does not matter
+  
+  # check whether colReqPol is set to 'none' (no manual curing of the polymers took place).
+  # Then create a new column containing the ReqPolKey (this leads to all particles being evaluated)
+  if(colReqPol == 'none'){
+    temp$colReqPol <- ReqPolKey
+  }
+  
   
   return(temp)  
 

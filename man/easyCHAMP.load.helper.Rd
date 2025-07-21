@@ -61,7 +61,9 @@ This is automated now. However, automation can be disabled if a value is defined
 
 \item{colReqPol}{Column number for the particle check, whether the particle is a polymer or not.
 In the TOEKI lab this is column 24 (Plastik? or Plastik ja/nein). Could also be provided as column name, but only
-in ASCII encoding (e.g., special character as . and ä = d). Set in main function.}
+in ASCII encoding (e.g., special character as . and ä = d). If no curing took place, this parameter could be set to 'none' which
+will cause the function to simply use all particles in the file. Warning: this might cause further warnings or errors to occur, if
+a polymer is not an unknown substance (e.g., it is no polymer).}
 
 \item{colourSep}{whether colour separation is desired for the analysis. Only usable in evalPurency.particles()!}
 

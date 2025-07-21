@@ -95,7 +95,9 @@ Could also be provided as column name, but only in ASCII encoding (e.g., special
 
 \item{colReqPol}{Column number for the particle check, whether the particle is a polymer or not.
 In the TOEKI lab this is column 24 (Plastik? or Plastik ja/nein). Could also be provided as column name, but only
-in ASCII encoding (e.g., special character as . and ä = d).}
+in ASCII encoding (e.g., special character as . and ä = d). If no curing took place, this parameter could be set to 'none' which
+will cause the function to simply use all particles in the file. Warning: this might cause further warnings or errors to occur, if
+a polymer is not an unknown substance (e.g., it is no polymer).}
 
 \item{ReqPolKey}{key word or sentence of 'colReqPol' that indicates that it is a plastic particle. Default is 'ja'.}
 

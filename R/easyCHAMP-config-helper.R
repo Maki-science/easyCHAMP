@@ -21,7 +21,9 @@
 #' Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
 #' @param colReqPol Column number for the particle check, whether the particle is a polymer or not. 
 #' In the TOEKI lab this is column 24 (Plastik? or Plastik ja/nein). Could also be provided as column name, but only 
-#' in ASCII encoding (e.g., special character as . and ä = d).
+#' in ASCII encoding (e.g., special character as . and ä = d). If no curing took place, this parameter could be set to 'none' which 
+#' will cause the function to simply use all particles in the file. Warning: this might cause further warnings or errors to occur, if 
+#' a polymer is not an unknown substance (e.g., it is no polymer).
 #' @param ReqPolKey key word or sentence of 'colReqPol' that indicates that it is a plastic particle. Default is 'ja'.
 #' @param colShape Column number for the particle shape. In the TOEKI lab this is column 25 (Form).
 #' Could also be provided as column name, but only in ASCII encoding (e.g., special character as . and ä = d).
@@ -62,31 +64,31 @@ easyCHAMP.config.helper <- function(labpreset,
   
   #### lab presets ####
   # if a preset is set, load the respective preset (if available)
-  # this is how a preset is created:
-  # evalPurencyPresets <- data.frame(
-  #   labname = "Laforsch",
-  #   blankKey = "Blank",
-  #   sep = ";",
-  #   dec = ",",
-  #   colPol = 6,
-  #   colL = 17,
-  #   colReqPol = 24,
-  #   ReqPolKey = "ja",
-  #   colShape = 25,
-  #   colCol = 26,
-  #   colLFib = 27,
-  #   colArea = 4,
-  #   colWidth = 18,
-  #   fibre = "Faser",
-  #   sphere = "Kugel",
-  #   fragment = "Fragment",
-  #   pixel = "Pixel",
-  #   startrow = 40
-  # )
-  
-  # check whether this is similar with easyCHAMP-config-helper.R
-  # usethis::use_data(evalPurencyPresets, testdata.default, testdata.size, testdata.noeocsum,
+  # usethis::use_data(easyCHAMPPresets, testdata.default, testdata.size, testdata.noeocsum,
   #                   overwrite = TRUE, internal = TRUE)
+  
+  # this is how a preset is created:
+  # easyCHAMPPresets <- rbind(easyCHAMPPresets,
+  #                             data.frame(
+  #                               labname = "siMPle",
+  #                               blankKey = "Blank",
+  #                               sep = ";",
+  #                               dec = ".",
+  #                               colPol = 5,
+  #                               colL = 8,
+  #                               colReqPol = 'none',
+  #                               ReqPolKey = "yes",
+  #                               colShape = 'none',
+  #                               colCol = 26,
+  #                               colLFib = 8,
+  #                               colArea = 7,
+  #                               colWidth = 9,
+  #                               fibre = "fiber",
+  #                               sphere = "sphere",
+  #                               fragment = "fragment",
+  #                               pixel = "pixel",
+  #                               startrow = "auto"
+  #                             ))
   
   config <- data.frame(
     labname = labpreset,
@@ -111,51 +113,51 @@ easyCHAMP.config.helper <- function(labpreset,
   
   # Check whether a labpreset was chosen
   if(labpreset != FALSE){
-    if( length(evalPurencyPresets$labname[which(evalPurencyPresets$labname == labpreset)]) == 0){
+    if( length(easyCHAMPPresets$labname[which(easyCHAMPPresets$labname == labpreset)]) == 0){
       stop("You selected a labpreset, that does not exist. Please check this parameter for typo or request a new labpreset for your lab. \n")
     }
     
-    if(!is.na(evalPurencyPresets$blankKey)){
-      config$blankKey <- evalPurencyPresets$blankKey
+    if(!is.na(easyCHAMPPresets$blankKey[which(easyCHAMPPresets$labname == labpreset)])){
+      config$blankKey <- easyCHAMPPresets$blankKey[which(easyCHAMPPresets$labname == labpreset)]
     }
-    if(!is.na(evalPurencyPresets$colPol)){
-      config$colPol <- evalPurencyPresets$colPol[which(evalPurencyPresets$labname == labpreset)]
+    if(!is.na(easyCHAMPPresets$colPol[which(easyCHAMPPresets$labname == labpreset)])){
+      config$colPol <- easyCHAMPPresets$colPol[which(easyCHAMPPresets$labname == labpreset)]
     }
-    if(!is.na(evalPurencyPresets$colL)){
-      config$colL <- evalPurencyPresets$colL[which(evalPurencyPresets$labname == labpreset)]
+    if(!is.na(easyCHAMPPresets$colL[which(easyCHAMPPresets$labname == labpreset)])){
+      config$colL <- easyCHAMPPresets$colL[which(easyCHAMPPresets$labname == labpreset)]
     }
-    if(!is.na(evalPurencyPresets$colReqPol)){
-      config$colReqPol <- evalPurencyPresets$colReqPol[which(evalPurencyPresets$labname == labpreset)]
+    if(!is.na(easyCHAMPPresets$colReqPol[which(easyCHAMPPresets$labname == labpreset)])){
+      config$colReqPol <- easyCHAMPPresets$colReqPol[which(easyCHAMPPresets$labname == labpreset)]
     }
-    if(!is.na(evalPurencyPresets$colShape)){
-      config$colShape <- evalPurencyPresets$colShape[which(evalPurencyPresets$labname == labpreset)]
+    if(!is.na(easyCHAMPPresets$colShape[which(easyCHAMPPresets$labname == labpreset)])){
+      config$colShape <- easyCHAMPPresets$colShape[which(easyCHAMPPresets$labname == labpreset)]
     }
-    if(!is.na(evalPurencyPresets$colCol)){
-      config$colCol <- evalPurencyPresets$colCol[which(evalPurencyPresets$labname == labpreset)]
+    if(!is.na(easyCHAMPPresets$colCol[which(easyCHAMPPresets$labname == labpreset)])){
+      config$colCol <- easyCHAMPPresets$colCol[which(easyCHAMPPresets$labname == labpreset)]
     }
-    if(!is.na(evalPurencyPresets$colLFib)){
-      config$colLFib <- evalPurencyPresets$colLFib[which(evalPurencyPresets$labname == labpreset)]
+    if(!is.na(easyCHAMPPresets$colLFib[which(easyCHAMPPresets$labname == labpreset)])){
+      config$colLFib <- easyCHAMPPresets$colLFib[which(easyCHAMPPresets$labname == labpreset)]
     }
-    if(!is.na(evalPurencyPresets$colArea)){
-      config$colArea <- evalPurencyPresets$colArea[which(evalPurencyPresets$labname == labpreset)]
+    if(!is.na(easyCHAMPPresets$colArea[which(easyCHAMPPresets$labname == labpreset)])){
+      config$colArea <- easyCHAMPPresets$colArea[which(easyCHAMPPresets$labname == labpreset)]
     }
-    if(!is.na(evalPurencyPresets$colWidth)){
-      config$colWidth <- evalPurencyPresets$colWidth[which(evalPurencyPresets$labname == labpreset)]
+    if(!is.na(easyCHAMPPresets$colWidth[which(easyCHAMPPresets$labname == labpreset)])){
+      config$colWidth <- easyCHAMPPresets$colWidth[which(easyCHAMPPresets$labname == labpreset)]
     }
-    if(!is.na(evalPurencyPresets$fibre)){
-      config$fibre <- evalPurencyPresets$fibre[which(evalPurencyPresets$labname == labpreset)]
+    if(!is.na(easyCHAMPPresets$fibre[which(easyCHAMPPresets$labname == labpreset)])){
+      config$fibre <- easyCHAMPPresets$fibre[which(easyCHAMPPresets$labname == labpreset)]
     }
-    if(!is.na(evalPurencyPresets$sphere)){
-      config$sphere <- evalPurencyPresets$sphere[which(evalPurencyPresets$labname == labpreset)]
+    if(!is.na(easyCHAMPPresets$sphere[which(easyCHAMPPresets$labname == labpreset)])){
+      config$sphere <- easyCHAMPPresets$sphere[which(easyCHAMPPresets$labname == labpreset)]
     }
-    if(!is.na(evalPurencyPresets$fragment)){
-      config$fragment <- evalPurencyPresets$fragment[which(evalPurencyPresets$labname == labpreset)]
+    if(!is.na(easyCHAMPPresets$fragment[which(easyCHAMPPresets$labname == labpreset)])){
+      config$fragment <- easyCHAMPPresets$fragment[which(easyCHAMPPresets$labname == labpreset)]
     }
-    if(!is.na(evalPurencyPresets$pixel)){
-      config$pixel <- evalPurencyPresets$pixel[which(evalPurencyPresets$labname == labpreset)]
+    if(!is.na(easyCHAMPPresets$pixel[which(easyCHAMPPresets$labname == labpreset)])){
+      config$pixel <- easyCHAMPPresets$pixel[which(easyCHAMPPresets$labname == labpreset)]
     }
-    if(!is.na(evalPurencyPresets$startrow)){
-      config$startrow <- evalPurencyPresets$startrow[which(evalPurencyPresets$labname == labpreset)]
+    if(!is.na(easyCHAMPPresets$startrow[which(easyCHAMPPresets$labname == labpreset)])){
+      config$startrow <- easyCHAMPPresets$startrow[which(easyCHAMPPresets$labname == labpreset)]
     }
   }
   

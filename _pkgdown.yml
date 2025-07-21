@@ -12,7 +12,9 @@ navbar:
     articles:
       text: Customizations
       menu:
-      - text: Emplyoed file specifications
+      - text: Labpresets & important function specifications 
+        href: articles/other-lab.html
+      - text: Employed file specifications
         href: articles/file-custom.html
       - text: Customise processing options
         href: articles/option-custom.html
