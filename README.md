@@ -1,5 +1,5 @@
 
-# easyCHAMP
+# easyCHAMP: An automated Comparable and Harmonized Analyses of Micro-Particles
 
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/easyCHAMP)](https://CRAN.R-project.org/package=easyCHAMP)
