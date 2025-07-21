@@ -4,7 +4,6 @@
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/easyCHAMP)](https://CRAN.R-project.org/package=easyCHAMP)
 [![R-CMD-check](https://github.com/Maki-science/easyCHAMP/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Maki-science/easyCHAMP/actions/workflows/R-CMD-check.yaml)
-[![Codecov test coverage](https://codecov.io/gh/Maki-science/easyCHAMP/branch/main/graph/badge.svg)](https://app.codecov.io/gh/Maki-science/easyCHAMP?branch=main)
 [![Codecov test coverage](https://codecov.io/gh/Maki-science/easyCHAMP/graph/badge.svg)](https://app.codecov.io/gh/Maki-science/easyCHAMP)
 <!-- badges: end -->
 
