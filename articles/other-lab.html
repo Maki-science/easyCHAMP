@@ -30,10 +30,11 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="../articles/easyCHAMP.html">Get started</a></li>
-<li class="nav-item dropdown">
+<li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-customizations" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Customizations</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-customizations">
-<li><a class="dropdown-item" href="../articles/file-custom.html">Emplyoed file specifications</a></li>
+<li><a class="dropdown-item" href="../articles/other-lab.html">Labpresets &amp; important function specifications</a></li>
+    <li><a class="dropdown-item" href="../articles/file-custom.html">Employed file specifications</a></li>
     <li><a class="dropdown-item" href="../articles/option-custom.html">Customise processing options</a></li>
     <li><a class="dropdown-item" href="../articles/output-custom.html">Customise output options</a></li>
     <li><a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting</a></li>
@@ -80,7 +81,7 @@
 <div class="section level2">
 <h2 id="use-this-package-in-another-lab">Use this package in another lab<a class="anchor" aria-label="anchor" href="#use-this-package-in-another-lab"></a>
 </h2>
-<p>The output of Purency can be customized to a certain extend and
+<p>The output of easyCHAMP can be customized to a certain extend and
 different labs may have different requirements and conventions on how to
 name things (also in the language this is done). Therefore, the default
 settings of this function apply for the animal ecology group of the
@@ -91,10 +92,22 @@ the working environment of the lab.</p>
 package, you can overwrite the default settings to your liking. In case
 you would prefer a complete preset for your lab, that you don’t have to
 provide each parameter separately, we can implement a preset to your
-desire if you open an issue or send me a request. A preset can be added
-quite fast.</p>
+desire. Please feel free to open an <a href="https://github.com/Maki-science/easyCHAMP/issues" class="external-link">issue</a> in
+order to request your own preset to become included in this package. A
+preset can be added quite fast.</p>
 <p>A preset can be loaded in the function call by adding the parameter
-<code>labpreset = "MYOWNLABNAME"</code>.</p>
+<code>labpreset = "MYOWNLABNAME"</code>:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/easyCHAMP.html">easyCHAMP</a></span><span class="op">(</span>path<span class="op">=</span><span class="st">"C:/users/MYNAME/Desktop/MYFILESTOBEPROCESSED/"</span>, labpreset <span class="op">=</span> <span class="st">"siMPle"</span><span class="op">)</span> <span class="co"># for example</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="current-presets-to-choose">Current presets to choose<a class="anchor" aria-label="anchor" href="#current-presets-to-choose"></a>
+</h3>
+<p><img src="Labpresets.png"></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="how-to-specify-the-function-call-for-specific--csv-files">How to specify the function call for specific *.csv files?<a class="anchor" aria-label="anchor" href="#how-to-specify-the-function-call-for-specific--csv-files"></a>
+</h2>
 <p>If no preset is available for your lab, so far, consider the
 following parameters to be adjusted (just add the necessary parameters
 as additional parameter in the function call):</p>
@@ -114,7 +127,12 @@ and ä = d).</li>
 whether the particle is a polymer or not. In the TOEKI lab this is
 column 24 (Plastik? or Plastik ja/nein). Could also be provided as
 column name, but only in ASCII encoding (e.g., special character as .
-and ä = d).</li>
+and ä = d). If no curing took place, this parameter could be set to
+‘none’ which will cause the function to simply use all particles in the
+file. <em>Warning: this might cause further warnings or errors to occur,
+if a polymer is not an unknown substance (e.g., it is no
+polymer).</em>
+</li>
 <li>
 <code>ReqPolKey = "ja"</code>, key words that indicates whether it
 is a plastic particle or not in ‘colReqPol’.</li>
@@ -122,7 +140,9 @@ is a plastic particle or not in ‘colReqPol’.</li>
 <code>colShape = 25</code>, Column number for the particle shape. In
 the TOEKI lab this is column 25 (Form). Could also be provided as column
 name, but only in ASCII encoding (e.g., special character = . and ä =
-d).</li>
+d). Can also be set to ‘none’ if no column for shape exists in the
+files. This will cause the function to create one and set as ‘fragment’
+as shape. However, this can be ignored afterwards.</li>
 <li>
 <code>colCol = 26</code>, Column number for the particle color In
 the TOEKI lab this is column 26 (Farbe). Could also be provided as
@@ -156,7 +176,8 @@ numbers.</p>
 <p>With an adopted preset, you can now run the function as mentioned
 before (just add the preset always to the function).</p>
 </div>
-  </main>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 

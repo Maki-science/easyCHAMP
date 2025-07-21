@@ -28,7 +28,8 @@ as well as improving testing."></head><body>
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/easyCHAMP.html">Get started</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-customizations" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Customizations</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-customizations"><li><a class="dropdown-item" href="../articles/file-custom.html">Emplyoed file specifications</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-customizations"><li><a class="dropdown-item" href="../articles/other-lab.html">Labpresets &amp; important function specifications</a></li>
+    <li><a class="dropdown-item" href="../articles/file-custom.html">Employed file specifications</a></li>
     <li><a class="dropdown-item" href="../articles/option-custom.html">Customise processing options</a></li>
     <li><a class="dropdown-item" href="../articles/output-custom.html">Customise output options</a></li>
     <li><a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting</a></li>
@@ -126,7 +127,9 @@ Could also be provided as column name, but only in ASCII encoding (e.g., special
 <dt id="arg-colreqpol">colReqPol<a class="anchor" aria-label="anchor" href="#arg-colreqpol"></a></dt>
 <dd><p>Column number for the particle check, whether the particle is a polymer or not.
 In the TOEKI lab this is column 24 (Plastik? or Plastik ja/nein). Could also be provided as column name, but only
-in ASCII encoding (e.g., special character as . and ä = d).</p></dd>
+in ASCII encoding (e.g., special character as . and ä = d). If no curing took place, this parameter could be set to 'none' which
+will cause the function to simply use all particles in the file. Warning: this might cause further warnings or errors to occur, if
+a polymer is not an unknown substance (e.g., it is no polymer).</p></dd>
 
 
 <dt id="arg-reqpolkey">ReqPolKey<a class="anchor" aria-label="anchor" href="#arg-reqpolkey"></a></dt>
