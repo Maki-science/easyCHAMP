@@ -42,9 +42,9 @@ The following topics can be found at the [pkgdown website](https://maki-science.
       - [A polymer-shape-size wise summary](https://maki-science.github.io/easyCHAMP/articles/easyCHAMP.html#processing-a-summary-with-blank-correction)
       - [A particle-wise processing (mainly blank correction)](https://maki-science.github.io/easyCHAMP/articles/easyCHAMP.html#perform-particle-wise-processing)
   * Customisations:
-    + [Labpresets & important function specifications](file:///C:/Users/marvi/Documents/easyCHAMP/docs/articles/other-lab.html)
-      - [Labpresets](file:///C:/Users/marvi/Documents/easyCHAMP/docs/articles/other-lab.html#use-this-package-in-another-lab)
-      - [specifications for function call according to your *.csv files](file:///C:/Users/marvi/Documents/easyCHAMP/docs/articles/other-lab.html#how-to-specify-the-function-call-for-specific--csv-files)
+    + [Labpresets & important function specifications](https://maki-science.github.io/easyCHAMP/articles/other-lab.html)
+      - [Labpresets](https://maki-science.github.io/easyCHAMP/articles/other-lab.html#use-this-package-in-another-lab)
+      - [specifications for function call according to your *.csv files](https://maki-science.github.io/easyCHAMP/articles/other-lab.html#how-to-specify-the-function-call-for-specific--csv-files)
     + [Customise file specifications](https://maki-science.github.io/easyCHAMP/articles/file-custom.html)
       - [Changing file specifications (e.g., decimal sign)](https://maki-science.github.io/easyCHAMP/articles/file-custom.html#changing-separator-and-decimal-sign-in--csv-files)
       - [Use different naming styles](https://maki-science.github.io/easyCHAMP/articles/file-custom.html#dont-use-the-recommended-file-naming)  
